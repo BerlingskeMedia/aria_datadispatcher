@@ -2,6 +2,7 @@
 'use strict';
 
 const Hapi = require('@hapi/hapi');
+const BpcClient = require('bpc_client');
 const Events = require('./events.js')
 const Scheme = require('./scheme.js')
 
@@ -35,11 +36,13 @@ server.route({
   }
 });
 
-if (process.env.NODE_ENV === 'test') {
-  // We are running tests.
-} else {
-  await server.start();
-  console.log(`Server running at: ${server.info.uri}`);
-}
+BpcClient.events.on('ready', async () => {
+  if (process.env.NODE_ENV === 'test') {
+    // We are running tests.
+  } else {
+    await server.start();
+    console.log(`Server running at: ${server.info.uri}`);
+  }
+});
 
 module.exports = server;
