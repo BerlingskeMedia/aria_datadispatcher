@@ -1,6 +1,6 @@
 # aria_notifications
 
-##Terminology
+## Terminology
 
 * _Client application_: ARIA + AMPS
 * _Event Dispatcher_: A webservice implemented by Berlingske to recieve notifications from ARIA + AMPS.
