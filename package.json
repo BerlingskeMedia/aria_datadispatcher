@@ -1,0 +1,28 @@
+{
+  "name": "aria_eventdispatcher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/index.js",
+  "dependencies": {
+    "@hapi/hapi": "^18.3.1",
+    "@hapi/boom": "^7.4.2",
+    "bpc_client": "^1.2.4"
+  },
+  "devDependencies": {
+    "code": "^5.2.4",
+    "lab": "^18.0.2",
+    "nodemon": "^1.19.0",
+    "sinon": "^7.3.2"
+  },
+  "scripts": {
+    "start": "node $npm_package_main",
+    "dev": "nodemon --inspect --ignore 'test/' server",
+    "test": "node node_modules/lab/bin/lab --bail --verbose --leaks --timeout 0 -r console"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/BerlingskeMedia/aria_eventdispatcher"
+  },
+  "author": "Daniel Kokott <dako@berlingskemedia.dk>",
+  "license": "ISC"
+}

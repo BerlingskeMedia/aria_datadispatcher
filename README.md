@@ -3,7 +3,7 @@
 ## Terminology
 
 * _Client application_: ARIA + AMPS
-* _Event Dispatcher_: A webservice implemented by Berlingske to recieve notifications from ARIA + AMPS.
+* _Server application_: Event Dispatcher, a webservice implemented by Berlingske to recieve notifications from ARIA + AMPS.
 * _Auth server_: [BPC](https://github.com/BerlingskeMedia/bpc)
 * _Hawk_: An HTTP authentication scheme [github.com/hapijs/hawk]https://github.com/hapijs/hawk)
 
@@ -32,7 +32,9 @@ For more information on Hawk, see https://github.com/hapijs/hawk.
 
 ### Example
 
-##### Generation the Hawk Authorization header
+Below is an example explaining the process for both the client and server application.
+
+##### Generation the Hawk Authorization header on the client
 
 *Note*: This can also be done using Postman.
 
@@ -68,11 +70,11 @@ Content-Type: text/plain
 this is a test payload
 ```
 
-##### Request validation in Event Dispatcher
+##### Request validation on server
 
-This part is implemented by Berlingske Medias Event Dispatcher. So it’s only relevant for understanding the full picture.
+This part is implemented by Berlingske Media's Event Dispatcher.
 
-After receiving a request signed with a Hawk Authorization header, the Event Dispatcher validates the request against BPC. BPC is the authoritative register of Berlingske Hawk credentials.
+After receiving a request from the client signed with a Hawk Authorization header, the Event Dispatcher validates the request against BPC. BPC is the authoritative register of Berlingske Hawk credentials.
 
 The Event Dispatcher will have its own set of Hawk credentials, also issued by BPC, and an app ticket for accessing the features on BPC.
 
