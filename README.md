@@ -2,9 +2,10 @@
 
 ##Terminology
 
-* Client application: ARIA + AMPS
-* Event Dispatcher: A webservice implemented by Berlingske to recieve notifications from ARIA + AMPS.
-* Auth server: [BPC](https://github.com/BerlingskeMedia/bpc)
+* _Client application_: ARIA + AMPS
+* _Event Dispatcher_: A webservice implemented by Berlingske to recieve notifications from ARIA + AMPS.
+* _Auth server_: [BPC](https://github.com/BerlingskeMedia/bpc)
+* _Hawk_: An HTTP authentication scheme [github.com/hapijs/hawk]https://github.com/hapijs/hawk)
 
 ## Architecture
 
