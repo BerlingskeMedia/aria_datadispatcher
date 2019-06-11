@@ -74,7 +74,7 @@ this is a test payload
 
 This part is implemented by Berlingske Media's Event Dispatcher.
 
-After receiving a request from the client signed with a Hawk Authorization header, the Event Dispatcher validates the request against BPC. BPC is the authoritative register of Berlingske Hawk credentials.
+After receiving a request from the client signed with a Hawk Authorization header, the Event Dispatcher validates the request against Auth server, BPC. BPC is the authoritative register of Berlingske Hawk credentials.
 
 The Event Dispatcher will have its own set of Hawk credentials, also issued by BPC, and an app ticket for accessing the features on BPC.
 
@@ -124,6 +124,8 @@ Ie. the requests to Event Dispatcher is signed using app credentials - not, as u
 
 The benefit it that the client application does not need to request a ticket and keep reissuing it upon expiration.
 
-The benefit of using tickets is that the ticket `id` is an encrypted signature containing all necessary parts to do a validation. This means that the validation-process does not need to fetch the application key from the database for each request.
+A downside is that the Auth server need to fetch the application key from the database for each request. Whereas when using tickets, the ticket `id` is an encrypted signature containing all necessary parts to do a validation on the Auth server. 
+
+Another downside is that the validation does not support [BPC scope](https://github.com/BerlingskeMedia/bpc#scope). In practice this means that all apps registered in BPC are allowed to pass the authorization. Whereas when using tickets, only apps with the scope eg. `aria_notifications` will pass the authorization.
 
 It is, however, unverified what the difference in performance between these two approaches are.
