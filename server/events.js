@@ -13,14 +13,14 @@ module.exports = {
       options: {
         auth: 'bpc',
         payload: {
-          // parse: false
+          parse: false,
+          allow: ['text/xml', 'text/plain', 'application/xml', 'application/json']
         }
       },
       handler: async (request, h) => {
 
-        console.log('Message recieved');
         return {
-          status: `Message recieved`
+          status: `OK`
         };
       }
     });
