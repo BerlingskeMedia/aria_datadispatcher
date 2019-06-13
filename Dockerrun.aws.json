@@ -1,11 +1,12 @@
 {
   "AWSEBDockerrunVersion": "1",
   "Image": {
-    "Name": "berlingskemedia/aria_eventdispatcher:latest"
+    "Name": "berlingskemedia/aria_eventdispatcher:latest",
+    "Update": "true"
   },
   "Ports": [
     {
-      "ContainerPort": "3000"
+      "ContainerPort": "8081"
     }
   ]
 }
