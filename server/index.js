@@ -13,7 +13,7 @@ process.on('unhandledRejection', (err) => {
 });
 
 const server = Hapi.server({
-  port: 3000,
+  port: 8081,
   host: 'localhost'
 });
 
