@@ -19,6 +19,11 @@ module.exports = {
       },
       handler: async (request, h) => {
 
+        console.log(`Message received: ${ new Date().toISOString() }.`);
+        console.log(`Content Type: ${ request.headers['content-type'] }`);
+        console.log('Payload:')
+        console.log(request.payload.toString());
+
         return {
           status: `OK`
         };
