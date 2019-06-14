@@ -2,7 +2,7 @@
 
 const Boom = require('@hapi/boom');
 
-// To disable the payload validartion, the ENV var must be explicitly set to "true"
+// To print the event payload details to console log, the ENV var must be explicitly set to "true"
 const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true');
 
 if(CONSOLE_LOG_EVENTS) {
