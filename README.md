@@ -132,3 +132,16 @@ A downside is that the Auth server need to fetch the application key from the da
 Another downside is that the validation does not support [BPC scope](https://github.com/BerlingskeMedia/bpc#scope). In practice this means that all apps registered in BPC are allowed to pass the authorization. Whereas when using tickets, only apps with the scope eg. `aria_notifications` will pass the authorization.
 
 It is, however, unverified what the difference in performance between these two approaches are.
+
+## Build
+
+This application is build using (Docker Cloud)[https://cloud.docker.com/u/berlingskemedia/repository/docker/berlingskemedia/aria_eventdispatcher].
+
+To start a build make a new release on [GitHub](https://github.com/BerlingskeMedia/aria_eventdispatcher/releases).
+Make sure the versionnumber is in the format `x.x.x`. This will trigger a new build with tag `release-{sourceref}` and `latest`.
+
+## Deployment
+
+For testing we are deploying using AWS Elastic Beanstalk.
+
+Later we must use EKS.
