@@ -1,6 +1,12 @@
 /*jshint node: true */
 'use strict';
 
+// To disable the payload validartion, the ENV var must be explicitly set to "true"
+const DISABLE_VALIDATION = (process.env.DISABLE_VALIDATION === 'true');
+
+if(DISABLE_VALIDATION) {
+  console.warn('Warning: ALL validation has been disabled.')
+}
 
 // To disable the payload validartion, the ENV var must be explicitly set to "true"
 const DISABLE_PAYLOAD_VALIDATION = (process.env.DISABLE_PAYLOAD_VALIDATION === 'true');
@@ -31,6 +37,10 @@ const scheme = function (server, options) {
     },
 
     authenticate: async function (request, h) {
+
+      if(DISABLE_VALIDATION) {
+        return h.authenticated({ credentials: {} });
+      }  
 
       if(!request.headers.authorization) {
         return Boom.unauthorized();
@@ -96,9 +106,9 @@ module.exports = {
   name: 'scheme',
   version: '1.0.0',
   register(server, options) {
-      BpcClient.connect();
-      server.auth.scheme('bpc', scheme);
-      server.auth.strategy('bpc', 'bpc');
-      server.decorate('toolkit', 'bpc', BpcClient);
+    BpcClient.connect();
+    server.auth.scheme('bpc', scheme);
+    server.auth.strategy('bpc', 'bpc');
+    server.decorate('toolkit', 'bpc', BpcClient);
   }
 };
