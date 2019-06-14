@@ -135,7 +135,7 @@ It is, however, unverified what the difference in performance between these two 
 
 ## Build
 
-This application is build using (Docker Cloud)[https://cloud.docker.com/u/berlingskemedia/repository/docker/berlingskemedia/aria_eventdispatcher].
+This application is build using [Docker Cloud](https://cloud.docker.com/u/berlingskemedia/repository/docker/berlingskemedia/aria_eventdispatcher).
 
 To start a build make a new release on [GitHub](https://github.com/BerlingskeMedia/aria_eventdispatcher/releases).
 Make sure the versionnumber is in the format `x.x.x`. This will trigger a new build with tag `release-{sourceref}` and `latest`.
