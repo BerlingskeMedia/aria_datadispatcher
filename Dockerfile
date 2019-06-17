@@ -21,7 +21,7 @@ ADD . /app
 RUN npm i --production
 
 # Exposing our endpoint to Docker.
-EXPOSE 80
+EXPOSE 9000
 
 # When starting a container with our image, this command will be run.
 CMD ["node", "server/index.js"]
