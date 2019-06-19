@@ -27,10 +27,12 @@ module.exports = {
       handler: async (request, h) => {
 
         if(CONSOLE_LOG_EVENTS) {
-          console.log(`Message received: ${ new Date().toISOString() }.`);
-          console.log(`Content Type: ${ request.headers['content-type'] }`);
-          console.log('Payload:')
-          console.log(request.payload.toString());
+          console.log(`
+Message received: ${ new Date().toISOString() }
+Content Type: ${ request.headers['content-type'] }
+Authorization: ${ request.headers['authorization'] }
+Payload:
+${ request.payload.toString()}`);
         }
 
         return {
