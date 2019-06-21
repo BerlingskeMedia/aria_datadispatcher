@@ -3,7 +3,7 @@
 
 const Hapi = require('@hapi/hapi');
 const BpcClient = require('bpc_client');
-const Events = require('./events.js')
+const NotificationsEvents = require('./events.js')
 const Scheme = require('./scheme.js')
 
 
@@ -17,7 +17,7 @@ const server = Hapi.server({
 });
 
 server.register(Scheme);
-server.register(Events, { routes: { prefix: '/events' } });
+server.register(NotificationsEvents, { routes: { prefix: '/notifications_events' } });
 
 server.route({
   method: 'GET',

@@ -10,7 +10,7 @@ if(CONSOLE_LOG_EVENTS) {
 }
 
 module.exports = {
-  name: 'events',
+  name: 'notifications_events',
   version: '1.0.0',
   register: async (server, options) => {
 

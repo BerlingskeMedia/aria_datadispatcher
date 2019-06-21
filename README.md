@@ -3,7 +3,7 @@
 ## Terminology
 
 * _Client application_: ARIA + AMPS
-* _Server application_: Event Dispatcher, a webservice implemented by Berlingske to recieve notifications from ARIA + AMPS.
+* _Server application_: Data Dispatcher, a webservice implemented by Berlingske to recieve notifications from ARIA + AMPS.
 * _Auth server_: [BPC](https://github.com/BerlingskeMedia/bpc)
 * _Hawk_: An HTTP authentication scheme [github.com/hapijs/hawk](https://github.com/hapijs/hawk)
 
@@ -67,7 +67,7 @@ The request will look like this:
 ```
 POST/webhooks HTTP/1.1
 Host: notifications.berlingskemedia.net:443
-Authorization: Hawk id="aria", ts="1556624461", nonce="QmbuDC", hash="hxnRPTxATAovVOhYn/20neTXXLtBXyl+t/VjWf971mQ=", mac="aGkvqovoApV1s9d32vPJk3T9kQNGTU8DNMX8EhIQr80="
+Authorization: Hawk id="aria_notifications", ts="1556624461", nonce="QmbuDC", hash="hxnRPTxATAovVOhYn/20neTXXLtBXyl+t/VjWf971mQ=", mac="aGkvqovoApV1s9d32vPJk3T9kQNGTU8DNMX8EhIQr80="
 Content-Type: text/plain
  
 this is a test payload
@@ -75,24 +75,24 @@ this is a test payload
 
 ##### Request validation on server
 
-This part is implemented by Berlingske Media's Event Dispatcher.
+This part is implemented by Berlingske Media's Data Dispatcher.
 
-After receiving a request from the client signed with a Hawk Authorization header, the Event Dispatcher validates the request against Auth server, BPC. BPC is the authoritative register of Berlingske Hawk credentials.
+After receiving a request from the client signed with a Hawk Authorization header, the Data Dispatcher validates the request against Auth server, BPC. BPC is the authoritative register of Berlingske Hawk credentials.
 
-The Event Dispatcher will have its own set of Hawk credentials, also issued by BPC, and an app ticket for accessing the features on BPC.
+The Data Dispatcher will have its own set of Hawk credentials, also issued by BPC, and an app ticket for accessing the features on BPC.
 
 The validation is done using the following request.
 
 ```
 POST /validate/credentials
 Host: bpc.berlingskemedia.net:443
-Authorization: Hawk id=”event_producer” ts="1556626940", nonce="WgdvVV", mac="UiPM+PsE4jEO62Uqvd6CymUUISFfYVjEERl5/jNnJaU="
+Authorization: Hawk id="aria_datadispatcher" ts="1556626940", nonce="WgdvVV", mac="UiPM+PsE4jEO62Uqvd6CymUUISFfYVjEERl5/jNnJaU="
 Content-Type: application/json
  
 {
   "url": "https://notifications.berlingskemedia.net/webhooks",
   "method": "POST",
-  "authorization": "Hawk id=\"aria\", ts=\"1556624461\", nonce=\"QmbuDC\", hash=\"hxnRPTxATAovVOhYn/20neTXXLtBXyl+t/VjWf971mQ=\", mac=\"aGkvqovoApV1s9d32vPJk3T9kQNGTU8DNMX8EhIQr80=\"",
+  "authorization": "Hawk id=\"aria_notifications\", ts=\"1556624461\", nonce=\"QmbuDC\", hash=\"hxnRPTxATAovVOhYn/20neTXXLtBXyl+t/VjWf971mQ=\", mac=\"aGkvqovoApV1s9d32vPJk3T9kQNGTU8DNMX8EhIQr80=\"",
   "payload": "this is a test payload",
   "contentType": "text/plain"
 }
@@ -123,7 +123,7 @@ If not valid, the response from BPC will be a `403 Forbidden`.
 
 To simply the security complexity on the client of handling credentials, the above solution is not using BPC tickets. See [Using only app credentials and no tickets](https://github.com/BerlingskeMedia/bpc/blob/master/doc/ServerToServer.md#using-bpc-to-secure-an-api)
 
-Ie. the requests to Event Dispatcher is signed using app credentials - not, as usally, a BPC ticket.
+Ie. the requests to Data Dispatcher is signed using app credentials - not, as usally, a BPC ticket.
 
 The benefit it that the client application does not need to request a ticket and keep reissuing it upon expiration.
 
@@ -135,9 +135,9 @@ It is, however, unverified what the difference in performance between these two 
 
 ## Build
 
-This application is build using [Docker Cloud](https://cloud.docker.com/u/berlingskemedia/repository/docker/berlingskemedia/aria_eventdispatcher).
+This application is build using [Docker Cloud](https://cloud.docker.com/u/berlingskemedia/repository/docker/berlingskemedia/aria_datadispatcher).
 
-To start a build make a new release on [GitHub](https://github.com/BerlingskeMedia/aria_eventdispatcher/releases).
+To start a build make a new release on [GitHub](https://github.com/BerlingskeMedia/aria_datadispatcher/releases).
 Make sure the versionnumber is in the format `x.x.x`. This will trigger a new build with tag `release-{sourceref}` and `latest`.
 
 ## Deployment
