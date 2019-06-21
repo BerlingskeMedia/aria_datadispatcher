@@ -3,7 +3,7 @@
 
 const Hapi = require('@hapi/hapi');
 const BpcClient = require('bpc_client');
-const NotificationsEvents = require('./events.js')
+const NotificationsEvents = require('./notifications_events.js')
 const Scheme = require('./scheme.js')
 
 
