@@ -1,4 +1,4 @@
-# aria_notifications
+# aria_datadispatcher
 
 ## Terminology
 
