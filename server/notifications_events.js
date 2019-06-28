@@ -34,15 +34,17 @@ module.exports = {
 
 
         const id = Date.now();
+        // Since the payload is not parsed, it's a buffer. So we need toString()
+        const payload = request.payload.toString();
 
 
         if(Kafka.ready) {
-          await Kafka.deliver(id, request.payload);
+          await Kafka.deliver(id, payload);
         }
 
 
         if(SQS.ready) {
-          await SQS.deliver(id, request.payload)
+          await SQS.deliver(id, payload);
         }
 
 
