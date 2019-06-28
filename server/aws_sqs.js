@@ -28,7 +28,7 @@ if(!SQS_QUEUE_URL) {
   return;
 }
 
-console.log(`Connecting to SQS on ${ SQS_QUEUE_URL } using AWS_ACCESS_KEY_ID ${ AWS_ACCESS_KEY_ID }`);
+console.log(`Connecting to SQS on ${ SQS_QUEUE_URL } on message group ${ SQS_MESSAGE_GROUP_ID } using AWS_ACCESS_KEY_ID ${ AWS_ACCESS_KEY_ID }`);
 
 
 // Verify we have a Fifo queue
