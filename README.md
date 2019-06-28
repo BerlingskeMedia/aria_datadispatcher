@@ -133,9 +133,30 @@ Another downside is that the validation does not support [BPC scope](https://git
 
 It is, however, unverified what the difference in performance between these two approaches are.
 
+## ENV VARS
+
+* ARIA_SECRET
+* KAFKA_HOST
+* KAFKA_INGRESS_TOPIC
+* AWS_REGION
+* AWS_ACCESS_KEY_ID
+* AWS_SECRET_ACCESS_KEY
+* SQS_QUEUE_URL
+
+
+## Development
+
+* Install Node.js and NPM. See [Dockerfile](/blob/master/Dockerfile) for version.
+* Clone GitHub repo.
+* `npm i`
+* Set ENV VARS in the environment.
+* Start the process using `npm run dev`.
+
+
 ## Documentation
 
-https://github.com/SOHU-Co/kafka-node
+* [kafka-node](https://github.com/SOHU-Co/kafka-node)
+* [AWS.SQS](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/SQS.html)
 
 ## Kafka
 
@@ -143,7 +164,17 @@ https://docs.aws.amazon.com/msk/latest/developerguide/create-topic.html
 
 ## SQS
 
+https://sqs.eu-west-1.amazonaws.com/815296035528/aria_datadispatcher.fifo
+
 ## Build
+
+**GitHub**
+
+1. Push your feature branch to GitHub
+2. Merge with master branch
+3. Publish a release with an incrementet version number
+
+**Docker Automated**
 
 This application is build using [Docker Cloud](https://cloud.docker.com/u/berlingskemedia/repository/docker/berlingskemedia/aria_datadispatcher).
 
@@ -152,6 +183,26 @@ Make sure the versionnumber is in the format `x.x.x`. This will trigger a new bu
 
 ## Deployment
 
-For testing we are deploying using AWS Elastic Beanstalk.
+**Task Definition**
 
-Later we must use EKS.
+Go to correponding ECS Task Definition:
+
+* [Task Definition: AriaDatadispatcher](https://eu-west-1.console.aws.amazon.com/ecs/home?region=eu-west-1#/taskDefinitions/AriaDatadispatcher)
+* [Task Definition: AriaDatadispatcher-TEST](https://eu-west-1.console.aws.amazon.com/ecs/home?region=eu-west-1#/taskDefinitions/AriaDatadispatcher-TEST)
+
+Create a new revision of the Task Definition, where the only thing to change is in the _Containter Definitions_.
+Change the _Image_ to the latest release tag eg. `berlingskemedia/aria_datadispatcher:release-4`.
+
+
+**Service**
+
+Go to the correponding ECS Cluster:
+
+* [Cluster: AriaDatadispatcher](https://eu-west-1.console.aws.amazon.com/ecs/home?region=eu-west-1#/clusters/AriaDatadispatcher)
+* [Cluster: AriaDatadispatcher-TEST](https://eu-west-1.console.aws.amazon.com/ecs/home?region=eu-west-1#/clusters/AriaDatadispatcher-TEST/services)
+
+Open the _Service_ and click the blue button _Update_. Selest the latest revision - the one that was created in the previous step. Click Next->Next->Next.
+
+The old task aka. container is now being shut down and a new is being started up.
+
+
