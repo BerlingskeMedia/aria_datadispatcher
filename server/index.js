@@ -2,7 +2,7 @@
 'use strict';
 
 const Hapi = require('@hapi/hapi');
-const Inert = require('@hapi/Inert');
+const Inert = require('@hapi/inert');
 const Scheme = require('./scheme.js');
 const Kafka = require('./kafka.js');
 const SQS = require('./aws_sqs.js');
