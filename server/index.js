@@ -2,9 +2,10 @@
 'use strict';
 
 const Hapi = require('@hapi/hapi');
-const BpcClient = require('bpc_client');
-const NotificationsEvents = require('./notifications_events.js')
-const Scheme = require('./scheme.js')
+const Scheme = require('./scheme.js');
+const Kafka = require('./kafka.js');
+const SQS = require('./aws_sqs.js');
+const NotificationsEvents = require('./notifications_events.js');
 
 
 process.on('unhandledRejection', (err) => {
@@ -12,12 +13,15 @@ process.on('unhandledRejection', (err) => {
   process.exit(1);
 });
 
+
 const server = Hapi.server({
   port: process.env.PORT || 9000
 });
 
+
 server.register(Scheme);
 server.register(NotificationsEvents, { routes: { prefix: '/notifications_events' } });
+
 
 server.route({
   method: 'GET',
@@ -27,6 +31,7 @@ server.route({
   }
 });
 
+
 server.route({
   method: 'GET',
   path: '/healthcheck',
@@ -35,13 +40,31 @@ server.route({
   }
 });
 
-BpcClient.events.on('ready', async () => {
+
+SQS.events.once('ready', async () => {
+  console.log('SQS ready');
+  if(Kafka.ready || Kafka.disabled) {
+    await start();
+  }  
+});
+
+
+Kafka.once('ready', async () => {
+  console.log('Kafka ready');
+  if(SQS.ready || SQS.disabled) {
+    await start();
+  }
+});
+
+
+async function start() {
   if (process.env.NODE_ENV === 'test') {
     // We are running tests.
-  } else {
+  } else if (!server.info.started) {
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
   }
-});
+}
+
 
 module.exports = server;

@@ -117,7 +117,7 @@ If valid, the response from BPC will be a `200 OK` with payload:
 }
 ```
 
-If not valid, the response from BPC will be a `403 Forbidden`.
+If not valid, the respSonse from BPC will be a `403 Forbidden`.
 
 ### Performance considerations
 
@@ -132,6 +132,16 @@ A downside is that the Auth server need to fetch the application key from the da
 Another downside is that the validation does not support [BPC scope](https://github.com/BerlingskeMedia/bpc#scope). In practice this means that all apps registered in BPC are allowed to pass the authorization. Whereas when using tickets, only apps with the scope eg. `aria_notifications` will pass the authorization.
 
 It is, however, unverified what the difference in performance between these two approaches are.
+
+## Documentation
+
+https://github.com/SOHU-Co/kafka-node
+
+## Kafka
+
+https://docs.aws.amazon.com/msk/latest/developerguide/create-topic.html
+
+## SQS
 
 ## Build
 

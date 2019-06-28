@@ -15,17 +15,7 @@ if(DISABLE_PAYLOAD_VALIDATION) {
   console.warn('Warning: Payload validation has been disabled.')
 }
 
-if (process.env.NODE_ENV === 'test') {
-  module.exports = require('../test/bpc_stub.js');
-  return;
-}
-
 const Boom = require('@hapi/boom');
-const BpcClient = require('bpc_client');
-
-BpcClient.events.on('ready', async () => {
-  console.log('Connected to BPC');
-});
 
 const scheme = function (server, options) {
 
@@ -40,14 +30,6 @@ const scheme = function (server, options) {
 
       if(DISABLE_VALIDATION) {
         return h.authenticated({ credentials: {} });
-      }  
-
-      if(!request.headers.authorization) {
-        return Boom.unauthorized();
-      }
-
-      if(!h.bpc.appTicket) {
-        return Boom.badImplementation('Not connected to BPC');
       }
 
       
@@ -57,19 +39,9 @@ const scheme = function (server, options) {
 
       if(DISABLE_PAYLOAD_VALIDATION) {
         
-        const payload = {
-          authorization: request.headers.authorization,
-          method: request.method,
-          url: request.url.href
-        };
+        // TODO
         
-        const artifacts = await h.bpc.request({
-          path: '/validate/credentials',
-          method: 'POST',
-          payload: payload
-        });
-        
-        return h.authenticated({ credentials: artifacts });
+        return h.authenticated({ credentials: {} });
 
       } else {
 
@@ -80,21 +52,7 @@ const scheme = function (server, options) {
       
     payload: async function (request, h) {
 
-      // This function will only be executed if the "options.payload" is set to true.
-
-      const payload = {
-        authorization: request.headers.authorization,
-        method: request.method,
-        url: request.url.href,
-        payload: request.payload.toString(),
-        contentType: request.headers['content-type']
-      };
-
-      await h.bpc.request({
-        path: '/validate/credentials',
-        method: 'POST',
-        payload: payload
-      });
+      // This function will only be executed if this scheme "options.payload" is set to true.
 
       return h.continue;
     }
@@ -106,9 +64,7 @@ module.exports = {
   name: 'scheme',
   version: '1.0.0',
   register(server, options) {
-    BpcClient.connect();
-    server.auth.scheme('bpc', scheme);
-    server.auth.strategy('bpc', 'bpc');
-    server.decorate('toolkit', 'bpc', BpcClient);
+    server.auth.scheme('aria', scheme);
+    server.auth.strategy('aria', 'aria');
   }
 };
