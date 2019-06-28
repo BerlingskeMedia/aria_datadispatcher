@@ -8,6 +8,7 @@ const AWS_REGION = process.env.AWS_REGION || 'eu-west-1';
 const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
 const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 const SQS_QUEUE_URL = process.env.SQS_QUEUE_URL;
+const SQS_MESSAGE_GROUP_ID = process.env.SQS_MESSAGE_GROUP_ID || 'aria';
 
 
 AWS.config.update({accessKeyId: AWS_ACCESS_KEY_ID, secretAccessKey: AWS_SECRET_ACCESS_KEY, region: AWS_REGION});
@@ -29,6 +30,8 @@ if(!SQS_QUEUE_URL) {
 
 console.log(`Connecting to SQS on ${ SQS_QUEUE_URL } using AWS_ACCESS_KEY_ID ${ AWS_ACCESS_KEY_ID }`);
 
+
+// Verify we have a Fifo queue
 const params = {
   QueueUrl: SQS_QUEUE_URL,
   AttributeNames: [
@@ -37,7 +40,6 @@ const params = {
     /* more items */
   ]
 };
-
 
 sqs.getQueueAttributes(params, function(err, data) {
   if (err) {
@@ -48,48 +50,26 @@ sqs.getQueueAttributes(params, function(err, data) {
       module.exports.ready = true;
       module.exports.events.emit('ready');
     } else {
-      throw new Error('SQS queue is not Fifo')
+      throw new Error('SQS queue is not Fifo');
     }
   }
 });
 
 
+module.exports.deliver = async function(id, payload) {
+  var sqsParams = {
+    MessageBody: JSON.stringify(payload),
+    MessageDeduplicationId: id.toString(),
+    MessageGroupId: SQS_MESSAGE_GROUP_ID,
+    // MessageAttributes,
+    QueueUrl: SQS_QUEUE_URL
+  };
 
+  sqs.sendMessage(sqsParams, function(err, data) {
+    if (err) {
+      console.log('ERR', err);
+    }
 
-
-// module.exports.sendMessage = (podcastFromDB) => {
-//   const {lastErrorObject, value} = podcastFromDB;
-//   const inserted = lastErrorObject.updatedExisting ? 'created' : 'updated';
-//   const MessageBody = `${value.kind}:${inserted}:${value.ext_id}`;
-//   const MessageAttributes = {
-//     kind: {
-//       DataType: 'String',
-//       StringValue: `${value.kind}`
-//     },
-//     event: {
-//       DataType: 'String',
-//       StringValue: `${inserted}`
-//     },
-//     id: {
-//       DataType: 'String',
-//       StringValue: `${value.ext_id}`
-//     },
-//     producer: {
-//       DataType: 'String',
-//       StringValue: 'scraper'
-//     }
-//   };
-//   var sqsParams = {
-//     MessageBody,
-//     MessageAttributes,
-//     QueueUrl: SQS_QUEUE_URL
-//   };
-
-//   sqs.sendMessage(sqsParams, function(err, data) {
-//     if (err) {
-//       console.log('ERR', err);
-//     }
-
-//     console.log(data);
-//   });
-// }
+    console.log(data);
+  });
+};
