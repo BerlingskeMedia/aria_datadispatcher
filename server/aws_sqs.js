@@ -27,7 +27,7 @@ if(!SQS_QUEUE_URL) {
   return;
 }
 
-console.log(`Connecting to SQS on ${ SQS_QUEUE_URL }`);
+console.log(`Connecting to SQS on ${ SQS_QUEUE_URL } using AWS_ACCESS_KEY_ID ${ AWS_ACCESS_KEY_ID }`);
 
 const params = {
   QueueUrl: SQS_QUEUE_URL,
