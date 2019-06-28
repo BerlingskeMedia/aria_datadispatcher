@@ -2,6 +2,7 @@
 'use strict';
 
 const Hapi = require('@hapi/hapi');
+const Inert = require('@hapi/Inert');
 const Scheme = require('./scheme.js');
 const Kafka = require('./kafka.js');
 const SQS = require('./aws_sqs.js');
@@ -19,6 +20,7 @@ const server = Hapi.server({
 });
 
 
+server.register(Inert);
 server.register(Scheme);
 server.register(NotificationsEvents, { routes: { prefix: '/notifications_events' } });
 
@@ -27,7 +29,7 @@ server.route({
   method: 'GET',
   path: '/',
   handler: (request, h) => {
-      return 'OK';
+    return 'OK';
   }
 });
 
@@ -36,7 +38,16 @@ server.route({
   method: 'GET',
   path: '/healthcheck',
   handler: (request, h) => {
-      return 'OK';
+    return 'OK';
+  }
+});
+
+
+server.route({
+  method: 'GET',
+  path: '/version',
+  handler: {
+    file: './server/version'
   }
 });
 
