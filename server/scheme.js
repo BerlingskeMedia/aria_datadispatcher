@@ -4,24 +4,25 @@
 // To disable the payload validartion, the ENV var must be explicitly set to "true"
 const DISABLE_VALIDATION = (process.env.DISABLE_VALIDATION === 'true');
 
-if(DISABLE_VALIDATION) {
-  console.warn('Warning: ALL validation has been disabled.')
-}
-
 // To disable the payload validartion, the ENV var must be explicitly set to "true"
 const DISABLE_PAYLOAD_VALIDATION = (process.env.DISABLE_PAYLOAD_VALIDATION === 'true');
+
+const ARIA_CLIENT_NO = process.env.ARIA_CLIENT_NO;
+const ARIA_AUTH_KEY = process.env.ARIA_AUTH_KEY;
+
+const crypto = require('crypto');
+const Boom = require('@hapi/boom');
+const Joi = require('@hapi/joi');
+
 
 if(DISABLE_PAYLOAD_VALIDATION) {
   console.warn('Warning: Payload validation has been disabled.')
 }
 
 
-const ARIA_CLIENT_NO = process.env.ARIA_CLIENT_NO;
-const ARIA_AUTH_KEY = process.env.ARIA_AUTH_KEY;
-
-
-const Boom = require('@hapi/boom');
-const Joi = require('@hapi/joi');
+if(DISABLE_VALIDATION) {
+  console.warn('Warning: ALL validation has been disabled.')
+}
 
 
 const msgAuthDetailsValidation = Joi.object().keys({
@@ -52,12 +53,15 @@ const concatMsgAuthDetails = function(input) {
     ARIA_AUTH_KEY
   ];
 
-  return temp.join('|');
+  const concatValue = temp.join('|');
+  return concatValue;
 };
 
 
 const calculateSignatureValue = function(input) {
-  return '00+cdJ1hOqJU3QZFmr0W1w1koE6k3A/NrmYUqZeqjts=';
+  const sha256 = crypto.createHash('sha256').update(input, 'utf16le').digest();
+  const base64 = Buffer.from(sha256).toString('base64');
+  return base64;
 };
 
 
