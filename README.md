@@ -74,7 +74,8 @@ Please note that there is no need to provide authKey in the JSON and all other v
 
 ## ENV VARS
 
-* ARIA_SECRET
+* ARIA_CLIENT_NO
+* ARIA_AUTH_KEY
 * KAFKA_HOST
 * KAFKA_INGRESS_TOPIC
 * AWS_REGION

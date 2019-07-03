@@ -9,8 +9,9 @@ const { describe, it, before, after } = exports.lab = require('lab').script();
 
 describe('auth scheme tests', async () => {
   
-  process.env.ARIA_CLIENT_NO = "10";
-  process.env.ARIA_SECRET = "ASDvwHnQtaD6KyVuMGgVFGE8tukXaTkE"
+  process.env.ARIA_CLIENT_NO = "25";
+  process.env.ARIA_AUTH_KEY = "ASas782309UK44qweaxczsg";
+
   const server = require('../server');
 
   async function request(options) {
@@ -37,17 +38,6 @@ describe('auth scheme tests', async () => {
 
   after(async () => {
   });
-
-
-  const msgAuthDetails = {
-    "clientNo": 10,
-    "requestDateTime": "2019-05-27T00:00:00Z",
-    "signatureValue": "asdjkfq35ascas5q4wq09fq34racndsca=",
-    "signatureVersion": 0,
-    "ariaAccountID": "acctID1",
-    "ariaAccountNo": 0,
-    "userID": "userid1"
-  };
 
 
   it('endpoint should return 409 if missing payload', async () => {

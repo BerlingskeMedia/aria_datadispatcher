@@ -15,16 +15,49 @@ if(DISABLE_PAYLOAD_VALIDATION) {
   console.warn('Warning: Payload validation has been disabled.')
 }
 
+
+const ARIA_CLIENT_NO = process.env.ARIA_CLIENT_NO;
+const ARIA_AUTH_KEY = process.env.ARIA_AUTH_KEY;
+
+
 const Boom = require('@hapi/boom');
+const Joi = require('@hapi/joi');
 
 
+const msgAuthDetailsValidation = Joi.object().keys({
+  clientNo: Joi.number().integer(),
+  requestDateTime: Joi.string(),
+  signatureVersion: Joi.number().integer(),
+  ariaAccountID: Joi.string(),
+  ariaAccountNo: Joi.number().integer(),
+  userID: Joi.string()
+}).unknown(true); // Allow and strip unknows parameters
+
+
+// Must return:
+//    clientNo|requestDateTime|accountID|accountNo|userID|authKey
 const concatMsgAuthDetails = function(input) {
-  return '40|2019-03-26T08:24:00Z|xyz|0|abc|ASDvwHnQtaD6KyVuMGgVFGE8tukXaTkE';
+
+  const validateResult = msgAuthDetailsValidation.validate(input);
+  if(validateResult.error) {
+    throw Boom.badRequest();
+  }
+
+  const temp = [
+    input.clientNo,
+    input.requestDateTime,
+    input.ariaAccountID,
+    input.ariaAccountNo,
+    input.userID,
+    ARIA_AUTH_KEY
+  ];
+
+  return temp.join('|');
 };
 
 
 const calculateSignatureValue = function(input) {
-  return 'asdjkfq35ascas5q4wq09fq34racndsca';
+  return '00+cdJ1hOqJU3QZFmr0W1w1koE6k3A/NrmYUqZeqjts=';
 };
 
 
