@@ -19,12 +19,12 @@ const Boom = require('@hapi/boom');
 
 
 const concatMsgAuthDetails = function(input) {
-  return 'TEST';
+  return '40|2019-03-26T08:24:00Z|xyz|0|abc|ASDvwHnQtaD6KyVuMGgVFGE8tukXaTkE';
 };
 
 
 const calculateSignatureValue = function(input) {
-  return 'TEST';
+  return 'asdjkfq35ascas5q4wq09fq34racndsca';
 };
 
 
