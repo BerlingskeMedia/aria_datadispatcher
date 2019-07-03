@@ -91,6 +91,8 @@ Please note that there is no need to provide authKey in the JSON and all other v
 * Set ENV VARS in the environment.
 * Start the process using `npm run dev`.
 
+Or simply run `npm test` to run automated tests.
+
 
 ## Documentation
 

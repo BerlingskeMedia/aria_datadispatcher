@@ -17,6 +17,17 @@ if(DISABLE_PAYLOAD_VALIDATION) {
 
 const Boom = require('@hapi/boom');
 
+
+const concatMsgAuthDetails = function(input) {
+  return 'TEST';
+};
+
+
+const calculateSignatureValue = function(input) {
+  return 'TEST';
+};
+
+
 const scheme = function (server, options) {
 
   return {
@@ -66,5 +77,7 @@ module.exports = {
   register(server, options) {
     server.auth.scheme('aria', scheme);
     server.auth.strategy('aria', 'aria');
-  }
+  },
+  concatMsgAuthDetails: concatMsgAuthDetails,
+  calculateSignatureValue: calculateSignatureValue
 };
