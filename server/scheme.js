@@ -26,12 +26,12 @@ if(DISABLE_VALIDATION) {
 
 
 const msgAuthDetailsValidation = Joi.object().keys({
-  clientNo: Joi.number().integer(),
-  requestDateTime: Joi.string(),
+  clientNo: Joi.number().integer().required(),
+  requestDateTime: Joi.string().required(),
   signatureVersion: Joi.number().integer(),
-  ariaAccountID: Joi.string(),
-  ariaAccountNo: Joi.number().integer(),
-  userID: Joi.string()
+  ariaAccountID: Joi.string().required(),
+  ariaAccountNo: Joi.number().integer().required(),
+  userID: Joi.string().required()
 }).unknown(true); // Allow and strip unknows parameters
 
 
