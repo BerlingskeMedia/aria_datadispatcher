@@ -3,8 +3,8 @@
 
 
 // Test shortcuts.
-const { expect } = require('code');
-const { describe, it, before, after } = exports.lab = require('lab').script();
+const { expect } = require('@hapi/code');
+const { describe, it, before, after } = exports.lab = require('@hapi/lab').script();
 
 const server = require('../server');
 

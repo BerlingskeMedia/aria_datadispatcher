@@ -7,20 +7,20 @@
     "@hapi/boom": "^7.4.2",
     "@hapi/hapi": "^18.3.1",
     "@hapi/inert": "^5.2.1",
-    "@hapi/joi": "^15.0.3",
-    "aws-sdk": "^2.484.0",
+    "@hapi/joi": "^15.1.0",
+    "aws-sdk": "^2.497.0",
     "kafka-node": "^4.1.3"
   },
   "devDependencies": {
-    "code": "^5.2.4",
-    "lab": "^18.0.2",
+    "@hapi/code": "^5.3.1",
+    "@hapi/lab": "^19.1.0",
     "nodemon": "^1.19.0",
     "sinon": "^7.3.2"
   },
   "scripts": {
     "start": "node $npm_package_main",
     "dev": "nodemon --inspect --ignore 'test/' server",
-    "test": "node node_modules/lab/bin/lab --bail --verbose --leaks --timeout 0 -r console"
+    "test": "node node_modules/@hapi/lab/bin/lab --bail --verbose --leaks --timeout 0 -r console"
   },
   "repository": {
     "type": "git",
