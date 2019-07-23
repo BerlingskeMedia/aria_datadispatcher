@@ -13,6 +13,7 @@ const SQS_MESSAGE_GROUP_ID = process.env.SQS_MESSAGE_GROUP_ID || 'aria';
 
 AWS.config.update({accessKeyId: AWS_ACCESS_KEY_ID, secretAccessKey: AWS_SECRET_ACCESS_KEY, region: AWS_REGION});
 
+const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true');
 
 const sqs = new AWS.SQS();
 
@@ -43,7 +44,7 @@ const params = {
 
 sqs.getQueueAttributes(params, function(err, data) {
   if (err) {
-    console.log(err, err.stack); // an error occurred
+    console.error(err, err.stack); // an error occurred
   } else {
     // console.log(data);           // successful response
     if(data.Attributes.FifoQueue === 'true') {
@@ -65,11 +66,11 @@ module.exports.deliver = async function(id, payload) {
     QueueUrl: SQS_QUEUE_URL
   };
 
-  sqs.sendMessage(sqsParams, function(err, data) {
+  sqs.sendMessage(sqsParams, function(err, result) {
     if (err) {
-      console.log('ERR', err);
+      console.error('SQS Error:', err);
+    } else if(CONSOLE_LOG_EVENTS) {
+      console.log('SQS OK:', result.toString());
     }
-
-    console.log(data);
   });
 };

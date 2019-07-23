@@ -29,7 +29,9 @@ module.exports = {
       handler: async (request, h) => {
 
         if(CONSOLE_LOG_EVENTS) {
-          console.log(`Message received: ${ new Date().toISOString() }. Payload: ${ request.payload.toString()}`);
+          console.log(`Message received: ${ new Date().toISOString() }`);
+          console.log(`Headers: ${ Object.keys(request.headers).map(h => `${h}=${request.headers[h]}`).join(', ')}`);
+          console.log(`Payload: ${ request.payload.toString()}`);
         }
 
 

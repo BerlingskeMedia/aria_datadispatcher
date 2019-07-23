@@ -7,6 +7,8 @@ const Kafka = require('kafka-node');
 const KAFKA_HOST = process.env.KAFKA_HOST;
 const KAFKA_INGRESS_TOPIC = process.env.KAFKA_INGRESS_TOPIC;
 
+const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true');
+
 if(!KAFKA_HOST) {
   console.log('Kafka disabled')
   module.exports = new EventEmitter();
@@ -63,7 +65,7 @@ module.exports.deliver = async function(id, payload) {
   producer.send(payloads, function (err, result) {
     if(err) {
       console.error('Kafka error:',err);
-    } else {
+    } else if(CONSOLE_LOG_EVENTS) {
       console.log('Kafka OK:', result)
     }
   });
