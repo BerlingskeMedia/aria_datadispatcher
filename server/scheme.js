@@ -35,7 +35,11 @@ const msgAuthDetailsValidation = Joi.object().keys({
 
 // Must return:
 //    clientNo|requestDateTime|accountID|accountNo|userID|authKey
-const concatMsgAuthDetails = function(input, authKey) {
+const concatMsgAuthDetails = function(input) {
+
+  // 
+  const ARIA_CLIENT_NO = process.env.ARIA_CLIENT_NO;
+  const ARIA_AUTH_KEY = process.env.ARIA_AUTH_KEY;
 
   const validateResult = msgAuthDetailsValidation.validate(input);
   if(validateResult.error) {
@@ -53,7 +57,7 @@ const concatMsgAuthDetails = function(input, authKey) {
       input.ariaAccountNo,
       input.userID,
       input.message,
-      authKey
+      ARIA_AUTH_KEY
     ];
 
   } else {
@@ -64,7 +68,7 @@ const concatMsgAuthDetails = function(input, authKey) {
       input.ariaAccountID,
       input.ariaAccountNo,
       input.userID,
-      authKey
+      ARIA_AUTH_KEY
     ];
 
   }
@@ -95,10 +99,6 @@ const scheme = function (server, options) {
       if(DISABLE_VALIDATION) {
         return h.authenticated({ credentials: {} });
       }
-
-      // 
-      const ARIA_CLIENT_NO = process.env.ARIA_CLIENT_NO;
-      const ARIA_AUTH_KEY = process.env.ARIA_AUTH_KEY;
 
       
       // Payload data in "request.payload" is not available in the "authenticate" function.
