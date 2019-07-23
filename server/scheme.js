@@ -7,9 +7,6 @@ const DISABLE_VALIDATION = (process.env.DISABLE_VALIDATION === 'true');
 // To disable the payload validartion, the ENV var must be explicitly set to "true"
 const DISABLE_PAYLOAD_VALIDATION = (process.env.DISABLE_PAYLOAD_VALIDATION === 'true');
 
-const ARIA_CLIENT_NO = process.env.ARIA_CLIENT_NO;
-const ARIA_AUTH_KEY = process.env.ARIA_AUTH_KEY;
-
 const crypto = require('crypto');
 const Boom = require('@hapi/boom');
 const Joi = require('@hapi/joi');
@@ -31,27 +28,46 @@ const msgAuthDetailsValidation = Joi.object().keys({
   signatureVersion: Joi.number().integer(),
   ariaAccountID: Joi.string().required(),
   ariaAccountNo: Joi.number().integer().required(),
-  userID: Joi.string().required()
+  userID: Joi.string().default(''),
+  message: Joi.string().default('')
 }).unknown(true); // Allow and strip unknows parameters
 
 
 // Must return:
 //    clientNo|requestDateTime|accountID|accountNo|userID|authKey
-const concatMsgAuthDetails = function(input) {
+const concatMsgAuthDetails = function(input, authKey) {
 
   const validateResult = msgAuthDetailsValidation.validate(input);
   if(validateResult.error) {
     throw Boom.badRequest();
   }
 
-  const temp = [
-    input.clientNo,
-    input.requestDateTime,
-    input.ariaAccountID,
-    input.ariaAccountNo,
-    input.userID,
-    ARIA_AUTH_KEY
-  ];
+  let temp;
+  
+  if(input.message) {
+
+    temp = [
+      input.clientNo,
+      input.requestDateTime,
+      input.ariaAccountID,
+      input.ariaAccountNo,
+      input.userID,
+      input.message,
+      authKey
+    ];
+
+  } else {
+
+    temp = [
+      input.clientNo,
+      input.requestDateTime,
+      input.ariaAccountID,
+      input.ariaAccountNo,
+      input.userID,
+      authKey
+    ];
+
+  }
 
   const concatValue = temp.join('|');
   return concatValue;
@@ -79,6 +95,10 @@ const scheme = function (server, options) {
       if(DISABLE_VALIDATION) {
         return h.authenticated({ credentials: {} });
       }
+
+      // 
+      const ARIA_CLIENT_NO = process.env.ARIA_CLIENT_NO;
+      const ARIA_AUTH_KEY = process.env.ARIA_AUTH_KEY;
 
       
       // Payload data in "request.payload" is not available in the "authenticate" function.
