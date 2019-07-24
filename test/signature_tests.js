@@ -39,7 +39,7 @@ describe('valid auth scheme', async () => {
 
 
     it('validate the concatenated string', async () => {
-      const concatenatedValue = scheme.concatMsgAuthDetails({ msgAuthDetails });
+      const concatenatedValue = scheme.concatMsgAuthDetails(msgAuthDetails);
       const expectedConcatenatedValue = '25|2019-07-03T07:48:31Z|AccountID|1234567|ASaeed|ASas782309UK44qweaxczsg';
       expect(concatenatedValue).to.equal(expectedConcatenatedValue);
     });

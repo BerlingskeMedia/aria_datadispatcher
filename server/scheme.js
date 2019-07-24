@@ -30,7 +30,6 @@ const msgAuthDetailsValidation = Joi.object().keys({
 //    clientNo|requestDateTime|accountID|accountNo|userID|authKey
 const concatMsgAuthDetails = function({ msgAuthDetails, eventData }) {
 
-  // 
   const ARIA_CLIENT_NO = process.env.ARIA_CLIENT_NO;
   const ARIA_AUTH_KEY = process.env.ARIA_AUTH_KEY;
 
