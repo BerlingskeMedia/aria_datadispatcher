@@ -72,9 +72,9 @@ describe('valid auth scheme', async () => {
     it('validate test 2', async () => {
       const concatenatedValue = scheme.concatMsgAuthDetails({ msgAuthDetails, eventData });
       const expectedConcatenatedValue = `25|2019-07-23T08:36:15Z|AriaAccountID|1000||{"request":{"version":1.0,"sender":0,"transaction_id":336440859,"action":0,"class":3,"classSpecified":true,"prov_classSpecified":false,"auth_key":"CbWMtwXCyCdMAPB7PT5bX4Ws3UC7BvCE"},"account":{"client_no":90000327,"acct_no":41940067,"userid":"45393375","senior_acct_noSpecified":false,"master_plan_instances":[{"master_plan_instance_no":130159158,"client_plan_instance_id":"MPI-f23ee0c4-6dbe-49f1-a0e4-f2764eb06b47","resp_level_cd":1},{"master_plan_instance_no":130159159,"client_plan_instance_id":"BER-C-DIGITAL-FULL-91fe320d-2672-419c-b09e-1449a2b639e1","resp_level_cd":1},{"master_plan_instance_no":130159381,"client_plan_instance_id":"BER-C-DIGITAL-FULL-943da223-41fc-40f6-b580-39cc2f8f198f","resp_level_cd":1},{"master_plan_instance_no":130159384,"client_plan_instance_id":"BER-C-DIGITAL-FULL-6dd8bd1c-359b-4699-a70c-a304b6f42215","resp_level_cd":1}]},"message":{"msg_id":17193834,"msg_class":"I","msg_class_label":"Invoice/Statement","msg_creation_date":"2019-07-20 01:37:27","msg_sent_date":"2019-07-20 01:37:27","msg_subject":"BEM Domestic Invoice","msg_recipient_email_address":"nmikklesen@cimtest.dk","xml_statement_no":"N/A"},"event_data":[{"event_id":1004,"event_label":"Account Message Type "Invoice/Statement" Requires Sending"},{"event_id":1014,"event_label":"Message Type "Invoice/Statement" Sent To Account Holder"}]}|ASas782309UK44qweaxczsg`;
-      // expect(concatenatedValue).to.equal(expectedConcatenatedValue);
+      expect(concatenatedValue).to.equal(expectedConcatenatedValue);
 
-      const signatureValue = scheme.calculateSignatureValue(expectedConcatenatedValue);
+      const signatureValue = scheme.calculateSignatureValue(concatenatedValue);
       expect(signatureValue).to.equal(msgAuthDetails.signatureValue);
     });
   });
