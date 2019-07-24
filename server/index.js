@@ -79,3 +79,10 @@ async function start() {
 
 
 module.exports = server;
+
+// I want the server to start on my local dev laptop, even though both Kafka and SQS is disabled.
+if (Kafka.disabled && SQS.disabled && ['DK0000271', 'YOU CAN ADD YOUR DEV LAPTOP HOSTNAME HERE'].indexOf(server.info.host) > -1) {
+  console.warn('Starting the server with all queues disabled');
+  // The timeout is to make sure all plugins have registered. Easier then rewriting this into an async func.
+  setTimeout(start, 2000);
+}
