@@ -39,14 +39,29 @@ describe('auth scheme tests', async () => {
   });
 
 
-  it('endpoint should return 409 if missing payload', async () => {
+  it('endpoint should return 401 Unauthorized if missing payload', async () => {
     const response = await request({ method: 'POST', url: '/notifications_events' });
-    // expect(response.statusCode).to.equal(409);
+    expect(response.statusCode).to.equal(401);
   });
 
 
-  it('endpoint should return 409 if empty payload', async () => {
+  it('endpoint should return 401 Unauthorized if empty payload', async () => {
     const response = await request({ method: 'POST', url: '/notifications_events', payload: {} });
-    // expect(response.statusCode).to.equal(409);
+    expect(response.statusCode).to.equal(401);
+  });
+
+  it('endpoint should return 200 when msgAuthDetails is valid', async () => {
+    const msgAuthDetails = {
+      clientNo: 25,
+      requestDateTime: "2019-07-03T07:48:31Z",
+      signatureValue: "00+cdJ1hOqJU3QZFmr0W1w1koE6k3A/NrmYUqZeqjts=",
+      ariaAccountID: "AccountID",
+      ariaAccountNo: 1234567,
+      signatureVersion: 1,
+      userID: "ASaeed"
+    };
+
+    const response = await request({ method: 'POST', url: '/notifications_events', payload: { msgAuthDetails } });
+    expect(response.statusCode).to.equal(200);
   });
 });
