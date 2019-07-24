@@ -1,6 +1,8 @@
 'use strict';
 
 const Boom = require('@hapi/boom');
+const Joi = require('@hapi/joi');
+const Scheme = require('./scheme.js');
 const Kafka = require('./kafka.js');
 const SQS = require('./aws_sqs.js');
 
@@ -22,8 +24,14 @@ module.exports = {
       options: {
         auth: 'aria',
         payload: {
-          parse: false,
-          allow: ['text/xml', 'text/plain', 'application/xml', 'application/json']
+          // parse: false,
+          allow: ['application/json']
+        },
+        validate: {
+          payload: Joi.object().keys({
+            // eventData: 
+          })
+          .unknown(true)
         }
       },
       handler: async (request, h) => {
@@ -31,7 +39,9 @@ module.exports = {
         if(CONSOLE_LOG_EVENTS) {
           console.log(`Message received: ${ new Date().toISOString() }`);
           console.log(`Headers: ${ Object.keys(request.headers).map(h => `${h}=${request.headers[h]}`).join(', ')}`);
-          console.log(`Payload: ${ request.payload.toString()}`);
+          // console.log(`Payload: ${ request.payload.toString()}`);
+          console.log(`msgAuthDetails: ${ JSON.stringify(request.payload.msgAuthDetails) }`);
+          console.log(`eventData: ${ JSON.stringify(request.payload.eventData) }`);
         }
 
 
