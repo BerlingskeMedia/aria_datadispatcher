@@ -98,7 +98,7 @@ const scheme = function (server, options) {
     payload: async function (request, h) {
 
       if(DISABLE_VALIDATION) {
-        return h.authenticated({ credentials: {} });
+        return h.continue;;
       }
 
       if(!request.payload) {
