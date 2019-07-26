@@ -24,14 +24,8 @@ module.exports = {
       options: {
         auth: 'aria',
         payload: {
-          // parse: false,
+          parse: false,
           allow: ['application/json']
-        },
-        validate: {
-          payload: Joi.object().keys({
-            // eventData: 
-          })
-          .unknown(true)
         }
       },
       handler: async (request, h) => {
@@ -39,9 +33,10 @@ module.exports = {
         if(CONSOLE_LOG_EVENTS) {
           console.log(`Message received: ${ new Date().toISOString() }`);
           console.log(`Headers: ${ Object.keys(request.headers).map(h => `${h}=${request.headers[h]}`).join(', ')}`);
-          // console.log(`Payload: ${ request.payload.toString()}`);
-          console.log(`msgAuthDetails: ${ JSON.stringify(request.payload.msgAuthDetails) }`);
-          console.log(`eventData: ${ JSON.stringify(request.payload.eventData) }`);
+          console.log(`Payload: ${ request.payload.toString()}`);
+          // console.log(`Payload: ${ JSON.stringify(request.payload) }`);
+          // console.log(`msgAuthDetails: ${ JSON.stringify(request.payload.msgAuthDetails) }`);
+          // console.log(`eventData: ${ JSON.stringify(request.payload.eventData) }`);
         }
 
 
