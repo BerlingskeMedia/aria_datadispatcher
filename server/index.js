@@ -43,11 +43,21 @@ server.route({
 });
 
 
+const versionFileName = './server/version';
+const Fs = require('fs');
+Fs.stat(versionFileName, function(err, file) {
+  if(file) {
+    Fs.readFile(versionFileName, function(err, buf){
+      console.log(`Running ${ buf.toString() }`);
+    });
+  }
+});
+
 server.route({
   method: 'GET',
   path: '/version',
   handler: {
-    file: './server/version'
+    file: versionFileName
   }
 });
 
