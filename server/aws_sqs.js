@@ -70,7 +70,7 @@ module.exports.deliver = async function(id, payload) {
     if (err) {
       console.error('SQS Error:', err);
     } else if(CONSOLE_LOG_EVENTS) {
-      console.log('SQS OK:', result.toString());
+      console.log('SQS OK:', JSON.stringify(result));
     }
   });
 };
