@@ -59,7 +59,7 @@ sqs.getQueueAttributes(params, function(err, data) {
 
 module.exports.deliver = async function(id, payload) {
   var sqsParams = {
-    MessageBody: JSON.stringify(payload),
+    MessageBody: payload,
     MessageDeduplicationId: id.toString(),
     MessageGroupId: SQS_MESSAGE_GROUP_ID,
     // MessageAttributes,
