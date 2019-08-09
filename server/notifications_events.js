@@ -25,6 +25,8 @@ module.exports = {
         auth: 'aria',
         payload: {
           parse: false,
+          // ^-- Important not to parse the payload, as this will change the payload content from
+          //   what AMPS has used to calculate the signatureValue
           allow: ['application/json']
         }
       },

@@ -50,6 +50,7 @@ describe('auth scheme tests', async () => {
     expect(response.statusCode).to.equal(401);
   });
 
+
   it('endpoint should return 200 when msgAuthDetails is valid', async () => {
     const msgAuthDetails = {
       clientNo: 25,
@@ -61,7 +62,7 @@ describe('auth scheme tests', async () => {
       userID: "ASaeed"
     };
 
-    const response = await request({ method: 'POST', url: '/notifications_events', payload: { msgAuthDetails } });
+    const response = await request({ method: 'POST', url: '/notifications_events', payload: { msgAuthDetails, eventData: { test:1 } } });
     expect(response.statusCode).to.equal(200);
   });
 });

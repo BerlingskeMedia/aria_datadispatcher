@@ -28,7 +28,7 @@ const msgAuthDetailsValidation = Joi.object().keys({
 
 // Must return:
 //    clientNo|requestDateTime|accountID|accountNo|userID|authKey
-const concatMsgAuthDetails = function({ msgAuthDetails, eventData }) {
+const concatMsgAuthDetails = function(msgAuthDetails, message) {
 
   const ARIA_CLIENT_NO = process.env.ARIA_CLIENT_NO;
   const ARIA_AUTH_KEY = process.env.ARIA_AUTH_KEY;
@@ -48,7 +48,7 @@ const concatMsgAuthDetails = function({ msgAuthDetails, eventData }) {
   }
 
 
-  let temp = [
+  let fields = [
     msgAuthDetails.clientNo,
     msgAuthDetails.requestDateTime,
     msgAuthDetails.ariaAccountID,
@@ -60,11 +60,15 @@ const concatMsgAuthDetails = function({ msgAuthDetails, eventData }) {
   
   if(msgAuthDetails.signatureVersion !== 1) {
 
-    let message = JSON.stringify(eventData).replace(/\\/g, '');
-    temp.splice(5, 0, message);
+    // let message = stringifyWithFloats(eventData);
+    // let message = JSON.stringify(eventData);
+    // Aria workflow calculated the hash without the backslash escapes
+    message = message.replace(/\\/g, '');
+    // Adding the message on the fifth position in the fields array
+    fields.splice(5, 0, message);
   }
 
-  const concatValue = temp.join('|');
+  const concatValue = fields.join('|');
   return concatValue;
 };
 
@@ -83,32 +87,58 @@ const scheme = function (server, options) {
     options: {
       // This will trigger the "payload" async auth function
       // Do NOT set to false, otherwise authentication is practially disabled
-      payload: true
+      payload: !DISABLE_VALIDATION
     },
+
 
     authenticate: async function (request, h) {
-
-      // Payload data in "request.payload" is not available in this "authenticate" function.
-      // So we need to return "h.authenticated" in order to process to the "payload" function
+      // In this "authenticate" function, payload data (in "request.payload") is not yet available.
+      // So we need to return "h.authenticated" in order to proceed to the "payload" function
       return h.authenticated({ credentials: {} });
-
     },
-      
+
+
     // This function will only be executed if this scheme "options.payload" is set to true.
     payload: async function (request, h) {
-
-      if(DISABLE_VALIDATION) {
-        return h.continue;;
-      }
 
       if(!request.payload) {
         throw Boom.unauthorized();
       }
 
-      const input = concatMsgAuthDetails(request.payload);
+      const originalPayload = request.payload.toString();
+      
+      if(!originalPayload) {
+        throw Boom.unauthorized();
+      }
+
+      let parsedPayload;
+
+      try {
+        parsedPayload = JSON.parse(originalPayload);
+      } catch(ex) {
+        console.error(ex);
+        throw Boom.unauthorized();
+      }
+
+
+      const splitString = '"eventData":{';
+      const eventDataIndex = originalPayload.indexOf(splitString);
+      // Getting the content of eventData
+      const strippedEventData = originalPayload.substring(eventDataIndex + splitString.length - 1, originalPayload.length - 1 );
+
+
+      // Store the original request string
+      // try to parse JSON
+      // Validate that there is both msgAuthDetails and eventData
+      // get the msgAuthDetails object
+      // if the
+      // isolate the eventData
+
+
+      const input = concatMsgAuthDetails(parsedPayload.msgAuthDetails, strippedEventData);
       const hash = calculateSignatureValue(input);
 
-      if(hash === request.payload.msgAuthDetails.signatureValue) {
+      if(hash === parsedPayload.msgAuthDetails.signatureValue) {
         return h.continue;
       } else {
         throw Boom.unauthorized();
