@@ -34,6 +34,7 @@ module.exports = {
 
         if(CONSOLE_LOG_EVENTS) {
           console.log(`Message received: ${ new Date().toISOString() }`);
+          console.log(`Message is authenticated: ${ request.auth.isAuthenticated }`);
           console.log(`Headers: ${ Object.keys(request.headers).map(h => `${h}=${request.headers[h]}`).join(', ')}`);
           console.log(`Payload: ${ request.payload.toString()}`);
           // console.log(`Payload: ${ JSON.stringify(request.payload) }`);

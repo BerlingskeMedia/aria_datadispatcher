@@ -26,6 +26,16 @@ const msgAuthDetailsValidation = Joi.object().keys({
 }).unknown(true); // Allow and strip unknows parameters
 
 
+const isolateEventData = function(payload) {
+  const splitString = '"eventData":{';
+  const eventDataIndex = payload.indexOf(splitString);
+  // Getting the content of eventData
+  // TODO: This code expects the eventData to be the last object.
+  // We should count the '{' and find the index of the matching '}'
+  return payload.substring(eventDataIndex + splitString.length - 1, payload.length - 1 );
+};
+
+
 // Must return:
 //    clientNo|requestDateTime|accountID|accountNo|userID|authKey
 const concatMsgAuthDetails = function(msgAuthDetails, message) {
@@ -121,21 +131,9 @@ const scheme = function (server, options) {
       }
 
 
-      const splitString = '"eventData":{';
-      const eventDataIndex = originalPayload.indexOf(splitString);
-      // Getting the content of eventData
-      const strippedEventData = originalPayload.substring(eventDataIndex + splitString.length - 1, originalPayload.length - 1 );
+      const eventDataStr = isolateEventData(originalPayload)
 
-
-      // Store the original request string
-      // try to parse JSON
-      // Validate that there is both msgAuthDetails and eventData
-      // get the msgAuthDetails object
-      // if the
-      // isolate the eventData
-
-
-      const input = concatMsgAuthDetails(parsedPayload.msgAuthDetails, strippedEventData);
+      const input = concatMsgAuthDetails(parsedPayload.msgAuthDetails, eventDataStr);
       const hash = calculateSignatureValue(input);
 
       if(hash === parsedPayload.msgAuthDetails.signatureValue) {
@@ -155,6 +153,7 @@ module.exports = {
     server.auth.scheme('aria', scheme);
     server.auth.strategy('aria', 'aria');
   },
+  isolateEventData,
   concatMsgAuthDetails,
   calculateSignatureValue,
   msgAuthDetailsValidation
