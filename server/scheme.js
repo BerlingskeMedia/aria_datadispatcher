@@ -27,12 +27,52 @@ const msgAuthDetailsValidation = Joi.object().keys({
 
 
 const isolateEventData = function(payload) {
-  const splitString = '"eventData":{';
+  const splitString = '"eventData":';
+
   const eventDataIndex = payload.indexOf(splitString);
-  // Getting the content of eventData
-  // TODO: This code expects the eventData to be the last object.
-  // We should count the '{' and find the index of the matching '}'
-  return payload.substring(eventDataIndex + splitString.length - 1, payload.length - 1 );
+
+  if(eventDataIndex === -1) {
+    return '';
+  }
+  
+  const startOfObject = eventDataIndex + splitString.length;
+  const halfWayEventDataStr = payload.substring(startOfObject);
+  const endOfObject = findEndOfObject(halfWayEventDataStr);
+  const eventDataStr = halfWayEventDataStr.substring(0, endOfObject);
+  return eventDataStr;
+};
+
+
+const findEndOfObject = function(input, position = 0, bracketCounter = 0) {
+  if(input.length === 0) {
+    return position;
+  }
+
+  if(position > 0 && bracketCounter === 0) {
+    return position;
+  }
+
+  const nextOpen = input.indexOf('{', position);
+  const nextClose = input.indexOf('}', position);
+  
+  if (nextOpen === -1 && nextClose === -1) {
+    // There is no open nor close brackets
+    // We return the last postion
+    return input.length - 1;
+
+  } else if(nextOpen === -1 || nextOpen > nextClose) {
+    // There is no open but close brackets, or
+    // the next bracket is a close
+    return findEndOfObject(input, nextClose + 1, bracketCounter += -1);
+
+  } else if(nextClose === -1 || nextOpen < nextClose) {
+    // There is an open but no close brackets, or
+    // the next bracket is an open
+    return findEndOfObject(input, nextOpen + 1, bracketCounter += 1);
+  }
+
+  throw new Error('Exception');
+
 };
 
 

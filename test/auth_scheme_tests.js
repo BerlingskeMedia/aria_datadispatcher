@@ -100,4 +100,39 @@ describe('auth scheme tests', async () => {
     expect(response.statusCode).to.equal(200);
   });
 
+
+  it('endpoint should return 200 when reversed content version 2 is valid 2', async () => {
+    const msgAuthDetails = {
+      clientNo: 25,
+      requestDateTime: "2019-07-03T07:48:31Z",
+      signatureValue: "Gkq68zvCcJOPyDX9V8HouzrcDZWnQjmFFJvO6VyF2oE=",
+      ariaAccountID: "AccountID",
+      ariaAccountNo: 1234567,
+      signatureVersion: 2,
+      userID: "ASaeed"
+    };
+
+    const eventData = { test:1 };
+
+    const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventData, msgAuthDetails } });
+    expect(response.statusCode).to.equal(200);
+  });
+
+
+  it('endpoint should return 200 when reversed content version 2 is valid 2', async () => {
+    const msgAuthDetails = {
+      clientNo: 25,
+      requestDateTime: "2019-07-03T07:48:31Z",
+      signatureValue: "5oF5G1BUIn7BDURnZdCeb6Yn8Gjr3zfXqPrbg0Kjyrg=",
+      ariaAccountID: "AccountID",
+      ariaAccountNo: 1234567,
+      signatureVersion: 2,
+      userID: "ASaeed"
+    };
+
+    const eventData = { subdocument: { test: 1, anothervalue: 'text' }};
+
+    const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventData, msgAuthDetails } });
+    expect(response.statusCode).to.equal(200);
+  });
 });
