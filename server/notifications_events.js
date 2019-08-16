@@ -7,7 +7,7 @@ const Kafka = require('./kafka.js');
 const SQS = require('./aws_sqs.js');
 
 // To print the event payload details to console log, the ENV var must be explicitly set to "true"
-const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true');
+const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true' && process.env.NODE_ENV !== 'test');
 
 if(CONSOLE_LOG_EVENTS) {
   console.log('Console log event has been enabled.')
@@ -31,30 +31,27 @@ module.exports = {
         }
       },
       handler: async (request, h) => {
-
+        
+        const id = Date.now();
+        // Since the payload is not parsed, it's a buffer. So we need toString()
+        const payload = request.payload.toString();
+        
         if(CONSOLE_LOG_EVENTS) {
           console.log(`Message received: ${ new Date().toISOString() }`);
           console.log(`Message is authenticated: ${ request.auth.isAuthenticated }`);
           console.log(`Headers: ${ Object.keys(request.headers).map(h => `${h}=${request.headers[h]}`).join(', ')}`);
-          console.log(`Payload: ${ request.payload.toString()}`);
-          // console.log(`Payload: ${ JSON.stringify(request.payload) }`);
-          // console.log(`msgAuthDetails: ${ JSON.stringify(request.payload.msgAuthDetails) }`);
-          // console.log(`eventData: ${ JSON.stringify(request.payload.eventData) }`);
+          console.log(`Payload: ${ payload}`);
         }
-
-
-        const id = Date.now();
-        // Since the payload is not parsed, it's a buffer. So we need toString()
-        const payload = request.payload.toString();
-
+        
+        const eventPayload = Scheme.isolateEventPayload(payload);
 
         if(Kafka.ready) {
-          await Kafka.deliver(id, payload);
+          await Kafka.deliver(id, eventPayload);
         }
 
 
         if(SQS.ready) {
-          await SQS.deliver(id, payload);
+          await SQS.deliver(id, eventPayload);
         }
 
 

@@ -26,20 +26,21 @@ const msgAuthDetailsValidation = Joi.object().keys({
 }).unknown(true); // Allow and strip unknows parameters
 
 
-const isolateEventData = function(payload) {
-  const splitString = '"eventData":';
+const isolateEventPayload = function(payload) {
+  const splitString = '"eventPayload":';
 
-  const eventDataIndex = payload.indexOf(splitString);
+  const eventPayloadIndex = payload.indexOf(splitString);
 
-  if(eventDataIndex === -1) {
-    return '';
+  if(eventPayloadIndex === -1) {
+    // In case there is no 
+    return payload;
   }
   
-  const startOfObject = eventDataIndex + splitString.length;
-  const halfWayEventDataStr = payload.substring(startOfObject);
-  const endOfObject = findEndOfObject(halfWayEventDataStr);
-  const eventDataStr = halfWayEventDataStr.substring(0, endOfObject);
-  return eventDataStr;
+  const startOfObject = eventPayloadIndex + splitString.length;
+  const halfWayEventPayloadStr = payload.substring(startOfObject);
+  const endOfObject = findEndOfObject(halfWayEventPayloadStr);
+  const eventPayloadStr = halfWayEventPayloadStr.substring(0, endOfObject);
+  return eventPayloadStr;
 };
 
 
@@ -110,8 +111,6 @@ const concatMsgAuthDetails = function(msgAuthDetails, message) {
   
   if(msgAuthDetails.signatureVersion !== 1) {
 
-    // let message = stringifyWithFloats(eventData);
-    // let message = JSON.stringify(eventData);
     // Aria workflow calculated the hash without the backslash escapes
     message = message.replace(/\\/g, '');
     // Adding the message on the fifth position in the fields array
@@ -161,22 +160,40 @@ const scheme = function (server, options) {
         throw Boom.unauthorized();
       }
 
-      let parsedPayload;
+      const eventPayload = isolateEventPayload(originalPayload);
 
-      try {
-        parsedPayload = JSON.parse(originalPayload);
-      } catch(ex) {
-        console.error(ex);
-        throw Boom.unauthorized();
+
+      let msgAuthDetails = {};
+      
+      
+      if(request.headers.authorization) {
+        
+        const a = request.headers.authorization.split(',');
+        a.forEach(c => {
+          const firstEqualIndex = c.indexOf('=');
+          const keyName = c.substring(0, firstEqualIndex).trim();
+          const value = c.substring(firstEqualIndex + 1).trim().replace(/"/g, '');
+          msgAuthDetails[keyName] = value;
+        });
+        
+      } else {
+
+        try {
+
+          const parsedPayload = JSON.parse(originalPayload);
+          msgAuthDetails = parsedPayload.msgAuthDetails;
+
+        } catch(ex) {
+          console.error(ex);
+          throw Boom.unauthorized();
+        }
       }
 
 
-      const eventDataStr = isolateEventData(originalPayload)
-
-      const input = concatMsgAuthDetails(parsedPayload.msgAuthDetails, eventDataStr);
+      const input = concatMsgAuthDetails(msgAuthDetails, eventPayload);
       const hash = calculateSignatureValue(input);
 
-      if(hash === parsedPayload.msgAuthDetails.signatureValue) {
+      if(hash === msgAuthDetails.signatureValue) {
         return h.continue;
       } else {
         throw Boom.unauthorized();
@@ -193,7 +210,7 @@ module.exports = {
     server.auth.scheme('aria', scheme);
     server.auth.strategy('aria', 'aria');
   },
-  isolateEventData,
+  isolateEventPayload,
   concatMsgAuthDetails,
   calculateSignatureValue,
   msgAuthDetailsValidation

@@ -78,7 +78,7 @@ describe('auth scheme tests', async () => {
       userID: "ASaeed"
     };
 
-    const response = await request({ method: 'POST', url: '/notifications_events', payload: { msgAuthDetails, eventData: { test:1 } } });
+    const response = await request({ method: 'POST', url: '/notifications_events', payload: { msgAuthDetails, eventPayload: { test:1 } } });
     expect(response.statusCode).to.equal(200);
   });
 
@@ -94,9 +94,9 @@ describe('auth scheme tests', async () => {
       userID: "ASaeed"
     };
 
-    const eventData = { test:1 };
+    const eventPayload = { test:1 };
 
-    const response = await request({ method: 'POST', url: '/notifications_events', payload: { msgAuthDetails, eventData } });
+    const response = await request({ method: 'POST', url: '/notifications_events', payload: { msgAuthDetails, eventPayload } });
     expect(response.statusCode).to.equal(200);
   });
 
@@ -112,9 +112,9 @@ describe('auth scheme tests', async () => {
       userID: "ASaeed"
     };
 
-    const eventData = { test:1 };
+    const eventPayload = { test:1 };
 
-    const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventData, msgAuthDetails } });
+    const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventPayload, msgAuthDetails } });
     expect(response.statusCode).to.equal(200);
   });
 
@@ -130,9 +130,22 @@ describe('auth scheme tests', async () => {
       userID: "ASaeed"
     };
 
-    const eventData = { subdocument: { test: 1, anothervalue: 'text' }};
+    const eventPayload = { subdocument: { test: 1, anothervalue: 'text' }};
 
-    const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventData, msgAuthDetails } });
+    const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventPayload, msgAuthDetails } });
+    expect(response.statusCode).to.equal(200);
+  });
+
+
+  it('endpoint should return 200 when auth header 1', async () => {
+      
+    const headers = {
+      'Authorization': 'clientNo="25", requestDateTime="2019-07-03T07:48:31Z", signatureValue="Oy2RsOLi2uJG50NSnRYzxW2zERKJmKGre482K/q7Kl0=", ariaAccountID="AccountID", ariaAccountNo="1234567", signatureVersion="2", userID="ASaeed"'
+    };
+
+    const payload = { subdocument: { test: 2, anothervalue: 'text on a request with headers' }};
+
+    const response = await request({ method: 'POST', url: '/notifications_events', payload, headers });
     expect(response.statusCode).to.equal(200);
   });
 });
