@@ -148,4 +148,27 @@ describe('auth scheme tests', async () => {
     const response = await request({ method: 'POST', url: '/notifications_events', payload, headers });
     expect(response.statusCode).to.equal(200);
   });
+
+
+  it('endpoint should return 200 when auth header is test and payload includes msgAuthDetails', async () => {
+      
+    const headers = {
+      'Authorization': 'clientNo="TEST", requestDateTime="1971-07-01T01:48:31Z", signatureValue="TEST", ariaAccountID="AccountID", ariaAccountNo="1234567", signatureVersion="2", userID="TEST"'
+    };
+
+    const msgAuthDetails = {
+      clientNo: 25,
+      requestDateTime: "2019-07-03T07:48:31Z",
+      signatureValue: "5oF5G1BUIn7BDURnZdCeb6Yn8Gjr3zfXqPrbg0Kjyrg=",
+      ariaAccountID: "AccountID",
+      ariaAccountNo: 1234567,
+      signatureVersion: 2,
+      userID: "ASaeed"
+    };
+
+    const eventPayload = { subdocument: { test: 1, anothervalue: 'text' }};
+
+    const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventPayload, msgAuthDetails }, headers });
+    expect(response.statusCode).to.equal(200);
+  });
 });

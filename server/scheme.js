@@ -164,9 +164,20 @@ const scheme = function (server, options) {
 
 
       let msgAuthDetails = {};
-      
-      
-      if(request.headers.authorization) {
+
+      try {
+        const parsedPayload = JSON.parse(originalPayload);
+        if(parsedPayload.msgAuthDetails) {
+          msgAuthDetails = parsedPayload.msgAuthDetails
+        }
+      } catch(ex) {
+        console.error(ex);
+        throw Boom.unauthorized();
+      }
+
+      // We still prioritize the msgAuthDetails object in the payload, over the Authorization header.
+      // ARIA are still developing
+      if(request.headers.authorization && Object.keys(msgAuthDetails).length === 0) {
         
         const a = request.headers.authorization.split(',');
         a.forEach(c => {
@@ -174,19 +185,7 @@ const scheme = function (server, options) {
           const keyName = c.substring(0, firstEqualIndex).trim();
           const value = c.substring(firstEqualIndex + 1).trim().replace(/"/g, '');
           msgAuthDetails[keyName] = value;
-        });
-        
-      } else {
-
-        try {
-
-          const parsedPayload = JSON.parse(originalPayload);
-          msgAuthDetails = parsedPayload.msgAuthDetails;
-
-        } catch(ex) {
-          console.error(ex);
-          throw Boom.unauthorized();
-        }
+        });        
       }
 
 
