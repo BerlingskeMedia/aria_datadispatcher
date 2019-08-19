@@ -55,7 +55,7 @@ describe('auth scheme tests', async () => {
   });
 
 
-  it('endpoint should return 200 when msgAuthDetails is valid 1', async () => {
+  it('endpoint should return 400 Bad request when msgAuthDetails is valid but no eventPayload', async () => {
     const msgAuthDetails = {
       clientNo: 25,
       requestDateTime: "2019-07-03T07:48:31Z",
@@ -67,10 +67,29 @@ describe('auth scheme tests', async () => {
     };
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { msgAuthDetails } });
+    expect(response.statusCode).to.equal(400);
+
+    expect(KafkaSpy.deliver.called).to.equal(false);
+    expect(SQSSpy.deliver.called).to.equal(false);
+  });
+
+
+  it('endpoint should return 200 when msgAuthDetails is valid 1', async () => {
+    const msgAuthDetails = {
+      clientNo: 25,
+      requestDateTime: "2019-07-04T08:48:31Z",
+      signatureValue: "idS88u89kLz1QVkctNASIINy9CZaUk4np61OJWYgqyk=",
+      ariaAccountID: "AccountID",
+      ariaAccountNo: 1234567,
+      signatureVersion: 1,
+      userID: "ASaeed"
+    };
+
+    const response = await request({ method: 'POST', url: '/notifications_events', payload: { msgAuthDetails, eventPayload: { test: 1 } } });
     expect(response.statusCode).to.equal(200);
 
-    expect(KafkaSpy.deliver.called).to.equal(true);
-    expect(SQSSpy.deliver.called).to.equal(true);
+    expect(KafkaSpy.deliver.calledOnce).to.equal(true);
+    expect(SQSSpy.deliver.calledOnce).to.equal(true);
   });
 
 
@@ -98,8 +117,8 @@ describe('auth scheme tests', async () => {
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { msgAuthDetails, eventPayload: { test:1 } } });
     expect(response.statusCode).to.equal(200);
 
-    expect(KafkaSpy.deliver.called).to.equal(true);
-    expect(SQSSpy.deliver.called).to.equal(true);
+    expect(KafkaSpy.deliver.calledOnce).to.equal(true);
+    expect(SQSSpy.deliver.calledOnce).to.equal(true);
   });
 
 
@@ -119,8 +138,8 @@ describe('auth scheme tests', async () => {
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { msgAuthDetails, eventPayload } });
     expect(response.statusCode).to.equal(200);
 
-    expect(KafkaSpy.deliver.called).to.equal(true);
-    expect(SQSSpy.deliver.called).to.equal(true);
+    expect(KafkaSpy.deliver.calledOnce).to.equal(true);
+    expect(SQSSpy.deliver.calledOnce).to.equal(true);
   });
 
 
@@ -140,29 +159,31 @@ describe('auth scheme tests', async () => {
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventPayload, msgAuthDetails } });
     expect(response.statusCode).to.equal(200);
 
-    expect(KafkaSpy.deliver.called).to.equal(true);
-    expect(SQSSpy.deliver.called).to.equal(true);
+    expect(KafkaSpy.deliver.calledOnce).to.equal(true);
+    expect(SQSSpy.deliver.calledOnce).to.equal(true);
   });
 
 
   it('endpoint should return 200 when reversed content version 2 is valid 2', async () => {
     const msgAuthDetails = {
       clientNo: 25,
-      requestDateTime: "2019-07-03T07:48:31Z",
-      signatureValue: "5oF5G1BUIn7BDURnZdCeb6Yn8Gjr3zfXqPrbg0Kjyrg=",
+      requestDateTime: "2019-06-01T09:48:32Z",
+      signatureValue: "+NRqjGIwt2i7H95kH9moB2bPNo8wr8b7jQDBndEc6QU=",
       ariaAccountID: "AccountID",
       ariaAccountNo: 1234567,
       signatureVersion: 2,
       userID: "ASaeed"
     };
 
-    const eventPayload = { subdocument: { test: 1, anothervalue: 'text' }};
+    const eventPayload = { event_id: 1, subdocument: { test: 1, anothervalue: 'text' }};
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventPayload, msgAuthDetails } });
     expect(response.statusCode).to.equal(200);
 
-    expect(KafkaSpy.deliver.called).to.equal(true);
-    expect(SQSSpy.deliver.called).to.equal(true);
+    expect(KafkaSpy.deliver.calledOnce).to.equal(true);
+    expect(KafkaSpy.deliver.calledWith(1, '{"event_id":1,"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
+    expect(SQSSpy.deliver.calledOnce).to.equal(true);
+    expect(KafkaSpy.deliver.calledWith(1, '{"event_id":1,"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
   });
 
 
@@ -177,8 +198,8 @@ describe('auth scheme tests', async () => {
     const response = await request({ method: 'POST', url: '/notifications_events', payload, headers });
     expect(response.statusCode).to.equal(200);
 
-    expect(KafkaSpy.deliver.called).to.equal(true);
-    expect(SQSSpy.deliver.called).to.equal(true);
+    expect(KafkaSpy.deliver.calledOnce).to.equal(true);
+    expect(SQSSpy.deliver.calledOnce).to.equal(true);
   });
 
 
@@ -191,19 +212,21 @@ describe('auth scheme tests', async () => {
     const msgAuthDetails = {
       clientNo: 25,
       requestDateTime: "2019-07-03T07:48:31Z",
-      signatureValue: "5oF5G1BUIn7BDURnZdCeb6Yn8Gjr3zfXqPrbg0Kjyrg=",
+      signatureValue: "pVTJo01hK7JSrd1Y4wtj4EQK5ZcIhFl91uxbCIEAoHU=",
       ariaAccountID: "AccountID",
       ariaAccountNo: 1234567,
       signatureVersion: 2,
       userID: "ASaeed"
     };
 
-    const eventPayload = { subdocument: { test: 1, anothervalue: 'text' }};
+    const eventPayload = { event_id: 1, subdocument: { test: 1, anothervalue: 'text' }};
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventPayload, msgAuthDetails }, headers });
     expect(response.statusCode).to.equal(200);
 
-    expect(KafkaSpy.deliver.called).to.equal(true);
-    expect(SQSSpy.deliver.called).to.equal(true);
+    expect(KafkaSpy.deliver.calledOnce).to.equal(true);
+    expect(KafkaSpy.deliver.calledWith(1, '{"event_id":1,"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
+    expect(SQSSpy.deliver.calledOnce).to.equal(true);
+    expect(SQSSpy.deliver.calledWith(1, '{"event_id":1,"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
   });
 });

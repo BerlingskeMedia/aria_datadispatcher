@@ -31,8 +31,7 @@ module.exports = {
         }
       },
       handler: async (request, h) => {
-        
-        const id = Date.now();
+
         // Since the payload is not parsed, it's a buffer. So we need toString()
         const payload = request.payload.toString();
         
@@ -44,6 +43,15 @@ module.exports = {
         }
         
         const eventPayload = Scheme.isolateEventPayload(payload);
+        let parsedEventPayload;
+
+        try {
+          parsedEventPayload = JSON.parse(eventPayload);
+        } catch(ex) {
+          throw Boom.badRequest();
+        }
+
+        const id = parsedEventPayload.event_id || Date.now();
 
         if(Kafka.ready) {
           await Kafka.deliver(id, eventPayload);
