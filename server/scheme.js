@@ -32,8 +32,15 @@ const isolateEventPayload = function(payload) {
   const eventPayloadIndex = payload.indexOf(splitString);
 
   if(eventPayloadIndex === -1) {
-    // In case there is no 
-    return payload;
+    // In case there is no eventPayload-object, but there is msgAuthDetails-object,
+    // which is the unexpected case, we return an empty string.
+    if(payload.indexOf('"msgAuthDetails":') > -1) {
+      return '';
+    } else {
+      // But if there is no eventPayload-object and no msgAuthDetails-object,
+      // which is the expected case, we simply returns the full payload
+      return payload;
+    }
   }
   
   const startOfObject = eventPayloadIndex + splitString.length;
