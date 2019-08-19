@@ -15,7 +15,7 @@
     "@hapi/code": "^5.3.1",
     "@hapi/lab": "^19.1.0",
     "nodemon": "^1.19.0",
-    "sinon": "^7.3.2"
+    "sinon": "^7.4.1"
   },
   "scripts": {
     "start": "node $npm_package_main",

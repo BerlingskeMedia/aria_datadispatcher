@@ -4,10 +4,12 @@
 
 // Test shortcuts.
 const { expect } = require('@hapi/code');
-const { describe, it, before, after } = exports.lab = require('@hapi/lab').script();
+const { describe, it, before, after, afterEach } = exports.lab = require('@hapi/lab').script();
 
 
 const server = require('../server');
+const KafkaSpy = require('./helpers/kafka_spy.js');
+const SQSSpy = require('./helpers/aws_sqs_spy.js');
 
 
 describe('auth scheme tests', async () => {
@@ -38,16 +40,18 @@ describe('auth scheme tests', async () => {
   after(async () => {
   });
 
+  afterEach(async () => {
+    KafkaSpy.reset();
+    SQSSpy.reset();
+  });
+
 
   it('endpoint should return 401 Unauthorized if missing payload', async () => {
     const response = await request({ method: 'POST', url: '/notifications_events' });
     expect(response.statusCode).to.equal(401);
-  });
-
-
-  it('endpoint should return 401 Unauthorized if empty payload', async () => {
-    const response = await request({ method: 'POST', url: '/notifications_events', payload: {} });
-    expect(response.statusCode).to.equal(401);
+    
+    expect(KafkaSpy.deliver.called).to.equal(false);
+    expect(SQSSpy.deliver.called).to.equal(false);
   });
 
 
@@ -64,7 +68,20 @@ describe('auth scheme tests', async () => {
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { msgAuthDetails } });
     expect(response.statusCode).to.equal(200);
+
+    expect(KafkaSpy.deliver.called).to.equal(true);
+    expect(SQSSpy.deliver.called).to.equal(true);
   });
+
+
+  it('endpoint should return 401 Unauthorized if empty payload', async () => {
+    const response = await request({ method: 'POST', url: '/notifications_events', payload: {} });
+    expect(response.statusCode).to.equal(401);
+
+    expect(KafkaSpy.deliver.called).to.equal(false);
+    expect(SQSSpy.deliver.called).to.equal(false);
+  });
+
 
 
   it('endpoint should return 200 when msgAuthDetails is valid 2', async () => {
@@ -80,6 +97,9 @@ describe('auth scheme tests', async () => {
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { msgAuthDetails, eventPayload: { test:1 } } });
     expect(response.statusCode).to.equal(200);
+
+    expect(KafkaSpy.deliver.called).to.equal(true);
+    expect(SQSSpy.deliver.called).to.equal(true);
   });
 
 
@@ -98,6 +118,9 @@ describe('auth scheme tests', async () => {
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { msgAuthDetails, eventPayload } });
     expect(response.statusCode).to.equal(200);
+
+    expect(KafkaSpy.deliver.called).to.equal(true);
+    expect(SQSSpy.deliver.called).to.equal(true);
   });
 
 
@@ -116,6 +139,9 @@ describe('auth scheme tests', async () => {
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventPayload, msgAuthDetails } });
     expect(response.statusCode).to.equal(200);
+
+    expect(KafkaSpy.deliver.called).to.equal(true);
+    expect(SQSSpy.deliver.called).to.equal(true);
   });
 
 
@@ -134,6 +160,9 @@ describe('auth scheme tests', async () => {
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventPayload, msgAuthDetails } });
     expect(response.statusCode).to.equal(200);
+
+    expect(KafkaSpy.deliver.called).to.equal(true);
+    expect(SQSSpy.deliver.called).to.equal(true);
   });
 
 
@@ -147,6 +176,9 @@ describe('auth scheme tests', async () => {
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload, headers });
     expect(response.statusCode).to.equal(200);
+
+    expect(KafkaSpy.deliver.called).to.equal(true);
+    expect(SQSSpy.deliver.called).to.equal(true);
   });
 
 
@@ -170,5 +202,8 @@ describe('auth scheme tests', async () => {
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventPayload, msgAuthDetails }, headers });
     expect(response.statusCode).to.equal(200);
+
+    expect(KafkaSpy.deliver.called).to.equal(true);
+    expect(SQSSpy.deliver.called).to.equal(true);
   });
 });

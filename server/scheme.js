@@ -167,8 +167,6 @@ const scheme = function (server, options) {
         throw Boom.unauthorized();
       }
 
-      const eventPayload = isolateEventPayload(originalPayload);
-
 
       let msgAuthDetails = {};
 
@@ -196,6 +194,8 @@ const scheme = function (server, options) {
       }
 
 
+      // Getting the "eventPayload" from the original, unparsed request payload
+      const eventPayload = isolateEventPayload(originalPayload);
       const input = concatMsgAuthDetails(msgAuthDetails, eventPayload);
       const hash = calculateSignatureValue(input);
 

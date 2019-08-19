@@ -1,6 +1,11 @@
 /*jshint node: true */
 'use strict';
 
+if (process.env.NODE_ENV === 'test') {
+  module.exports = require('../test/helpers/kafka_spy.js');
+  return;
+}
+
 const EventEmitter = require('events');
 const Kafka = require('kafka-node');
 
