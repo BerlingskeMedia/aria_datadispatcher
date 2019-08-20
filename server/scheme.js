@@ -11,7 +11,7 @@ const Joi = require('@hapi/joi');
 const DISABLE_VALIDATION = (process.env.DISABLE_VALIDATION === 'true' && process.env.NODE_ENV !== 'test');
 
 if(DISABLE_VALIDATION) {
-  console.warn('Warning: ALL validation has been disabled.')
+  console.warn('WARNING: ALL validation has been disabled.')
 }
 
 

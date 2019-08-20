@@ -77,11 +77,23 @@ Kafka.once('ready', async () => {
   }
 });
 
+const Good = require('@hapi/good');
+const goodOptions = {
+  reporters: {
+    myConsoleReporter: [
+      { module: '@hapi/good-squeeze', name: 'Squeeze', args: [{ log: '*', response: '*' }] },
+      { module: '@hapi/good-console' },
+      'stdout'
+    ]
+  }
+};
+
 
 async function start() {
   if (process.env.NODE_ENV === 'test') {
     // We are running tests.
   } else if (!server.info.started) {
+    await server.register({ plugin: Good, options: goodOptions });
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
   }

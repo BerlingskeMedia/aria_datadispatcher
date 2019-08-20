@@ -36,10 +36,7 @@ module.exports = {
         const payload = request.payload.toString();
         
         if(CONSOLE_LOG_EVENTS) {
-          console.log(`Message received: ${ new Date().toISOString() }`);
-          console.log(`Message is authenticated: ${ request.auth.isAuthenticated }`);
-          console.log(`Headers: ${ Object.keys(request.headers).map(h => `${h}=${request.headers[h]}`).join(', ')}`);
-          console.log(`Payload: ${ payload}`);
+          console.log(`Event:::\nHeaders: ${ Object.keys(request.headers).map(h => `${h}=${request.headers[h]}`).join(', ')} \nPayload: ${ payload}`);
         }
         
         const eventPayload = Scheme.isolateEventPayload(payload);
