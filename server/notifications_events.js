@@ -51,14 +51,8 @@ module.exports = {
           throw Boom.badRequest();
         }
 
-        let event_id = Date.now();
-
         // Getting the event_id if it's available.
-        if(parsedEventPayload.event_data &&
-           parsedEventPayload.event_data.event instanceof Array &&
-           parsedEventPayload.event_data.event.length === 1) {
-            event_id = parsedEventPayload.event_data.event[0].event_id;
-        }
+        let event_id = parsedEventPayload.some_unique_event_id || Date.now();
 
 
         if(SQS.ready) {
