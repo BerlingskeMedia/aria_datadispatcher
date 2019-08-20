@@ -51,15 +51,22 @@ module.exports = {
           throw Boom.badRequest();
         }
 
-        const id = parsedEventPayload.event_id || Date.now();
+        let event_id = Date.now();
+
+        // Getting the event_id if it's available.
+        if(parsedEventPayload.event_data &&
+           parsedEventPayload.event_data.event instanceof Array &&
+           parsedEventPayload.event_data.event.length === 1) {
+            event_id = parsedEventPayload.event_data.event[0].event_id;
+        }
 
         if(Kafka.ready) {
-          await Kafka.deliver(id, eventPayload);
+          await Kafka.deliver(event_id, eventPayload);
         }
 
 
         if(SQS.ready) {
-          await SQS.deliver(id, eventPayload);
+          await SQS.deliver(event_id, eventPayload);
         }
 
 

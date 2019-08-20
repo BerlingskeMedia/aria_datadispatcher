@@ -168,22 +168,31 @@ describe('auth scheme tests', async () => {
     const msgAuthDetails = {
       clientNo: 25,
       requestDateTime: "2019-06-01T09:48:32Z",
-      signatureValue: "+NRqjGIwt2i7H95kH9moB2bPNo8wr8b7jQDBndEc6QU=",
+      signatureValue: "MP80x738on9Mg8rAiU5j/Z+Vlncmybn1piLveTTRuB0=",
       ariaAccountID: "AccountID",
       ariaAccountNo: 1234567,
       signatureVersion: 2,
       userID: "ASaeed"
     };
 
-    const eventPayload = { event_id: 1, subdocument: { test: 1, anothervalue: 'text' }};
+    const event_data = {
+      "event": [
+        {
+            "event_label": "Account Master Plan Instance Dunning State Changed",
+            "event_id": 743
+        }
+      ]
+    };
+
+    const eventPayload = { event_data, subdocument: { test: 1, anothervalue: 'text' }};
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventPayload, msgAuthDetails } });
     expect(response.statusCode).to.equal(200);
 
     expect(KafkaSpy.deliver.calledOnce).to.equal(true);
-    expect(KafkaSpy.deliver.calledWith(1, '{"event_id":1,"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
+    expect(KafkaSpy.deliver.calledWith(743, '{"event_data":{"event":[{"event_label":"Account Master Plan Instance Dunning State Changed","event_id":743}]},"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
     expect(SQSSpy.deliver.calledOnce).to.equal(true);
-    expect(KafkaSpy.deliver.calledWith(1, '{"event_id":1,"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
+    expect(KafkaSpy.deliver.calledWith(743, '{"event_data":{"event":[{"event_label":"Account Master Plan Instance Dunning State Changed","event_id":743}]},"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
   });
 
 
@@ -212,21 +221,30 @@ describe('auth scheme tests', async () => {
     const msgAuthDetails = {
       clientNo: 25,
       requestDateTime: "2019-07-03T07:48:31Z",
-      signatureValue: "pVTJo01hK7JSrd1Y4wtj4EQK5ZcIhFl91uxbCIEAoHU=",
+      signatureValue: "uXaaj6usJB/v7dABcdElM5icWeAPjTdpIZKoM3Idd9g=",
       ariaAccountID: "AccountID",
       ariaAccountNo: 1234567,
       signatureVersion: 2,
       userID: "ASaeed"
     };
 
-    const eventPayload = { event_id: 1, subdocument: { test: 1, anothervalue: 'text' }};
+    const event_data = {
+      "event": [
+        {
+            "event_label": "Account Master Plan Instance Dunning Degrade Date Changed",
+            "event_id": 744
+        }
+      ]
+    };
+
+    const eventPayload = { event_data, subdocument: { test: 1, anothervalue: 'text' }};
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventPayload, msgAuthDetails }, headers });
     expect(response.statusCode).to.equal(200);
 
     expect(KafkaSpy.deliver.calledOnce).to.equal(true);
-    expect(KafkaSpy.deliver.calledWith(1, '{"event_id":1,"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
+    expect(KafkaSpy.deliver.calledWith(744, '{"event_data":{"event":[{"event_label":"Account Master Plan Instance Dunning Degrade Date Changed","event_id":744}]},"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
     expect(SQSSpy.deliver.calledOnce).to.equal(true);
-    expect(SQSSpy.deliver.calledWith(1, '{"event_id":1,"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
+    expect(SQSSpy.deliver.calledWith(744, '{"event_data":{"event":[{"event_label":"Account Master Plan Instance Dunning Degrade Date Changed","event_id":744}]},"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
   });
 });
