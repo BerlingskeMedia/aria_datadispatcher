@@ -13,7 +13,7 @@ const Boom = require('@hapi/boom');
 const KAFKA_HOST = process.env.KAFKA_HOST;
 const KAFKA_INGRESS_TOPIC = process.env.KAFKA_INGRESS_TOPIC;
 
-const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true');
+const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true' && process.env.NODE_ENV !== 'test');
 
 if(!KAFKA_HOST) {
   console.log('Kafka disabled')

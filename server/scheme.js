@@ -8,7 +8,7 @@ const Joi = require('@hapi/joi');
 
 
 // To disable the payload validartion, the ENV var must be explicitly set to "true"
-const DISABLE_VALIDATION = (process.env.DISABLE_VALIDATION === 'true');
+const DISABLE_VALIDATION = (process.env.DISABLE_VALIDATION === 'true' && process.env.NODE_ENV !== 'test');
 
 if(DISABLE_VALIDATION) {
   console.warn('Warning: ALL validation has been disabled.')
