@@ -43,7 +43,12 @@ client.on("error", function(err) {
   console.error(err);
 });
 
-const producer = new Kafka.Producer(client);
+const producerConfig = {
+  requireAcks : -1,
+  ackTimeoutMs : 1000
+};
+
+const producer = new Kafka.HighLevelProducer(client, producerConfig);
 
 module.exports = producer;
 
@@ -62,8 +67,8 @@ module.exports.deliver = async function(id, payload) {
   const payloads = [
     {
       topic: KAFKA_INGRESS_TOPIC,
-      messages: payload,
-      partition: 0
+      // key: 'theKey', // string or buffer, only needed when using keyed partitioner
+      messages: payload
     }
   ];
 

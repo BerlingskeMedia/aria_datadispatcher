@@ -60,13 +60,14 @@ module.exports = {
             event_id = parsedEventPayload.event_data.event[0].event_id;
         }
 
-        if(Kafka.ready) {
-          await Kafka.deliver(event_id, eventPayload);
-        }
-
 
         if(SQS.ready) {
           await SQS.deliver(event_id, eventPayload);
+        }
+
+
+        if(Kafka.ready) {
+          await Kafka.deliver(event_id, eventPayload);
         }
 
 
