@@ -8,6 +8,7 @@ if (process.env.NODE_ENV === 'test') {
 
 const EventEmitter = require('events');
 const AWS = require('aws-sdk');
+const Boom = require('@hapi/boom');
 
 const AWS_REGION = process.env.AWS_REGION || 'eu-west-1';
 const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
@@ -74,6 +75,7 @@ module.exports.deliver = async function(id, payload) {
   sqs.sendMessage(sqsParams, function(err, result) {
     if (err) {
       console.error('SQS Error:', err);
+      throw Boom.badImplementation(err.toString());
     } else if(CONSOLE_LOG_EVENTS) {
       console.log('SQS OK:', JSON.stringify(result));
     }
