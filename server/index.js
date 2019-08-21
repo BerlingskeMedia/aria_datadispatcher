@@ -1,6 +1,7 @@
 /*jshint node: true */
 'use strict';
 
+const Fs = require('fs');
 const Hapi = require('@hapi/hapi');
 const Inert = require('@hapi/inert');
 const Scheme = require('./scheme.js');
@@ -45,22 +46,25 @@ server.route({
   }
 });
 
+let version = 'unknown version';
 
-const versionFileName = './server/version';
-const Fs = require('fs');
-Fs.stat(versionFileName, function(err, file) {
-  if(file) {
-    Fs.readFile(versionFileName, function(err, buf){
-      console.log(`Running ${ buf.toString() }`);
-    });
-  }
-});
+try {
+  const packageJson = require('../package.json');
+  version = packageJson.version;
+} catch(ex) {}
+
+try {
+  const buf = Fs.readFileSync('./server/version');
+  version = buf.toString();
+} catch(ex) {}
+
+console.log(`Running ${ version }`);
 
 server.route({
   method: 'GET',
   path: '/version',
-  handler: {
-    file: versionFileName
+  handler: (request, h) => {
+    return version;
   }
 });
 
