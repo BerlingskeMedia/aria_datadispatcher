@@ -64,6 +64,10 @@ console.log(`Running ${ version }`);
 server.route({
   method: 'GET',
   path: '/version',
+  config: {
+    auth: false,
+    tags: ['healthcheck']
+  },
   handler: (request, h) => {
     return version;
   }
