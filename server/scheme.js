@@ -103,13 +103,13 @@ const concatMsgAuthDetails = function(msgAuthDetails, message) {
   }
 
   if(!msgAuthDetails) {
-    console.error('msgAuthDetails missing');
+    console.error('Error: msgAuthDetails missing');
     throw Boom.unauthorized('msgAuthDetails missing from Authtozation header or payload');
   }
 
   const validateResult = msgAuthDetailsValidation.validate(msgAuthDetails);
   if(validateResult.error) {
-    console.error(`Invalid msgAuthDetails::: ${ validateResult.error }`);
+    console.error(`msgAuthDetails validation error: ${ validateResult.error }`);
     throw Boom.unauthorized(validateResult.error);
   }
 
@@ -168,19 +168,19 @@ const scheme = function (server, options) {
       if(CONSOLE_LOG_EVENTS) {
         console.log(`Event:::`);
         console.log(`  Headers: ${ Object.keys(request.headers).map(h => `${h}=${request.headers[h]}`).join(', ')}`);
-        console.log(`  Payload: ${ payload }`);
+        console.log(`  Payload: ${ request.payload ? request.payload.toString() : '' }`);
       }
 
       if(!request.payload) {
-        console.error('Missing payload');
+        console.error('Error: Missing payload');
         throw Boom.unauthorized('Missing payload');
       }
 
       const originalPayload = request.payload.toString();
       
       if(!originalPayload) {
-        console.error('Invalid payload');
-        throw Boom.unauthorized('Invalid payload');
+        console.error('Error: Missing payload');
+        throw Boom.unauthorized('Missing payload');
       }
 
 

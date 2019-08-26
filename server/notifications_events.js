@@ -22,11 +22,12 @@ module.exports = {
           // ^-- Important not to parse the payload, as this will change the payload content from
           //   what AMPS has used to calculate the signatureValue
           allow: ['application/json']
-        }
+        },
+        tags: [ 'notifications' ]
       },
       handler: async (request, h) => {
 
-        
+
         // Since the payload is not parsed, it's a buffer. So we need toString()
         const payload = request.payload.toString();
         

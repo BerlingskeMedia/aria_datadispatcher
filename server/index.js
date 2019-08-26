@@ -40,7 +40,7 @@ server.route({
   path: '/healthcheck',
   config: {
     auth: false,
-    tags: ['healthcheck']
+    tags: [ 'healthcheck' ]
   },
   handler: (request, h) => {
     return 'OK';
@@ -66,7 +66,7 @@ server.route({
   path: '/version',
   config: {
     auth: false,
-    tags: ['healthcheck']
+    tags: [ 'healthcheck' ]
   },
   handler: (request, h) => {
     return version;
@@ -93,7 +93,18 @@ const Good = require('@hapi/good');
 const goodOptions = {
   reporters: {
     myConsoleReporter: [
-      { module: '@hapi/good-squeeze', name: 'Squeeze', args: [{ log: '*', response: { exclude: 'healthcheck' }}] },
+      { module: '@hapi/good-squeeze',
+        name: 'Squeeze',
+        args: [
+          {
+            log: '*',
+            response: {
+              exclude: 'healthcheck',
+              include: 'notifications'
+            }
+          }
+        ]
+      },
       { module: '@hapi/good-console' },
       'stdout'
     ]
