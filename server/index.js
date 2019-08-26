@@ -39,6 +39,7 @@ server.route({
   method: 'GET',
   path: '/healthcheck',
   config: {
+    auth: false,
     tags: ['healthcheck']
   },
   handler: (request, h) => {

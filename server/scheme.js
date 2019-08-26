@@ -6,6 +6,12 @@ const crypto = require('crypto');
 const Boom = require('@hapi/boom');
 const Joi = require('@hapi/joi');
 
+// To print the event payload details to console log, the ENV var must be explicitly set to "true"
+const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true' && process.env.NODE_ENV !== 'test');
+
+if(CONSOLE_LOG_EVENTS) {
+  console.log('Console log event has been enabled.')
+}
 
 // To disable the payload validartion, the ENV var must be explicitly set to "true"
 const DISABLE_VALIDATION = (process.env.DISABLE_VALIDATION === 'true' && process.env.NODE_ENV !== 'test');
@@ -93,16 +99,18 @@ const concatMsgAuthDetails = function(msgAuthDetails, message) {
 
   if(!ARIA_AUTH_KEY) {
     console.error('Environment variable ARIA_AUTH_KEY missing')
-    throw Boom.unauthorized();
+    throw Boom.unauthorized('Environment variable ARIA_AUTH_KEY missing');
   }
 
   if(!msgAuthDetails) {
-    throw Boom.unauthorized();
+    console.error('msgAuthDetails missing');
+    throw Boom.unauthorized('msgAuthDetails missing from Authtozation header or payload');
   }
 
   const validateResult = msgAuthDetailsValidation.validate(msgAuthDetails);
   if(validateResult.error) {
-    throw Boom.unauthorized();
+    console.error(`Invalid msgAuthDetails::: ${ validateResult.error }`);
+    throw Boom.unauthorized(validateResult.error);
   }
 
 
@@ -157,14 +165,22 @@ const scheme = function (server, options) {
     // This function will only be executed if this scheme "options.payload" is set to true.
     payload: async function (request, h) {
 
+      if(CONSOLE_LOG_EVENTS) {
+        console.log(`Event:::`);
+        console.log(`  Headers: ${ Object.keys(request.headers).map(h => `${h}=${request.headers[h]}`).join(', ')}`);
+        console.log(`  Payload: ${ payload }`);
+      }
+
       if(!request.payload) {
-        throw Boom.unauthorized();
+        console.error('Missing payload');
+        throw Boom.unauthorized('Missing payload');
       }
 
       const originalPayload = request.payload.toString();
       
       if(!originalPayload) {
-        throw Boom.unauthorized();
+        console.error('Invalid payload');
+        throw Boom.unauthorized('Invalid payload');
       }
 
 
@@ -177,15 +193,15 @@ const scheme = function (server, options) {
         }
       } catch(ex) {
         console.error(ex);
-        throw Boom.unauthorized();
+        throw Boom.unauthorized('Invalid JSON');
       }
 
       // We still prioritize the msgAuthDetails object in the payload, over the Authorization header.
-      // ARIA are still developing
-      if(request.headers.authorization && Object.keys(msgAuthDetails).length === 0) {
+      // ARIA are still developing.
+      if(Object.keys(msgAuthDetails).length === 0 && request.headers.authorization) {
         
-        const a = request.headers.authorization.split(',');
-        a.forEach(c => {
+        const parts = request.headers.authorization.split(',');
+        parts.forEach(c => {
           const firstEqualIndex = c.indexOf('=');
           const keyName = c.substring(0, firstEqualIndex).trim();
           const value = c.substring(firstEqualIndex + 1).trim().replace(/"/g, '');
@@ -202,7 +218,11 @@ const scheme = function (server, options) {
       if(hash === msgAuthDetails.signatureValue) {
         return h.continue;
       } else {
-        throw Boom.unauthorized();
+        console.error(`Signature error:::`);
+        console.error(`  eventPayload: ${ eventPayload }`);
+        console.error(`  msgAuthDetails: ${ msgAuthDetails }`);
+        console.error(`  calculateSignatureValue: ${ hash }`);
+        throw Boom.unauthorized('Signature value does not match payload');
       }
     }
   };

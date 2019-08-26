@@ -6,12 +6,6 @@ const Scheme = require('./scheme.js');
 const Kafka = require('./kafka.js');
 const SQS = require('./aws_sqs.js');
 
-// To print the event payload details to console log, the ENV var must be explicitly set to "true"
-const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true' && process.env.NODE_ENV !== 'test');
-
-if(CONSOLE_LOG_EVENTS) {
-  console.log('Console log event has been enabled.')
-}
 
 module.exports = {
   name: 'notifications_events',
@@ -32,21 +26,23 @@ module.exports = {
       },
       handler: async (request, h) => {
 
+        
         // Since the payload is not parsed, it's a buffer. So we need toString()
         const payload = request.payload.toString();
         
-        if(CONSOLE_LOG_EVENTS) {
-          console.log(`Event:::\nHeaders: ${ Object.keys(request.headers).map(h => `${h}=${request.headers[h]}`).join(', ')} \nPayload: ${ payload}`);
-        }
-        
+
         const eventPayload = Scheme.isolateEventPayload(payload);
         let parsedEventPayload;
 
+
         try {
+          // We actually already parsed the payload in the auth scheme.
+          // So there should in theory be no errors at this stage.
           parsedEventPayload = JSON.parse(eventPayload);
         } catch(ex) {
-          throw Boom.badRequest();
+          throw Boom.badRequest('Invalid JSON');
         }
+
 
         // Getting the event_id if it's available.
         let event_id = parsedEventPayload.some_unique_event_id || Date.now();
