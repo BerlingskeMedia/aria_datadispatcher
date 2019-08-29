@@ -25,7 +25,7 @@ const msgAuthDetailsValidation = Joi.object().keys({
   clientNo: Joi.number().integer().required(),
   requestDateTime: Joi.string().required(),
   signatureVersion: Joi.number().integer(),
-  ariaAccountID: Joi.string().required(),
+  ariaAccountID: Joi.string().allow([null]).required(),
   ariaAccountNo: Joi.number().integer().required(),
   userID: Joi.string().default(''),
   message: Joi.string().default('')
