@@ -229,4 +229,8 @@ describe('auth scheme tests', async () => {
     expect(SQSSpy.deliver.calledOnce).to.equal(true);
     expect(SQSSpy.deliver.calledWith(2, '{"some_unique_event_id":2,"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
   });
+
+  it('a test to try out Docker Hub Automated Testing', async () => {
+    expect(true).to.equal(true);
+  });
 });
