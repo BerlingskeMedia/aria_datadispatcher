@@ -13,6 +13,9 @@ if(CONSOLE_LOG_EVENTS) {
   console.log('Console log event has been enabled.')
 }
 
+
+const CONSOLE_LOG_ERRORS = process.env.NODE_ENV !== 'test';
+
 // To disable the payload validartion, the ENV var must be explicitly set to "true"
 const DISABLE_VALIDATION = (process.env.DISABLE_VALIDATION === 'true' && process.env.NODE_ENV !== 'test');
 
@@ -103,13 +106,17 @@ const concatMsgAuthDetails = function(msgAuthDetails, message) {
   }
 
   if(!msgAuthDetails) {
-    console.error('Error: msgAuthDetails missing');
+    if(CONSOLE_LOG_ERRORS) {
+      console.error('Error: msgAuthDetails missing');
+    }
     throw Boom.unauthorized('msgAuthDetails missing from Authtozation header or payload');
   }
 
   const validateResult = msgAuthDetailsValidation.validate(msgAuthDetails);
   if(validateResult.error) {
-    console.error(`msgAuthDetails validation error: ${ validateResult.error }`);
+    if(CONSOLE_LOG_ERRORS) {
+      console.error(`msgAuthDetails validation error: ${ validateResult.error }`);
+    }
     throw Boom.unauthorized(validateResult.error);
   }
 
@@ -179,7 +186,9 @@ const scheme = function (server, options) {
       const originalPayload = request.payload.toString();
       
       if(!originalPayload) {
-        console.error('Error: Missing payload');
+        if(CONSOLE_LOG_ERRORS) {
+          console.error('Error: Missing payload');
+        }
         throw Boom.unauthorized('Missing payload');
       }
 
@@ -192,7 +201,9 @@ const scheme = function (server, options) {
           msgAuthDetails = parsedPayload.msgAuthDetails
         }
       } catch(ex) {
-        console.error(ex);
+        if(CONSOLE_LOG_ERRORS) {
+          console.error(ex);
+        }
         throw Boom.unauthorized('Invalid JSON');
       }
 
@@ -218,10 +229,12 @@ const scheme = function (server, options) {
       if(hash === msgAuthDetails.signatureValue) {
         return h.continue;
       } else {
-        console.error(`Signature error:::`);
-        console.error(`  eventPayload: ${ eventPayload }`);
-        console.error(`  msgAuthDetails: ${ msgAuthDetails }`);
-        console.error(`  calculateSignatureValue: ${ hash }`);
+        if(CONSOLE_LOG_ERRORS) {
+          console.error(`Signature error:::`);
+          console.error(`  eventPayload: ${ eventPayload }`);
+          console.error(`  msgAuthDetails: ${ msgAuthDetails }`);
+          console.error(`  calculateSignatureValue: ${ hash }`);
+        }
         throw Boom.unauthorized('Signature value does not match payload');
       }
     }
