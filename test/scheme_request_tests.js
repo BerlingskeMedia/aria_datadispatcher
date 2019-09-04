@@ -190,7 +190,7 @@ describe('auth scheme tests', async () => {
   it('endpoint should return 200 when auth header 1', async () => {
       
     const headers = {
-      'Authorization': 'clientNo="25", requestDateTime="2019-07-03T07:48:31Z", signatureValue="Oy2RsOLi2uJG50NSnRYzxW2zERKJmKGre482K/q7Kl0=", ariaAccountID="AccountID", ariaAccountNo="1234567", signatureVersion="2", userID="ASaeed"'
+      'Authorization': 'clientNo="25", requestDateTime="2019-07-03T07:48:31Z", signatureValue="Oy2RsOLi2uJG50NSnRYzxW2zERKJmKGre482K/q7Kl0=", ariaAccountID="AccountID", ariaAccountNo="1234567", signatureVersion=2, userID="ASaeed"'
     };
 
     const payload = { subdocument: { test: 2, anothervalue: 'text on a request with headers' }};
@@ -206,7 +206,7 @@ describe('auth scheme tests', async () => {
   it('endpoint should return 200 when auth header is test and payload includes msgAuthDetails', async () => {
       
     const headers = {
-      'Authorization': 'clientNo="TEST", requestDateTime="1971-07-01T01:48:31Z", signatureValue="TEST", ariaAccountID="AccountID", ariaAccountNo="1234567", signatureVersion="2", userID="TEST"'
+      'Authorization': 'clientNo="TEST", requestDateTime="1971-07-01T01:48:31Z", signatureValue="TEST", ariaAccountID="AccountID", ariaAccountNo="1234567", signatureVersion=2, userID="TEST"'
     };
 
     const msgAuthDetails = {
@@ -228,5 +228,69 @@ describe('auth scheme tests', async () => {
     expect(KafkaSpy.deliver.calledWith(2, '{"some_unique_event_id":2,"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
     expect(SQSSpy.deliver.calledOnce).to.equal(true);
     expect(SQSSpy.deliver.calledWith(2, '{"some_unique_event_id":2,"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
+  });
+
+
+  it('allow signatureVersion to be a string', async () => {
+
+    const payload = {
+      "msgAuthDetails": {
+          "ariaAccountID": null,
+          "ariaAccountNo": 41998358,
+          "userID": null,
+          "clientNo": 25,
+          "authKey": null,
+          "requestDateTime": "2019-09-03T23:41:42Z",
+          "signatureValue": "420ujbOZUMBBnMd/CxlHfiIQtemgfmEM/3MH62uGleU=",
+          "signatureVersion": "2"
+      },
+      "accAccessControlAIDInfo": {
+          "accAccessControlAIDFeatureList": [
+              {
+                  "accessFeature": "WEB/APP",
+                  "eligibleForSharing": false,
+                  "titleDomain": "www.berlingske.dk"
+              }
+          ],
+          "ariaAccountID": null,
+          "ariaAccountNo": 41998358,
+          "numberOfAllotments": 0,
+          "some_unique_event_id": 3
+      }
+    };
+
+    const response = await request({ method: 'POST', url: '/notifications_events', payload });
+    expect(response.statusCode).to.equal(200);
+
+    expect(KafkaSpy.deliver.calledWith(3, '{"accAccessControlAIDFeatureList":[{"accessFeature":"WEB/APP","eligibleForSharing":false,"titleDomain":"www.berlingske.dk"}],"ariaAccountID":null,"ariaAccountNo":41998358,"numberOfAllotments":0,"some_unique_event_id":3}')).to.equal(true);
+  });
+
+
+  it('allow userID to be null', async () => {
+
+    const payload = {
+      "msgAuthDetails": {
+          "ariaAccountID": null,
+          "ariaAccountNo": 41998377,
+          "userID": null,
+          "clientNo": 25,
+          "authKey": null,
+          "requestDateTime": "2019-09-03T23:41:42Z",
+          "signatureValue": "IIp44ACADznRX/vokoKHJoIwKk6lb8hH4D96y/8ScEg=",
+          "signatureVersion": "2"
+      },
+      "accAccessControlAIDInfo": {
+          "accAccessControlAIDFeatureList": [],
+          "ariaAccountID": null,
+          "ariaAccountNo": 41998377,
+          "numberOfAllotments": 0,
+          "some_unique_event_id": 4
+      }
+    };
+
+    const response = await request({ method: 'POST', url: '/notifications_events', payload });
+    expect(response.statusCode).to.equal(200);
+
+    expect(KafkaSpy.deliver.calledWith(4, '{"accAccessControlAIDFeatureList":[],"ariaAccountID":null,"ariaAccountNo":41998377,"numberOfAllotments":0,"some_unique_event_id":4}')).to.equal(true);
   });
 });

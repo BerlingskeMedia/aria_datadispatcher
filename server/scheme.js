@@ -25,39 +25,80 @@ if(DISABLE_VALIDATION) {
 
 
 const msgAuthDetailsValidation = Joi.object().keys({
-  clientNo: Joi.number().integer().allow([ null, "" ]),
+  clientNo: Joi.number().integer().allow([ null, "" ]).default(''),
   requestDateTime: Joi.string().allow([ null, "" ]).required(),
-  signatureVersion: Joi.number().integer(),
-  ariaAccountID: Joi.string().allow([ null, "" ]).required(),
-  ariaAccountNo: Joi.number().integer().allow([ null ]).required(),
-  userID: Joi.string().default(''),
-  message: Joi.string().default('')
-}).unknown(true); // Allow and strip unknows parameters
+  signatureVersion: Joi.number().required(),
+  signatureValue: Joi.string().allow([ 1, 2 ]).default(2).required(),
+  ariaAccountID: Joi.string().default('').allow([ null, "" ]).required(),
+  ariaAccountNo: Joi.number().integer().allow(null).required(),
+  userID: Joi.string().allow([null, '']),
+  authKey: Joi.string().allow([null, ''])
+});
 
 
-const isolateEventPayload = function(payload) {
-  const splitString = '"eventPayload":';
-
-  const eventPayloadIndex = payload.indexOf(splitString);
-
-  if(eventPayloadIndex === -1) {
-    // In case there is no eventPayload-object, but there is msgAuthDetails-object,
-    // which is the unexpected case, we return an empty string.
-    if(payload.indexOf('"msgAuthDetails":') > -1) {
-      return '';
-    } else {
-      // But if there is no eventPayload-object and no msgAuthDetails-object,
-      // which is the expected case, we simply returns the full payload
-      return payload;
+const validateMsgAuthDetails = function(input) {
+  const validateResult = msgAuthDetailsValidation.validate(input);
+  if(validateResult.error) {
+    if(CONSOLE_LOG_ERRORS) {
+      console.error(`msgAuthDetails validation error: ${ validateResult.error }`);
     }
+    throw Boom.unauthorized(validateResult.error);
   }
-  
-  const startOfObject = eventPayloadIndex + splitString.length;
-  const halfWayEventPayloadStr = payload.substring(startOfObject);
-  const endOfObject = findEndOfObject(halfWayEventPayloadStr);
-  const eventPayloadStr = halfWayEventPayloadStr.substring(0, endOfObject);
-  return eventPayloadStr;
+
+  return validateResult.value;
 };
+
+
+const isolateMessage = function(payload) {
+
+  // We have already parsed the payload. So no need for try-catch
+  const parsedPayload = JSON.parse(payload);
+
+  const keys = Object.keys(parsedPayload);
+
+  // If we have no msgAuthDetails, we just want the whole payload
+  if(keys.every(n => n !== 'msgAuthDetails')) {
+    return payload;
+  }
+
+  // If we have msgAuthDetails, but more than one other key, somethings wrong
+  if(keys.some(n => n === 'msgAuthDetails') && keys.length !== 2) {
+    throw Boom.badRequest('Unexpected count of objects in the payload'); 
+  }
+
+  const messageKeyName = keys.find(n => n !== 'msgAuthDetails');
+  const messageKeySignature = `"${ messageKeyName }":`;
+  const messageObjectIndex = payload.indexOf(messageKeySignature);
+  const startOfObject = messageObjectIndex + messageKeySignature.length;
+  const endOfObject = startOfObject + findEndOfObject(payload.substring(startOfObject));
+
+  return payload.substring(startOfObject, endOfObject);
+};
+
+
+// const isolateEventPayload = function(payload) {
+//   const splitString = '"eventPayload":';
+
+//   const eventPayloadIndex = payload.indexOf(splitString);
+
+//   if(eventPayloadIndex === -1) {
+//     // In case there is no eventPayload-object, but there is msgAuthDetails-object,
+//     // which is the unexpected case, we return an empty string.
+//     if(payload.indexOf('"msgAuthDetails":') > -1) {
+//       return '';
+//     } else {
+//       // But if there is no eventPayload-object and no msgAuthDetails-object,
+//       // which is the expected case, we simply returns the full payload
+//       return payload;
+//     }
+//   }
+  
+//   const startOfObject = eventPayloadIndex + splitString.length;
+//   const halfWayEventPayloadStr = payload.substring(startOfObject);
+//   const endOfObject = findEndOfObject(halfWayEventPayloadStr);
+//   const eventPayloadStr = halfWayEventPayloadStr.substring(0, endOfObject);
+//   return eventPayloadStr;
+// };
 
 
 const findEndOfObject = function(input, position = 0, bracketCounter = 0) {
@@ -105,21 +146,7 @@ const concatMsgAuthDetails = function(msgAuthDetails, message) {
     throw Boom.unauthorized('Environment variable ARIA_AUTH_KEY missing');
   }
 
-  if(!msgAuthDetails) {
-    if(CONSOLE_LOG_ERRORS) {
-      console.error('Error: msgAuthDetails missing');
-    }
-    throw Boom.unauthorized('msgAuthDetails missing from Authtozation header or payload');
-  }
-
-  const validateResult = msgAuthDetailsValidation.validate(msgAuthDetails);
-  if(validateResult.error) {
-    if(CONSOLE_LOG_ERRORS) {
-      console.error(`msgAuthDetails validation error: ${ validateResult.error }`);
-    }
-    throw Boom.unauthorized(validateResult.error);
-  }
-
+  msgAuthDetails = validateMsgAuthDetails(msgAuthDetails);
 
   let fields = [
     msgAuthDetails.clientNo,
@@ -193,13 +220,12 @@ const scheme = function (server, options) {
       }
 
 
+      let parsedPayload = {};
       let msgAuthDetails = {};
+      let messageKeyName = '';
 
       try {
-        const parsedPayload = JSON.parse(originalPayload);
-        if(parsedPayload.msgAuthDetails) {
-          msgAuthDetails = parsedPayload.msgAuthDetails
-        }
+        parsedPayload = JSON.parse(originalPayload);
       } catch(ex) {
         if(CONSOLE_LOG_ERRORS) {
           console.error(ex);
@@ -207,9 +233,15 @@ const scheme = function (server, options) {
         throw Boom.unauthorized('Invalid JSON');
       }
 
+
+      if(parsedPayload.msgAuthDetails) {
+
+        msgAuthDetails = parsedPayload.msgAuthDetails;
+
+      } else if(request.headers.authorization) {
+
       // We still prioritize the msgAuthDetails object in the payload, over the Authorization header.
-      // ARIA are still developing.
-      if(Object.keys(msgAuthDetails).length === 0 && request.headers.authorization) {
+      // But in case we didn't get any msgAuthDetails in the payload, but we got a header...
         
         const parts = request.headers.authorization.split(',');
         parts.forEach(c => {
@@ -217,13 +249,21 @@ const scheme = function (server, options) {
           const keyName = c.substring(0, firstEqualIndex).trim();
           const value = c.substring(firstEqualIndex + 1).trim().replace(/"/g, '');
           msgAuthDetails[keyName] = value;
-        });        
+        });
+
+      } else {
+        if(CONSOLE_LOG_ERRORS) {
+          console.error('Error: msgAuthDetails missing');
+        }
+        throw Boom.unauthorized('msgAuthDetails missing from Authtozation header or payload');
       }
 
+      // msgAuthDetails = validateMsgAuthDetails(msgAuthDetails);
 
-      // Getting the "eventPayload" from the original, unparsed request payload
-      const eventPayload = isolateEventPayload(originalPayload);
-      const input = concatMsgAuthDetails(msgAuthDetails, eventPayload);
+      // Getting the "message" from the original, unparsed request payload
+      const message = isolateMessage(originalPayload);
+
+      const input = concatMsgAuthDetails(msgAuthDetails, message);
       const hash = calculateSignatureValue(input);
 
       if(hash === msgAuthDetails.signatureValue) {
@@ -231,7 +271,7 @@ const scheme = function (server, options) {
       } else {
         if(CONSOLE_LOG_ERRORS) {
           console.error(`Signature error:::`);
-          console.error(`  eventPayload: ${ eventPayload }`);
+          console.error(`  message: ${ message }`);
           console.error(`  msgAuthDetails: ${ msgAuthDetails }`);
           console.error(`  calculateSignatureValue: ${ hash }`);
         }
@@ -249,7 +289,9 @@ module.exports = {
     server.auth.scheme('aria', scheme);
     server.auth.strategy('aria', 'aria');
   },
-  isolateEventPayload,
+  findEndOfObject,
+  isolateMessage,
+  // isolateEventPayload,
   concatMsgAuthDetails,
   calculateSignatureValue,
   msgAuthDetailsValidation

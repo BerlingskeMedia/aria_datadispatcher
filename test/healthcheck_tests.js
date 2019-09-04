@@ -8,8 +8,7 @@ const { describe, it, before, after } = exports.lab = require('@hapi/lab').scrip
 
 const server = require('../server');
 
-describe('signature tests', async () => {
-  
+describe('loadbalancer', async () => {
   
   it('healthcheck', async () => {
     const response = await server.inject({
