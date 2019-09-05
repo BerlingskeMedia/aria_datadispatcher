@@ -2,4 +2,5 @@ FROM node:10.15-alpine
 WORKDIR /app
 ADD . /app
 RUN npm i
-#No CMD as we don't want to start the server
+# No CMD as we don't want to start the server
+# Docker compose (Automated tests) will execute the 'npm test' command.

@@ -30,32 +30,30 @@ module.exports = {
 
         // Since the payload is not parsed, it's a buffer. So we need toString()
         const payload = request.payload.toString();
-        
-
-        const eventPayload = Scheme.isolateEventPayload(payload);
-        let parsedEventPayload;
+        const message = Scheme.isolateMessage(payload);
+        let parsedMessage;
 
 
         try {
           // We actually already parsed the payload in the auth scheme.
           // So there should in theory be no errors at this stage.
-          parsedEventPayload = JSON.parse(eventPayload);
+          parsedMessage = JSON.parse(message);
         } catch(ex) {
           throw Boom.badRequest('Invalid JSON');
         }
 
 
         // Getting the event_id if it's available.
-        let event_id = parsedEventPayload.some_unique_event_id || Date.now();
+        let event_id = parsedMessage.some_unique_event_id || Date.now();
 
 
         if(SQS.ready) {
-          await SQS.deliver(event_id, eventPayload);
+          await SQS.deliver(event_id, message);
         }
 
 
         if(Kafka.ready) {
-          await Kafka.deliver(event_id, eventPayload);
+          await Kafka.deliver(event_id, message);
         }
 
 
