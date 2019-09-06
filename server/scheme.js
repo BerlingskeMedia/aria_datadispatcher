@@ -76,31 +76,6 @@ const isolateMessage = function(payload) {
 };
 
 
-// const isolateEventPayload = function(payload) {
-//   const splitString = '"eventPayload":';
-
-//   const eventPayloadIndex = payload.indexOf(splitString);
-
-//   if(eventPayloadIndex === -1) {
-//     // In case there is no eventPayload-object, but there is msgAuthDetails-object,
-//     // which is the unexpected case, we return an empty string.
-//     if(payload.indexOf('"msgAuthDetails":') > -1) {
-//       return '';
-//     } else {
-//       // But if there is no eventPayload-object and no msgAuthDetails-object,
-//       // which is the expected case, we simply returns the full payload
-//       return payload;
-//     }
-//   }
-  
-//   const startOfObject = eventPayloadIndex + splitString.length;
-//   const halfWayEventPayloadStr = payload.substring(startOfObject);
-//   const endOfObject = findEndOfObject(halfWayEventPayloadStr);
-//   const eventPayloadStr = halfWayEventPayloadStr.substring(0, endOfObject);
-//   return eventPayloadStr;
-// };
-
-
 const findEndOfObject = function(input, position = 0, bracketCounter = 0) {
   if(input.length === 0) {
     return position;
@@ -200,9 +175,8 @@ const scheme = function (server, options) {
     payload: async function (request, h) {
 
       if(CONSOLE_LOG_EVENTS) {
-        console.log(`Event:::`);
-        console.log(`  Headers: ${ Object.keys(request.headers).map(h => `${h}=${request.headers[h]}`).join(', ')}`);
-        console.log(`  Payload: ${ request.payload ? request.payload.toString() : '' }`);
+        // console.log(`Event::Headers: ${ Object.keys(request.headers).map(h => `${h}=${request.headers[h]}`).join(', ')}`);
+        console.log(`Event::Payload: ${ request.payload ? request.payload.toString() : '' }`);
       }
 
       if(!request.payload) {
@@ -258,24 +232,29 @@ const scheme = function (server, options) {
         throw Boom.unauthorized('msgAuthDetails missing from Authtozation header or payload');
       }
 
-      // msgAuthDetails = validateMsgAuthDetails(msgAuthDetails);
-
       // Getting the "message" from the original, unparsed request payload
       const message = isolateMessage(originalPayload);
 
       const input = concatMsgAuthDetails(msgAuthDetails, message);
       const hash = calculateSignatureValue(input);
 
+      // Activate to see hash results - helpful when writing tests
+      // console.log(`Matches: ${ hash === msgAuthDetails.signatureValue }\nCalcutated: ${ hash }\nmsgAuthDetails: ${ msgAuthDetails.signatureValue }`);
+
       if(hash === msgAuthDetails.signatureValue) {
+
         return h.continue;
+
       } else {
+
         if(CONSOLE_LOG_ERRORS) {
-          console.error(`Signature error:::`);
-          console.error(`  message: ${ message }`);
-          console.error(`  msgAuthDetails: ${ msgAuthDetails }`);
-          console.error(`  calculateSignatureValue: ${ hash }`);
+          console.error(`Signature:error:calculateSignatureValue: ${ hash }`);
+          console.error(`Signature:error:msgAuthDetails: ${ JSON.stringify(msgAuthDetails) }`);
+          console.error(`Signature:error:message: ${ message }`);
         }
+
         throw Boom.unauthorized('Signature value does not match payload');
+
       }
     }
   };
@@ -291,7 +270,6 @@ module.exports = {
   },
   findEndOfObject,
   isolateMessage,
-  // isolateEventPayload,
   concatMsgAuthDetails,
   calculateSignatureValue,
   msgAuthDetailsValidation

@@ -12,25 +12,25 @@ const KafkaSpy = require('./helpers/kafka_spy.js');
 const SQSSpy = require('./helpers/aws_sqs_spy.js');
 
 
-describe('auth scheme tests', async () => {
-  
+async function request(options) {
 
-  async function request(options) {
-
-    const req = {
-      method: options.method ? options.method : 'GET',
-      url: options.url,
-      payload: options.payload,
-      headers: Object.assign(options.headers || {},
-        {
-          host: 'testing.com'
-        }
-      )
-    };
-    
-    // We don't need to reject anything. We only resolve and the tests should validate the response
-    return await server.inject(req);
+  const req = {
+    method: options.method ? options.method : 'GET',
+    url: options.url,
+    payload: options.payload,
+    headers: Object.assign(options.headers || {},
+      {
+        host: 'testing.com'
+      }
+    )
   };
+  
+  // We don't need to reject anything. We only resolve and the tests should validate the response
+  return await server.inject(req);
+};
+
+
+describe('auth scheme tests', async () => {
   
 
   before(async () => {
@@ -39,6 +39,7 @@ describe('auth scheme tests', async () => {
 
   after(async () => {
   });
+
 
   afterEach(async () => {
     KafkaSpy.reset();
@@ -168,22 +169,22 @@ describe('auth scheme tests', async () => {
     const msgAuthDetails = {
       clientNo: 25,
       requestDateTime: "2019-06-01T09:48:32Z",
-      signatureValue: "7mL+GjbK0hadVThgdVmWROGU5h74mvIGhf9gNQKZQLI=",
+      signatureValue: "snTyOietaSS8gf2qMAoY9cXqX79DVhg5O/EFVh9wUL4=",
       ariaAccountID: "AccountID",
       ariaAccountNo: 1234567,
       signatureVersion: 2,
       userID: "ASaeed"
     };
 
-    const eventPayload = { some_unique_event_id: 1, subdocument: { test: 1, anothervalue: 'text' }};
+    const eventPayload = { request: { transaction_id: 1 }, subdocument: { test: 1, anothervalue: 'text' }};
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventPayload, msgAuthDetails } });
     expect(response.statusCode).to.equal(200);
 
     expect(KafkaSpy.deliver.calledOnce).to.equal(true);
-    expect(KafkaSpy.deliver.calledWith(1, '{"some_unique_event_id":1,"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
+    expect(KafkaSpy.deliver.calledWith(1, '{"request":{"transaction_id":1},"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
     expect(SQSSpy.deliver.calledOnce).to.equal(true);
-    expect(KafkaSpy.deliver.calledWith(1, '{"some_unique_event_id":1,"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
+    expect(KafkaSpy.deliver.calledWith(1, '{"request":{"transaction_id":1},"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
   });
 
 
@@ -212,22 +213,22 @@ describe('auth scheme tests', async () => {
     const msgAuthDetails = {
       clientNo: 25,
       requestDateTime: "2019-07-03T07:48:31Z",
-      signatureValue: "amFfBV2SUztr8Yqjzt313tCzt6PT5ED1DwRxnxEz95Y=",
+      signatureValue: "iIDhHq+DzsR2tubtQQ2xbrRi39JWyCbvrOFzfk5OrII=",
       ariaAccountID: "AccountID",
       ariaAccountNo: 1234567,
       signatureVersion: 2,
       userID: "ASaeed"
     };
 
-    const eventPayload = { some_unique_event_id: 2, subdocument: { test: 1, anothervalue: 'text' }};
+    const eventPayload = { request: { transaction_id: 2 }, subdocument: { test: 1, anothervalue: 'text' }};
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload: { eventPayload, msgAuthDetails }, headers });
     expect(response.statusCode).to.equal(200);
 
     expect(KafkaSpy.deliver.calledOnce).to.equal(true);
-    expect(KafkaSpy.deliver.calledWith(2, '{"some_unique_event_id":2,"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
+    expect(KafkaSpy.deliver.calledWith(2, '{"request":{"transaction_id":2},"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
     expect(SQSSpy.deliver.calledOnce).to.equal(true);
-    expect(SQSSpy.deliver.calledWith(2, '{"some_unique_event_id":2,"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
+    expect(SQSSpy.deliver.calledWith(2, '{"request":{"transaction_id":2},"subdocument":{"test":1,"anothervalue":"text"}}')).to.equal(true);
   });
 
 
@@ -292,5 +293,144 @@ describe('auth scheme tests', async () => {
     expect(response.statusCode).to.equal(200);
 
     expect(KafkaSpy.deliver.calledWith(4, '{"accAccessControlAIDFeatureList":[],"ariaAccountID":null,"ariaAccountNo":41998377,"numberOfAllotments":0,"some_unique_event_id":4}')).to.equal(true);
+  });
+
+  
+  it('test AMPSEventID=1 SUBSCRIPTION', async () => {
+
+    const payload = {
+      "msgAuthDetails": {
+        "userID": "34934396",
+        "signatureVersion": 2,
+        "ariaAccountNo": 42036867,
+        "ariaAccountID": null,
+        "signatureValue": "voFQskZvVsDqqNbxaXdg5fh9iZCaccScDbll7gWQbOs=",
+        "requestDateTime": "2019-09-05T09:54:43Z",
+        "authKey": null,
+        "clientNo": 25
+      },
+      "AMPSEventData": {
+        "AMPSEventIdent": {
+          "AMPSEventID": 1,
+          "AMPSEventClass": "SUBSCRIPTION"
+        },
+        "AMPSEventDetail": {
+          "AMPSEvent_TestTransactionId": 12,
+          "AMPSEvent_SubscriptionReplaced": null,
+          "AMPSEvent_SubscriptionModified": null,
+          "AMPSEvent_SubscriptionDowngraded": null,
+          "AMPSEvent_SubscriptionCancelled": null,
+          "AMPSEvent_SubscriptionAdded": {
+            "AMPSSubscriptionIDs": {
+              "AriaSubscriptionNo": 130338057,
+              "AriaSubscriptionID": "BER-C-DIGITAL-PLUS-e42d6aca-ca34-419e-831d-623b822eb834"
+            },
+            "AMPSSubscriptionDetails": {
+              "SubsPlanInstanceDetails": {
+                "AMPSPlanInstanceDetails": {
+                  "PlanEffectiveDate": "",
+                  "activationDate": "",
+                  "PlanUsageBillInterval": 3,
+                  "PlanUnits": 1,
+                  "PlanReccBillInterval": 3,
+                  "PlanPurchaseOrderNo": null,
+                  "PlanNextBillDate": "2019-12-05T00:00:00",
+                  "PlanBillThruDate": "2019-12-04T00:00:00",
+                  "PlanBillDay": 5,
+                  "PlanAssignmentDate": "2019-09-05T00:00:00",
+                  "AriarateScheduleName": "Berlingske Digital+ kvartal",
+                  "AriaSubscriptionDesc": null,
+                  "AriaRateScheduleNo": 375520,
+                  "AriaRateScheduleID": "BER-C-DIGITAL-PLUS-DKK-03",
+                  "AriaDunningGroupNo": 42988552,
+                  "AriaDunningGroupID": "DG-b257abdb-5947-446a-93bf-553bfd1a348b",
+                  "AriaBillingGroupNo": 41401104,
+                  "AriaBillingGroupID": "BG-b257abdb-5947-446a-93bf-553bfd1a348b",
+                  "PlanLastBillDate": "2019-09-05T00:00:00",
+                  "PlanInstanceStatusDate": "2019-09-05T00:00:00",
+                  "PlanInstanceStatusCodeLabel": "Active",
+                  "PlanInstanceStatusCode": 1,
+                  "PlanDunningStep": 0,
+                  "PlanDunningState": 0,
+                  "PlanDunningDegradeDate": "",
+                  "PlanDeprovisionedDate": "",
+                  "PlanCreateDate": "2019-09-05T00:00:00"
+                },
+                "AMPSPlanDetails": {
+                  "ProductTypeVariant": "STANDARD",
+                  "ProductType": "DIGITAL",
+                  "AriaPlanNo": 102319,
+                  "AriaPlanName": "Berlingske - Digital Plus",
+                  "AriaPlanID": "BER-C-DIGITAL-PLUS",
+                  "AriaPlanDesc": "Berlingske Digital+ hele ugen\n",
+                  "AMPSTitleDetails": [
+                    {
+                      "TitleName": "Berlingsk",
+                      "TitleDomain": "www.berlingske.dk",
+                      "TitleDesc": "Berlingsk",
+                      "TitleCode": "BER"
+                    }
+                  ]
+                }
+              },
+              "SubsDiscountDetails": [],
+              "SubsCampaignDetails": {
+                "CampaignDateStart": "",
+                "CampaignDateEnd": "",
+                "CampaignBillingSKU": null,
+                "CampaignBillingPriceVAT": null,
+                "CampaignBillingPriceInclVAT": null,
+                "CampaignBillingPriceExclVAT": null,
+                "CampaignBillingCode": null,
+                "CampaignDesc": null,
+                "CampaignName": null,
+                "CampaignID": null,
+                "CampaignDurationUnit": null,
+                "CampaignDurationLength": 0,
+                "CampaignDurationEndDate": ""
+              },
+              "SubsBundleDetails": null
+            },
+            "AMPSSubscriptionAction": {
+              "PlanInstanceStatusCodeUntilLabel": "Active",
+              "PlanInstanceStatusCodeUntil": 1,
+              "PlanChangeMethod": "IMMEDIATELY",
+              "PlanChangeDate": "2019-09-05T00:00:00"
+            },
+            "AMPSAccountIDs": {
+              "AriaUserID": "34934396",
+              "AriaAccountNo": 42036867,
+              "AriaAccountID": null,
+              "AcctMigratedCustomerID": ""
+            },
+            "AMPSAccountDetails": {
+              "AcctCustomerType": "C",
+              "AcctCurrencyCode": "dkk",
+              "AcctConsentCodeDate": "",
+              "AcctConsentCode": "",
+              "AcctChannelCode": "",
+              "AcctTitleCode": "BER",
+              "AcctTaxpayerID": null,
+              "AcctSourceCode": "",
+              "AcctReservationCodeDate": "",
+              "AcctReservationCode": "",
+              "AcctPurchaseOrderNo": null,
+              "AcctNotifyMethod": 1,
+              "AcctLocaleCode": "DK-DANSK",
+              "AcctLanguageCode": null
+            }
+          },
+          "AMPSEvent_AccountModified": null,
+          "AMPSEvent_AccountCreated": null,
+          "AMPSEvent_AccountCreditCardUpdated": null,
+          "AMPSEvent_SubscriptionUpgraded": null
+        }
+      }
+    };
+
+    const response = await request({ method: 'POST', url: '/notifications_events', payload });
+    expect(response.statusCode).to.equal(200);
+
+    expect(KafkaSpy.deliver.calledWith(12, '{"AMPSEventIdent":{"AMPSEventID":1,"AMPSEventClass":"SUBSCRIPTION"},"AMPSEventDetail":{"AMPSEvent_TestTransactionId":12,"AMPSEvent_SubscriptionReplaced":null,"AMPSEvent_SubscriptionModified":null,"AMPSEvent_SubscriptionDowngraded":null,"AMPSEvent_SubscriptionCancelled":null,"AMPSEvent_SubscriptionAdded":{"AMPSSubscriptionIDs":{"AriaSubscriptionNo":130338057,"AriaSubscriptionID":"BER-C-DIGITAL-PLUS-e42d6aca-ca34-419e-831d-623b822eb834"},"AMPSSubscriptionDetails":{"SubsPlanInstanceDetails":{"AMPSPlanInstanceDetails":{"PlanEffectiveDate":"","activationDate":"","PlanUsageBillInterval":3,"PlanUnits":1,"PlanReccBillInterval":3,"PlanPurchaseOrderNo":null,"PlanNextBillDate":"2019-12-05T00:00:00","PlanBillThruDate":"2019-12-04T00:00:00","PlanBillDay":5,"PlanAssignmentDate":"2019-09-05T00:00:00","AriarateScheduleName":"Berlingske Digital+ kvartal","AriaSubscriptionDesc":null,"AriaRateScheduleNo":375520,"AriaRateScheduleID":"BER-C-DIGITAL-PLUS-DKK-03","AriaDunningGroupNo":42988552,"AriaDunningGroupID":"DG-b257abdb-5947-446a-93bf-553bfd1a348b","AriaBillingGroupNo":41401104,"AriaBillingGroupID":"BG-b257abdb-5947-446a-93bf-553bfd1a348b","PlanLastBillDate":"2019-09-05T00:00:00","PlanInstanceStatusDate":"2019-09-05T00:00:00","PlanInstanceStatusCodeLabel":"Active","PlanInstanceStatusCode":1,"PlanDunningStep":0,"PlanDunningState":0,"PlanDunningDegradeDate":"","PlanDeprovisionedDate":"","PlanCreateDate":"2019-09-05T00:00:00"},"AMPSPlanDetails":{"ProductTypeVariant":"STANDARD","ProductType":"DIGITAL","AriaPlanNo":102319,"AriaPlanName":"Berlingske - Digital Plus","AriaPlanID":"BER-C-DIGITAL-PLUS","AriaPlanDesc":"Berlingske Digital+ hele ugen\\n","AMPSTitleDetails":[{"TitleName":"Berlingsk","TitleDomain":"www.berlingske.dk","TitleDesc":"Berlingsk","TitleCode":"BER"}]}},"SubsDiscountDetails":[],"SubsCampaignDetails":{"CampaignDateStart":"","CampaignDateEnd":"","CampaignBillingSKU":null,"CampaignBillingPriceVAT":null,"CampaignBillingPriceInclVAT":null,"CampaignBillingPriceExclVAT":null,"CampaignBillingCode":null,"CampaignDesc":null,"CampaignName":null,"CampaignID":null,"CampaignDurationUnit":null,"CampaignDurationLength":0,"CampaignDurationEndDate":""},"SubsBundleDetails":null},"AMPSSubscriptionAction":{"PlanInstanceStatusCodeUntilLabel":"Active","PlanInstanceStatusCodeUntil":1,"PlanChangeMethod":"IMMEDIATELY","PlanChangeDate":"2019-09-05T00:00:00"},"AMPSAccountIDs":{"AriaUserID":"34934396","AriaAccountNo":42036867,"AriaAccountID":null,"AcctMigratedCustomerID":""},"AMPSAccountDetails":{"AcctCustomerType":"C","AcctCurrencyCode":"dkk","AcctConsentCodeDate":"","AcctConsentCode":"","AcctChannelCode":"","AcctTitleCode":"BER","AcctTaxpayerID":null,"AcctSourceCode":"","AcctReservationCodeDate":"","AcctReservationCode":"","AcctPurchaseOrderNo":null,"AcctNotifyMethod":1,"AcctLocaleCode":"DK-DANSK","AcctLanguageCode":null}},"AMPSEvent_AccountModified":null,"AMPSEvent_AccountCreated":null,"AMPSEvent_AccountCreditCardUpdated":null,"AMPSEvent_SubscriptionUpgraded":null}}')).to.equal(true);
   });
 });
