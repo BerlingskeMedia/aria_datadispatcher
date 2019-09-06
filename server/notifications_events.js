@@ -43,8 +43,17 @@ module.exports = {
         }
 
 
+        let event_id = Date.now();
+
         // Getting the event_id if it's available.
-        let event_id = parsedMessage.some_unique_event_id || Date.now();
+        if(parsedMessage.request && parsedMessage.request.transaction_id) {
+          event_id = parsedMessage.request.transaction_id;
+        } else if(parsedMessage.AMPSEventDetail && parsedMessage.AMPSEventDetail.AMPSEvent_TestTransactionId) {
+          event_id = parsedMessage.AMPSEventDetail.AMPSEvent_TestTransactionId;
+        } else if(parsedMessage.some_unique_event_id) {
+          event_id = parsedMessage.some_unique_event_id;
+        }
+        
 
 
         if(SQS.ready) {
