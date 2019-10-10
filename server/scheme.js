@@ -72,7 +72,7 @@ const isolateMessage = function(payload) {
   const startOfObject = messageObjectIndex + messageKeySignature.length;
   const endOfObject = startOfObject + findEndOfObject(payload.substring(startOfObject));
 
-  return payload.substring(startOfObject, endOfObject);
+  return payload.substring(startOfObject, endOfObject).trim();
 };
 
 
