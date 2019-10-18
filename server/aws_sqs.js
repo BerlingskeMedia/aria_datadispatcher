@@ -8,7 +8,6 @@ if (process.env.NODE_ENV === 'test') {
 
 const EventEmitter = require('events');
 const AWS = require('aws-sdk');
-const Boom = require('@hapi/boom');
 
 const AWS_REGION = process.env.AWS_REGION || 'eu-west-1';
 const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
@@ -18,8 +17,6 @@ const SQS_MESSAGE_GROUP_ID = process.env.SQS_MESSAGE_GROUP_ID || 'aria';
 
 
 AWS.config.update({accessKeyId: AWS_ACCESS_KEY_ID, secretAccessKey: AWS_SECRET_ACCESS_KEY, region: AWS_REGION});
-
-const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true' && process.env.NODE_ENV !== 'test');
 
 const sqs = new AWS.SQS();
 
@@ -64,7 +61,7 @@ sqs.getQueueAttributes(params, function(err, data) {
 
 
 module.exports.deliver = async function(id, payload) {
-  var sqsParams = {
+  const sqsParams = {
     MessageBody: payload,
     MessageDeduplicationId: id.toString(),
     MessageGroupId: SQS_MESSAGE_GROUP_ID,
@@ -72,12 +69,13 @@ module.exports.deliver = async function(id, payload) {
     QueueUrl: SQS_QUEUE_URL
   };
 
-  sqs.sendMessage(sqsParams, function(err, result) {
-    if (err) {
-      console.error('SQS Error:', err);
-      throw Boom.badImplementation(err.toString());
-    } else if(CONSOLE_LOG_EVENTS) {
-      console.log('SQS OK:', JSON.stringify(result));
-    }
+  return new Promise((resolve, reject) => {
+    sqs.sendMessage(sqsParams, function(err, result) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
   });
 };

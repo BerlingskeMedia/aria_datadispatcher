@@ -11,7 +11,8 @@ const NotificationsEvents = require('./notifications_events.js');
 
 
 process.on('unhandledRejection', (err) => {
-  console.log(err);
+  console.error('unhandledRejection');
+  console.error(err);
   process.exit(1);
 });
 

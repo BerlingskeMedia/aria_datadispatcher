@@ -6,6 +6,7 @@ const Scheme = require('./scheme.js');
 const Kafka = require('./kafka.js');
 const SQS = require('./aws_sqs.js');
 
+const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true' && process.env.NODE_ENV !== 'test');
 
 module.exports = {
   name: 'notifications_events',
@@ -48,21 +49,48 @@ module.exports = {
         // Getting the event_id if it's available.
         if(parsedMessage.request && parsedMessage.request.transaction_id) {
           event_id = parsedMessage.request.transaction_id;
+
+        } else if(parsedMessage.eventPayLoad && parsedMessage.eventPayLoad.request && parsedMessage.eventPayLoad.request.transaction_id) {
+          event_id = parsedMessage.eventPayLoad.request.transaction_id;
+
         } else if(parsedMessage.AMPSEventDetail && parsedMessage.AMPSEventDetail.AMPSEvent_TestTransactionId) {
           event_id = parsedMessage.AMPSEventDetail.AMPSEvent_TestTransactionId;
+
         } else if(parsedMessage.some_unique_event_id) {
           event_id = parsedMessage.some_unique_event_id;
         }
         
 
-
         if(SQS.ready) {
-          await SQS.deliver(event_id, message);
+          try {
+
+            // If the messages is of type "enrichedEventData", we only want the "eventPayLoad" on SQS.
+            const MessageBody = parsedMessage.eventPayLoad ? JSON.stringify(parsedMessage.eventPayLoad) : message;
+
+            const resultSQS = await SQS.deliver(event_id, MessageBody);
+
+            if(CONSOLE_LOG_EVENTS) {
+              console.log('SQS OK:', JSON.stringify(resultSQS));
+            }
+          } catch(ex) {
+            console.error(ex);
+            throw Boom.badRequest('SQS error');
+          }
         }
 
 
         if(Kafka.ready) {
-          await Kafka.deliver(event_id, message);
+          try {
+
+            const resultKafka = await Kafka.deliver(event_id, message);
+
+            if(CONSOLE_LOG_EVENTS) {
+              console.log('Kafka OK:', resultKafka)
+            }
+          } catch(ex) {
+            console.error(ex);
+            throw Boom.badRequest('Kafka error');
+          }
         }
 
 

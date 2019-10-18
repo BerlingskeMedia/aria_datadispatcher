@@ -8,12 +8,9 @@ if (process.env.NODE_ENV === 'test') {
 
 const EventEmitter = require('events');
 const Kafka = require('kafka-node');
-const Boom = require('@hapi/boom');
 
 const KAFKA_HOST = process.env.KAFKA_HOST;
 const KAFKA_INGRESS_TOPIC = process.env.KAFKA_INGRESS_TOPIC;
-
-const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true' && process.env.NODE_ENV !== 'test');
 
 if(!KAFKA_HOST) {
   console.log('Kafka disabled')
@@ -73,12 +70,13 @@ module.exports.deliver = async function(id, payload) {
     }
   ];
 
-  producer.send(payloads, function (err, result) {
-    if(err) {
-      console.error('Kafka error:', err);
-      throw Boom.badImplementation(err.toString());
-    } else if(CONSOLE_LOG_EVENTS) {
-      console.log('Kafka OK:', result)
-    }
+  return new Promise((resolve, reject) => {
+    producer.send(payloads, function (err, result) {
+      if(err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
   });
 };
