@@ -50,6 +50,9 @@ module.exports = {
         if(parsedMessage.request && parsedMessage.request.transaction_id) {
           event_id = parsedMessage.request.transaction_id;
 
+        } else if(parsedMessage.eventPayload && parsedMessage.eventPayload.request && parsedMessage.eventPayload.request.transaction_id) {
+          event_id = parsedMessage.eventPayload.request.transaction_id;
+
         } else if(parsedMessage.eventPayLoad && parsedMessage.eventPayLoad.request && parsedMessage.eventPayLoad.request.transaction_id) {
           event_id = parsedMessage.eventPayLoad.request.transaction_id;
 
@@ -64,8 +67,11 @@ module.exports = {
         if(SQS.ready) {
           try {
 
-            // If the messages is of type "enrichedEventData", we only want the "eventPayLoad" on SQS.
-            const MessageBody = parsedMessage.eventPayLoad ? JSON.stringify(parsedMessage.eventPayLoad) : message;
+            // If the messages is of type "enrichedEventData", we only want the "eventPayload" or "eventPayLoad" on SQS.
+            const MessageBody = 
+              parsedMessage.eventPayload ? JSON.stringify(parsedMessage.eventPayload) :
+              parsedMessage.eventPayLoad ? JSON.stringify(parsedMessage.eventPayLoad) :
+              message;
 
             const resultSQS = await SQS.deliver(event_id, MessageBody);
 

@@ -380,4 +380,80 @@ describe('auth scheme tests', async () => {
     expect(SQSSpy.deliver.calledWith(13, '{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355225","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":13,"sender":"A","class":"T","auth_key":"riweuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}}')).to.equal(true);
     expect(KafkaSpy.deliver.calledWith(13, '{"eventPayLoad":{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355225","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":13,"sender":"A","class":"T","auth_key":"riweuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}},"JSONGetAllInvoiceInfomationMReponse":{"error_code":1016,"error_msg":"An input in the provided query is missing quotation marks around a string that includes a space, less than, greater than, or equals sign. Please add quotation marks to this input to receive the response you are expecting.","starting_record":null,"total_records":null,"all_invoice_details_m":[],"SupplementalField1":null,"SupplementalField2":null,"SupplementalField3":null,"SupplementalField4":null,"SupplementalField5":null}}')).to.equal(true);
   });
+
+
+  it('enrichedEventData.eventPayload small l delivered to SQS', async () => {
+
+    const payload = {
+      "msgAuthDetails": {
+          "userID": "abcd_user",
+          "ariaAccountNo": 42046657,
+          "ariaAccountID": null,
+          "signatureVersion": 2,
+          "signatureValue": "uUjqL18Mj3yAMpOpfDrDLwE1J2+1911nEIxHF5GkFTk=",
+          "requestDateTime": "2019-10-12T23:35:16Z",
+          "authKey": null,
+          "clientNo": 25
+      },
+      "enrichedEventData": {
+        "eventPayload": {
+          "account": {
+            "userid": "abcd_user",
+            "senior_acct_no": null,
+            "master_plan_instances": {
+              "master_plan_instance_data": [
+                {
+                  "resp_plan_instance_no": null,
+                  "resp_level_cd": "1",
+                  "plan_instance_no": "130355226",
+                  "client_plan_instance_id": "BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"
+                }
+              ]
+            },
+            "client_no": 90000327,
+            "acct_no": 42046604
+          },
+          "request": {
+            "version": 1,
+            "transaction_id": 14,
+            "sender": "A",
+            "class": "T",
+            "auth_key": "riwyuyoruywe",
+            "action": "M"
+          },
+          "posting_info": {
+            "posting_user": "System",
+            "posting_status_cd": 1,
+            "posting_date": "2019-11-13 01:34:52"
+          },
+          "event_data": {
+            "event": [
+              {
+                "event_label": "Invoice Created",
+                "event_id": 901
+              }
+            ]
+          }
+        },
+        "JSONGetAllInvoiceInfomationMReponse": {
+          "error_code": 1016,
+          "error_msg": "An input in the provided query is missing quotation marks around a string that includes a space, less than, greater than, or equals sign. Please add quotation marks to this input to receive the response you are expecting.",
+          "starting_record": null,
+          "total_records": null,
+          "all_invoice_details_m": [],
+          "SupplementalField1": null,
+          "SupplementalField2": null,
+          "SupplementalField3": null,
+          "SupplementalField4": null,
+          "SupplementalField5": null
+        }
+      }
+    };
+
+    const response = await request({ method: 'POST', url: '/notifications_events', payload });
+    expect(response.statusCode).to.equal(200);
+
+    expect(SQSSpy.deliver.calledWith(14, '{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355226","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":14,"sender":"A","class":"T","auth_key":"riwyuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}}')).to.equal(true);
+    expect(KafkaSpy.deliver.calledWith(14, '{"eventPayload":{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355226","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":14,"sender":"A","class":"T","auth_key":"riwyuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}},"JSONGetAllInvoiceInfomationMReponse":{"error_code":1016,"error_msg":"An input in the provided query is missing quotation marks around a string that includes a space, less than, greater than, or equals sign. Please add quotation marks to this input to receive the response you are expecting.","starting_record":null,"total_records":null,"all_invoice_details_m":[],"SupplementalField1":null,"SupplementalField2":null,"SupplementalField3":null,"SupplementalField4":null,"SupplementalField5":null}}')).to.equal(true);
+  });
 });
