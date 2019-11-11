@@ -44,7 +44,7 @@ module.exports = {
         }
 
 
-        let event_id = Date.now();
+        let event_id = null;
 
         // Getting the event_id if it's available.
         if(parsedMessage.request && parsedMessage.request.transaction_id) {
@@ -75,13 +75,15 @@ module.exports = {
         if(SQS.ready) {
           try {
 
+            const sqs_id = event_id || Date.now();
+
             // If the messages is of type "enrichedEventData", we only want the "eventPayload" or "eventPayLoad" on SQS.
             const MessageBody = 
               parsedMessage.eventPayload ? JSON.stringify(parsedMessage.eventPayload) :
               parsedMessage.eventPayLoad ? JSON.stringify(parsedMessage.eventPayLoad) :
               message;
 
-            const resultSQS = await SQS.deliver(event_id, MessageBody);
+            const resultSQS = await SQS.deliver(sqs_id, MessageBody);
 
             if(CONSOLE_LOG_EVENTS) {
               console.log('SQS OK:', JSON.stringify(resultSQS));
