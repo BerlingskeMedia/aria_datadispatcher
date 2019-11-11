@@ -50,11 +50,19 @@ module.exports = {
         if(parsedMessage.request && parsedMessage.request.transaction_id) {
           event_id = parsedMessage.request.transaction_id;
 
+          // If the eventPayload is bundled in a enrichedPayload
+          // Lowercase l
         } else if(parsedMessage.eventPayload && parsedMessage.eventPayload.request && parsedMessage.eventPayload.request.transaction_id) {
           event_id = parsedMessage.eventPayload.request.transaction_id;
 
+          // Uppercase L
         } else if(parsedMessage.eventPayLoad && parsedMessage.eventPayLoad.request && parsedMessage.eventPayLoad.request.transaction_id) {
           event_id = parsedMessage.eventPayLoad.request.transaction_id;
+
+          
+          // TODO: Pending Wajid GUID
+
+
 
         } else if(parsedMessage.AMPSEventDetail && parsedMessage.AMPSEventDetail.AMPSEvent_TestTransactionId) {
           event_id = parsedMessage.AMPSEventDetail.AMPSEvent_TestTransactionId;

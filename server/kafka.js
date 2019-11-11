@@ -65,8 +65,11 @@ module.exports.deliver = async function(id, payload) {
   const payloads = [
     {
       topic: KAFKA_INGRESS_TOPIC,
-      // key: 'theKey', // string or buffer, only needed when using keyed partitioner
-      messages: payload
+      key: id, // string or buffer, only needed when using keyed partitioner
+      messages: payload,
+      attributes: 1 // Gzip better compression
+      // attributes: 2 // Snappy - better CPU
+      // timestamp
     }
   ];
 
