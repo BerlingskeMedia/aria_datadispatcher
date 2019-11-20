@@ -81,7 +81,10 @@ module.exports = {
               parsedMessage.eventPayLoad ? JSON.stringify(parsedMessage.eventPayLoad) :
               message;
 
-            const resultSQS = await SQS.deliver(sqs_id, MessageBody);
+            const resultSQS = await SQS.deliver({
+              id: sqs_id,
+              message: MessageBody
+            });
 
             if(CONSOLE_LOG_EVENTS) {
               console.log('SQS OK:', JSON.stringify(resultSQS));
@@ -96,7 +99,10 @@ module.exports = {
         if(Kafka.ready) {
           try {
 
-            const resultKafka = await Kafka.deliver(event_id, message);
+            const resultKafka = await Kafka.deliver({
+              id: event_id,
+              message
+            });
 
             if(CONSOLE_LOG_EVENTS) {
               console.log('Kafka OK:', resultKafka)

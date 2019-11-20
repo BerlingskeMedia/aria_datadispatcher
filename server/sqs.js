@@ -53,7 +53,7 @@ sqs.getQueueAttributes(params, function(err, data) {
 });
 
 
-module.exports.deliver = async function(id, payload) {
+module.exports.deliver = async function({ id, message }) {
   const sqsParams = {
     MessageBody: message,
     QueueUrl: SQS_QUEUE_URL
