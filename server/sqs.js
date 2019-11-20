@@ -55,12 +55,14 @@ sqs.getQueueAttributes(params, function(err, data) {
 
 module.exports.deliver = async function(id, payload) {
   const sqsParams = {
-    MessageBody: payload,
-    MessageDeduplicationId: id.toString(),
-    MessageGroupId: SQS_MESSAGE_GROUP_ID,
-    // MessageAttributes,
+    MessageBody: message,
     QueueUrl: SQS_QUEUE_URL
   };
+
+  if(AttributeNames.indexOf('FifoQueue') > -1) {
+    sqsParams.MessageDeduplicationId = id.toString();
+    sqsParams.MessageGroupId = SQS_MESSAGE_GROUP_ID;
+  }
 
   return new Promise((resolve, reject) => {
     sqs.sendMessage(sqsParams, function(err, result) {
