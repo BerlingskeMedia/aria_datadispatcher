@@ -46,8 +46,10 @@ module.exports = {
 
         let event_id = null;
 
+          event_id = parsedMessage.eventIdent.event_guid;
+
         // Getting the event_id if it's available.
-        if(parsedMessage.request && parsedMessage.request.transaction_id) {
+        } else if(parsedMessage.request && parsedMessage.request.transaction_id) {
           event_id = parsedMessage.request.transaction_id;
 
           // If the eventPayload is bundled in a enrichedPayload
@@ -59,21 +61,15 @@ module.exports = {
         } else if(parsedMessage.eventPayLoad && parsedMessage.eventPayLoad.request && parsedMessage.eventPayLoad.request.transaction_id) {
           event_id = parsedMessage.eventPayLoad.request.transaction_id;
 
-          
-          // TODO: Pending Wajid GUID
-
-          
+        // Fall-back for those tests without IDs
         } else if(process.env.NODE_ENV === 'test') {
           event_id = 4;
 
         }        
 
 
-
         if(SQS.ready) {
           try {
-
-            const sqs_id = event_id || Date.now();
 
             // If the messages is of type "enrichedEventData", we only want the "eventPayload" or "eventPayLoad" on SQS.
             const MessageBody = 
@@ -82,7 +78,7 @@ module.exports = {
               message;
 
             const resultSQS = await SQS.deliver({
-              id: sqs_id,
+              id: event_id || Date.now(),
               message: MessageBody
             });
 
@@ -100,7 +96,7 @@ module.exports = {
           try {
 
             const resultKafka = await Kafka.deliver({
-              id: event_id,
+              id: event_id, // Kafka aka. The Data Platform prefers a "null" rather than a random ID, if no specific ID was found
               message
             });
 
