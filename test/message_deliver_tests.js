@@ -109,7 +109,7 @@ describe('auth scheme tests', async () => {
           "clientNo": 25,
           "authKey": null,
           "requestDateTime": "2019-09-03T23:41:42Z",
-          "signatureValue": "420ujbOZUMBBnMd/CxlHfiIQtemgfmEM/3MH62uGleU=",
+          "signatureValue": "74864F0CCkCp8pgsRBYh153h9JO+HAXp1P/nk6I4RVk=",
           "signatureVersion": "2"
       },
       "accAccessControlAIDInfo": {
@@ -122,16 +122,15 @@ describe('auth scheme tests', async () => {
           ],
           "ariaAccountID": null,
           "ariaAccountNo": 41998358,
-          "numberOfAllotments": 0,
-          "some_unique_event_id": 3
+          "numberOfAllotments": 0
       }
     };
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload });
     expect(response.statusCode).to.equal(200);
 
-    expect(KafkaSpy.deliver.calledWith(3, '{"accAccessControlAIDFeatureList":[{"accessFeature":"WEB/APP","eligibleForSharing":false,"titleDomain":"www.berlingske.dk"}],"ariaAccountID":null,"ariaAccountNo":41998358,"numberOfAllotments":0,"some_unique_event_id":3}')).to.equal(true);
-    expect(SQSSpy.deliver.calledWith(3, '{"accAccessControlAIDFeatureList":[{"accessFeature":"WEB/APP","eligibleForSharing":false,"titleDomain":"www.berlingske.dk"}],"ariaAccountID":null,"ariaAccountNo":41998358,"numberOfAllotments":0,"some_unique_event_id":3}')).to.equal(true);
+    expect(KafkaSpy.deliver.calledWith(4, '{"accAccessControlAIDFeatureList":[{"accessFeature":"WEB/APP","eligibleForSharing":false,"titleDomain":"www.berlingske.dk"}],"ariaAccountID":null,"ariaAccountNo":41998358,"numberOfAllotments":0}')).to.equal(true);
+    expect(SQSSpy.deliver.calledWith(4, '{"accAccessControlAIDFeatureList":[{"accessFeature":"WEB/APP","eligibleForSharing":false,"titleDomain":"www.berlingske.dk"}],"ariaAccountID":null,"ariaAccountNo":41998358,"numberOfAllotments":0}')).to.equal(true);
   });
 
 
@@ -145,23 +144,23 @@ describe('auth scheme tests', async () => {
           "clientNo": 25,
           "authKey": null,
           "requestDateTime": "2019-09-03T23:41:42Z",
-          "signatureValue": "IIp44ACADznRX/vokoKHJoIwKk6lb8hH4D96y/8ScEg=",
+          "signatureValue": "ybPM4uGNuGHqOuG21uFdekBLvNYYpN6UPdsDHuJtzwM=",
           "signatureVersion": "2"
       },
       "accAccessControlAIDInfo": {
           "accAccessControlAIDFeatureList": [],
           "ariaAccountID": null,
           "ariaAccountNo": 41998377,
-          "numberOfAllotments": 0,
-          "some_unique_event_id": 4
+          "numberOfAllotments": 0
       }
     };
 
     const response = await request({ method: 'POST', url: '/notifications_events', payload });
+    console.log(response.result)
     expect(response.statusCode).to.equal(200);
 
-    expect(SQSSpy.deliver.calledWith(4, '{"accAccessControlAIDFeatureList":[],"ariaAccountID":null,"ariaAccountNo":41998377,"numberOfAllotments":0,"some_unique_event_id":4}')).to.equal(true);
-    expect(KafkaSpy.deliver.calledWith(4, '{"accAccessControlAIDFeatureList":[],"ariaAccountID":null,"ariaAccountNo":41998377,"numberOfAllotments":0,"some_unique_event_id":4}')).to.equal(true);
+    expect(SQSSpy.deliver.calledWith(4, '{"accAccessControlAIDFeatureList":[],"ariaAccountID":null,"ariaAccountNo":41998377,"numberOfAllotments":0}')).to.equal(true);
+    expect(KafkaSpy.deliver.calledWith(4, '{"accAccessControlAIDFeatureList":[],"ariaAccountID":null,"ariaAccountNo":41998377,"numberOfAllotments":0}')).to.equal(true);
   });
 
   
@@ -173,7 +172,7 @@ describe('auth scheme tests', async () => {
         "signatureVersion": 2,
         "ariaAccountNo": 42036867,
         "ariaAccountID": null,
-        "signatureValue": "voFQskZvVsDqqNbxaXdg5fh9iZCaccScDbll7gWQbOs=",
+        "signatureValue": "3F9KkTcLcRuOOtfr+x9/9mtjH61nvj5aW9O9EG9Defo=",
         "requestDateTime": "2019-09-05T09:54:43Z",
         "authKey": null,
         "clientNo": 25
@@ -184,7 +183,6 @@ describe('auth scheme tests', async () => {
           "AMPSEventClass": "SUBSCRIPTION"
         },
         "AMPSEventDetail": {
-          "AMPSEvent_TestTransactionId": 12,
           "AMPSEvent_SubscriptionReplaced": null,
           "AMPSEvent_SubscriptionModified": null,
           "AMPSEvent_SubscriptionDowngraded": null,
@@ -300,8 +298,8 @@ describe('auth scheme tests', async () => {
     const response = await request({ method: 'POST', url: '/notifications_events', payload });
     expect(response.statusCode).to.equal(200);
 
-    expect(SQSSpy.deliver.calledWith(12, '{"AMPSEventIdent":{"AMPSEventID":1,"AMPSEventClass":"SUBSCRIPTION"},"AMPSEventDetail":{"AMPSEvent_TestTransactionId":12,"AMPSEvent_SubscriptionReplaced":null,"AMPSEvent_SubscriptionModified":null,"AMPSEvent_SubscriptionDowngraded":null,"AMPSEvent_SubscriptionCancelled":null,"AMPSEvent_SubscriptionAdded":{"AMPSSubscriptionIDs":{"AriaSubscriptionNo":130338057,"AriaSubscriptionID":"BER-C-DIGITAL-PLUS-e42d6aca-ca34-419e-831d-623b822eb834"},"AMPSSubscriptionDetails":{"SubsPlanInstanceDetails":{"AMPSPlanInstanceDetails":{"PlanEffectiveDate":"","activationDate":"","PlanUsageBillInterval":3,"PlanUnits":1,"PlanReccBillInterval":3,"PlanPurchaseOrderNo":null,"PlanNextBillDate":"2019-12-05T00:00:00","PlanBillThruDate":"2019-12-04T00:00:00","PlanBillDay":5,"PlanAssignmentDate":"2019-09-05T00:00:00","AriarateScheduleName":"Berlingske Digital+ kvartal","AriaSubscriptionDesc":null,"AriaRateScheduleNo":375520,"AriaRateScheduleID":"BER-C-DIGITAL-PLUS-DKK-03","AriaDunningGroupNo":42988552,"AriaDunningGroupID":"DG-b257abdb-5947-446a-93bf-553bfd1a348b","AriaBillingGroupNo":41401104,"AriaBillingGroupID":"BG-b257abdb-5947-446a-93bf-553bfd1a348b","PlanLastBillDate":"2019-09-05T00:00:00","PlanInstanceStatusDate":"2019-09-05T00:00:00","PlanInstanceStatusCodeLabel":"Active","PlanInstanceStatusCode":1,"PlanDunningStep":0,"PlanDunningState":0,"PlanDunningDegradeDate":"","PlanDeprovisionedDate":"","PlanCreateDate":"2019-09-05T00:00:00"},"AMPSPlanDetails":{"ProductTypeVariant":"STANDARD","ProductType":"DIGITAL","AriaPlanNo":102319,"AriaPlanName":"Berlingske - Digital Plus","AriaPlanID":"BER-C-DIGITAL-PLUS","AriaPlanDesc":"Berlingske Digital+ hele ugen\\n","AMPSTitleDetails":[{"TitleName":"Berlingsk","TitleDomain":"www.berlingske.dk","TitleDesc":"Berlingsk","TitleCode":"BER"}]}},"SubsDiscountDetails":[],"SubsCampaignDetails":{"CampaignDateStart":"","CampaignDateEnd":"","CampaignBillingSKU":null,"CampaignBillingPriceVAT":null,"CampaignBillingPriceInclVAT":null,"CampaignBillingPriceExclVAT":null,"CampaignBillingCode":null,"CampaignDesc":null,"CampaignName":null,"CampaignID":null,"CampaignDurationUnit":null,"CampaignDurationLength":0,"CampaignDurationEndDate":""},"SubsBundleDetails":null},"AMPSSubscriptionAction":{"PlanInstanceStatusCodeUntilLabel":"Active","PlanInstanceStatusCodeUntil":1,"PlanChangeMethod":"IMMEDIATELY","PlanChangeDate":"2019-09-05T00:00:00"},"AMPSAccountIDs":{"AriaUserID":"34934396","AriaAccountNo":42036867,"AriaAccountID":null,"AcctMigratedCustomerID":""},"AMPSAccountDetails":{"AcctCustomerType":"C","AcctCurrencyCode":"dkk","AcctConsentCodeDate":"","AcctConsentCode":"","AcctChannelCode":"","AcctTitleCode":"BER","AcctTaxpayerID":null,"AcctSourceCode":"","AcctReservationCodeDate":"","AcctReservationCode":"","AcctPurchaseOrderNo":null,"AcctNotifyMethod":1,"AcctLocaleCode":"DK-DANSK","AcctLanguageCode":null}},"AMPSEvent_AccountModified":null,"AMPSEvent_AccountCreated":null,"AMPSEvent_AccountCreditCardUpdated":null,"AMPSEvent_SubscriptionUpgraded":null}}')).to.equal(true);
-    expect(KafkaSpy.deliver.calledWith(12, '{"AMPSEventIdent":{"AMPSEventID":1,"AMPSEventClass":"SUBSCRIPTION"},"AMPSEventDetail":{"AMPSEvent_TestTransactionId":12,"AMPSEvent_SubscriptionReplaced":null,"AMPSEvent_SubscriptionModified":null,"AMPSEvent_SubscriptionDowngraded":null,"AMPSEvent_SubscriptionCancelled":null,"AMPSEvent_SubscriptionAdded":{"AMPSSubscriptionIDs":{"AriaSubscriptionNo":130338057,"AriaSubscriptionID":"BER-C-DIGITAL-PLUS-e42d6aca-ca34-419e-831d-623b822eb834"},"AMPSSubscriptionDetails":{"SubsPlanInstanceDetails":{"AMPSPlanInstanceDetails":{"PlanEffectiveDate":"","activationDate":"","PlanUsageBillInterval":3,"PlanUnits":1,"PlanReccBillInterval":3,"PlanPurchaseOrderNo":null,"PlanNextBillDate":"2019-12-05T00:00:00","PlanBillThruDate":"2019-12-04T00:00:00","PlanBillDay":5,"PlanAssignmentDate":"2019-09-05T00:00:00","AriarateScheduleName":"Berlingske Digital+ kvartal","AriaSubscriptionDesc":null,"AriaRateScheduleNo":375520,"AriaRateScheduleID":"BER-C-DIGITAL-PLUS-DKK-03","AriaDunningGroupNo":42988552,"AriaDunningGroupID":"DG-b257abdb-5947-446a-93bf-553bfd1a348b","AriaBillingGroupNo":41401104,"AriaBillingGroupID":"BG-b257abdb-5947-446a-93bf-553bfd1a348b","PlanLastBillDate":"2019-09-05T00:00:00","PlanInstanceStatusDate":"2019-09-05T00:00:00","PlanInstanceStatusCodeLabel":"Active","PlanInstanceStatusCode":1,"PlanDunningStep":0,"PlanDunningState":0,"PlanDunningDegradeDate":"","PlanDeprovisionedDate":"","PlanCreateDate":"2019-09-05T00:00:00"},"AMPSPlanDetails":{"ProductTypeVariant":"STANDARD","ProductType":"DIGITAL","AriaPlanNo":102319,"AriaPlanName":"Berlingske - Digital Plus","AriaPlanID":"BER-C-DIGITAL-PLUS","AriaPlanDesc":"Berlingske Digital+ hele ugen\\n","AMPSTitleDetails":[{"TitleName":"Berlingsk","TitleDomain":"www.berlingske.dk","TitleDesc":"Berlingsk","TitleCode":"BER"}]}},"SubsDiscountDetails":[],"SubsCampaignDetails":{"CampaignDateStart":"","CampaignDateEnd":"","CampaignBillingSKU":null,"CampaignBillingPriceVAT":null,"CampaignBillingPriceInclVAT":null,"CampaignBillingPriceExclVAT":null,"CampaignBillingCode":null,"CampaignDesc":null,"CampaignName":null,"CampaignID":null,"CampaignDurationUnit":null,"CampaignDurationLength":0,"CampaignDurationEndDate":""},"SubsBundleDetails":null},"AMPSSubscriptionAction":{"PlanInstanceStatusCodeUntilLabel":"Active","PlanInstanceStatusCodeUntil":1,"PlanChangeMethod":"IMMEDIATELY","PlanChangeDate":"2019-09-05T00:00:00"},"AMPSAccountIDs":{"AriaUserID":"34934396","AriaAccountNo":42036867,"AriaAccountID":null,"AcctMigratedCustomerID":""},"AMPSAccountDetails":{"AcctCustomerType":"C","AcctCurrencyCode":"dkk","AcctConsentCodeDate":"","AcctConsentCode":"","AcctChannelCode":"","AcctTitleCode":"BER","AcctTaxpayerID":null,"AcctSourceCode":"","AcctReservationCodeDate":"","AcctReservationCode":"","AcctPurchaseOrderNo":null,"AcctNotifyMethod":1,"AcctLocaleCode":"DK-DANSK","AcctLanguageCode":null}},"AMPSEvent_AccountModified":null,"AMPSEvent_AccountCreated":null,"AMPSEvent_AccountCreditCardUpdated":null,"AMPSEvent_SubscriptionUpgraded":null}}')).to.equal(true);
+    expect(SQSSpy.deliver.calledWith(4, '{"AMPSEventIdent":{"AMPSEventID":1,"AMPSEventClass":"SUBSCRIPTION"},"AMPSEventDetail":{"AMPSEvent_SubscriptionReplaced":null,"AMPSEvent_SubscriptionModified":null,"AMPSEvent_SubscriptionDowngraded":null,"AMPSEvent_SubscriptionCancelled":null,"AMPSEvent_SubscriptionAdded":{"AMPSSubscriptionIDs":{"AriaSubscriptionNo":130338057,"AriaSubscriptionID":"BER-C-DIGITAL-PLUS-e42d6aca-ca34-419e-831d-623b822eb834"},"AMPSSubscriptionDetails":{"SubsPlanInstanceDetails":{"AMPSPlanInstanceDetails":{"PlanEffectiveDate":"","activationDate":"","PlanUsageBillInterval":3,"PlanUnits":1,"PlanReccBillInterval":3,"PlanPurchaseOrderNo":null,"PlanNextBillDate":"2019-12-05T00:00:00","PlanBillThruDate":"2019-12-04T00:00:00","PlanBillDay":5,"PlanAssignmentDate":"2019-09-05T00:00:00","AriarateScheduleName":"Berlingske Digital+ kvartal","AriaSubscriptionDesc":null,"AriaRateScheduleNo":375520,"AriaRateScheduleID":"BER-C-DIGITAL-PLUS-DKK-03","AriaDunningGroupNo":42988552,"AriaDunningGroupID":"DG-b257abdb-5947-446a-93bf-553bfd1a348b","AriaBillingGroupNo":41401104,"AriaBillingGroupID":"BG-b257abdb-5947-446a-93bf-553bfd1a348b","PlanLastBillDate":"2019-09-05T00:00:00","PlanInstanceStatusDate":"2019-09-05T00:00:00","PlanInstanceStatusCodeLabel":"Active","PlanInstanceStatusCode":1,"PlanDunningStep":0,"PlanDunningState":0,"PlanDunningDegradeDate":"","PlanDeprovisionedDate":"","PlanCreateDate":"2019-09-05T00:00:00"},"AMPSPlanDetails":{"ProductTypeVariant":"STANDARD","ProductType":"DIGITAL","AriaPlanNo":102319,"AriaPlanName":"Berlingske - Digital Plus","AriaPlanID":"BER-C-DIGITAL-PLUS","AriaPlanDesc":"Berlingske Digital+ hele ugen\\n","AMPSTitleDetails":[{"TitleName":"Berlingsk","TitleDomain":"www.berlingske.dk","TitleDesc":"Berlingsk","TitleCode":"BER"}]}},"SubsDiscountDetails":[],"SubsCampaignDetails":{"CampaignDateStart":"","CampaignDateEnd":"","CampaignBillingSKU":null,"CampaignBillingPriceVAT":null,"CampaignBillingPriceInclVAT":null,"CampaignBillingPriceExclVAT":null,"CampaignBillingCode":null,"CampaignDesc":null,"CampaignName":null,"CampaignID":null,"CampaignDurationUnit":null,"CampaignDurationLength":0,"CampaignDurationEndDate":""},"SubsBundleDetails":null},"AMPSSubscriptionAction":{"PlanInstanceStatusCodeUntilLabel":"Active","PlanInstanceStatusCodeUntil":1,"PlanChangeMethod":"IMMEDIATELY","PlanChangeDate":"2019-09-05T00:00:00"},"AMPSAccountIDs":{"AriaUserID":"34934396","AriaAccountNo":42036867,"AriaAccountID":null,"AcctMigratedCustomerID":""},"AMPSAccountDetails":{"AcctCustomerType":"C","AcctCurrencyCode":"dkk","AcctConsentCodeDate":"","AcctConsentCode":"","AcctChannelCode":"","AcctTitleCode":"BER","AcctTaxpayerID":null,"AcctSourceCode":"","AcctReservationCodeDate":"","AcctReservationCode":"","AcctPurchaseOrderNo":null,"AcctNotifyMethod":1,"AcctLocaleCode":"DK-DANSK","AcctLanguageCode":null}},"AMPSEvent_AccountModified":null,"AMPSEvent_AccountCreated":null,"AMPSEvent_AccountCreditCardUpdated":null,"AMPSEvent_SubscriptionUpgraded":null}}')).to.equal(true);
+    expect(KafkaSpy.deliver.calledWith(4, '{"AMPSEventIdent":{"AMPSEventID":1,"AMPSEventClass":"SUBSCRIPTION"},"AMPSEventDetail":{"AMPSEvent_SubscriptionReplaced":null,"AMPSEvent_SubscriptionModified":null,"AMPSEvent_SubscriptionDowngraded":null,"AMPSEvent_SubscriptionCancelled":null,"AMPSEvent_SubscriptionAdded":{"AMPSSubscriptionIDs":{"AriaSubscriptionNo":130338057,"AriaSubscriptionID":"BER-C-DIGITAL-PLUS-e42d6aca-ca34-419e-831d-623b822eb834"},"AMPSSubscriptionDetails":{"SubsPlanInstanceDetails":{"AMPSPlanInstanceDetails":{"PlanEffectiveDate":"","activationDate":"","PlanUsageBillInterval":3,"PlanUnits":1,"PlanReccBillInterval":3,"PlanPurchaseOrderNo":null,"PlanNextBillDate":"2019-12-05T00:00:00","PlanBillThruDate":"2019-12-04T00:00:00","PlanBillDay":5,"PlanAssignmentDate":"2019-09-05T00:00:00","AriarateScheduleName":"Berlingske Digital+ kvartal","AriaSubscriptionDesc":null,"AriaRateScheduleNo":375520,"AriaRateScheduleID":"BER-C-DIGITAL-PLUS-DKK-03","AriaDunningGroupNo":42988552,"AriaDunningGroupID":"DG-b257abdb-5947-446a-93bf-553bfd1a348b","AriaBillingGroupNo":41401104,"AriaBillingGroupID":"BG-b257abdb-5947-446a-93bf-553bfd1a348b","PlanLastBillDate":"2019-09-05T00:00:00","PlanInstanceStatusDate":"2019-09-05T00:00:00","PlanInstanceStatusCodeLabel":"Active","PlanInstanceStatusCode":1,"PlanDunningStep":0,"PlanDunningState":0,"PlanDunningDegradeDate":"","PlanDeprovisionedDate":"","PlanCreateDate":"2019-09-05T00:00:00"},"AMPSPlanDetails":{"ProductTypeVariant":"STANDARD","ProductType":"DIGITAL","AriaPlanNo":102319,"AriaPlanName":"Berlingske - Digital Plus","AriaPlanID":"BER-C-DIGITAL-PLUS","AriaPlanDesc":"Berlingske Digital+ hele ugen\\n","AMPSTitleDetails":[{"TitleName":"Berlingsk","TitleDomain":"www.berlingske.dk","TitleDesc":"Berlingsk","TitleCode":"BER"}]}},"SubsDiscountDetails":[],"SubsCampaignDetails":{"CampaignDateStart":"","CampaignDateEnd":"","CampaignBillingSKU":null,"CampaignBillingPriceVAT":null,"CampaignBillingPriceInclVAT":null,"CampaignBillingPriceExclVAT":null,"CampaignBillingCode":null,"CampaignDesc":null,"CampaignName":null,"CampaignID":null,"CampaignDurationUnit":null,"CampaignDurationLength":0,"CampaignDurationEndDate":""},"SubsBundleDetails":null},"AMPSSubscriptionAction":{"PlanInstanceStatusCodeUntilLabel":"Active","PlanInstanceStatusCodeUntil":1,"PlanChangeMethod":"IMMEDIATELY","PlanChangeDate":"2019-09-05T00:00:00"},"AMPSAccountIDs":{"AriaUserID":"34934396","AriaAccountNo":42036867,"AriaAccountID":null,"AcctMigratedCustomerID":""},"AMPSAccountDetails":{"AcctCustomerType":"C","AcctCurrencyCode":"dkk","AcctConsentCodeDate":"","AcctConsentCode":"","AcctChannelCode":"","AcctTitleCode":"BER","AcctTaxpayerID":null,"AcctSourceCode":"","AcctReservationCodeDate":"","AcctReservationCode":"","AcctPurchaseOrderNo":null,"AcctNotifyMethod":1,"AcctLocaleCode":"DK-DANSK","AcctLanguageCode":null}},"AMPSEvent_AccountModified":null,"AMPSEvent_AccountCreated":null,"AMPSEvent_AccountCreditCardUpdated":null,"AMPSEvent_SubscriptionUpgraded":null}}')).to.equal(true);
   });
 
 

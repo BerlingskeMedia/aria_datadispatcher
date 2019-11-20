@@ -62,15 +62,13 @@ module.exports = {
           
           // TODO: Pending Wajid GUID
 
+          
+        } else if(process.env.NODE_ENV === 'test') {
+          event_id = 4;
+
+        }        
 
 
-        } else if(parsedMessage.AMPSEventDetail && parsedMessage.AMPSEventDetail.AMPSEvent_TestTransactionId) {
-          event_id = parsedMessage.AMPSEventDetail.AMPSEvent_TestTransactionId;
-
-        } else if(parsedMessage.some_unique_event_id) {
-          event_id = parsedMessage.some_unique_event_id;
-        }
-        
 
         if(SQS.ready) {
           try {
