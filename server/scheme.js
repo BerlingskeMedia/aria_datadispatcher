@@ -8,7 +8,6 @@ const Joi = require('@hapi/joi');
 
 // To print the event payload details to console log, the ENV var must be explicitly set to "true"
 const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true' && process.env.NODE_ENV !== 'test');
-
 if(CONSOLE_LOG_EVENTS) {
   console.log('Console log event has been enabled.')
 }
@@ -18,7 +17,6 @@ const CONSOLE_LOG_ERRORS = process.env.NODE_ENV !== 'test';
 
 // To disable the payload validartion, the ENV var must be explicitly set to "true"
 const DISABLE_VALIDATION = (process.env.DISABLE_VALIDATION === 'true' && process.env.NODE_ENV !== 'test');
-
 if(DISABLE_VALIDATION) {
   console.warn('WARNING: ALL validation has been disabled.')
 }
@@ -174,22 +172,13 @@ const scheme = function (server, options) {
     // This function will only be executed if this scheme "options.payload" is set to true.
     payload: async function (request, h) {
 
-      if(CONSOLE_LOG_EVENTS) {
-        // console.log(`Event::Headers: ${ Object.keys(request.headers).map(h => `${h}=${request.headers[h]}`).join(', ')}`);
-        console.log(`Event::Payload: ${ request.payload ? request.payload.toString() : '' }`);
-      }
-
       if(!request.payload) {
-        console.error('Error: Missing payload');
         throw Boom.unauthorized('Missing payload');
       }
 
       const originalPayload = request.payload.toString();
       
       if(!originalPayload) {
-        if(CONSOLE_LOG_ERRORS) {
-          console.error('Error: Missing payload');
-        }
         throw Boom.unauthorized('Missing payload');
       }
 
@@ -202,6 +191,7 @@ const scheme = function (server, options) {
         parsedPayload = JSON.parse(originalPayload);
       } catch(ex) {
         if(CONSOLE_LOG_ERRORS) {
+          console.error(`invalid:json:payload: ${ originalPayload }`);
           console.error(ex);
         }
         throw Boom.unauthorized('Invalid JSON');
@@ -227,7 +217,7 @@ const scheme = function (server, options) {
 
       } else {
         if(CONSOLE_LOG_ERRORS) {
-          console.error('Error: msgAuthDetails missing');
+          console.error(`missing:msgAuthDetails:payload: ${ originalPayload }`);
         }
         throw Boom.unauthorized('msgAuthDetails missing from Authtozation header or payload');
       }
@@ -243,16 +233,18 @@ const scheme = function (server, options) {
 
       if(hash === msgAuthDetails.signatureValue) {
 
+        if(CONSOLE_LOG_EVENTS) {
+          console.log(`Event::Payload: ${ originalPayload }`);
+        }
+
         return h.continue;
 
       } else {
 
         if(CONSOLE_LOG_ERRORS) {
+          console.error(`Signature:error:payload: ${ originalPayload }`);
           console.error(`Signature:error:calculateSignatureValue: ${ hash }`);
-          console.error(`Signature:error:msgAuthDetails: ${ JSON.stringify(msgAuthDetails) }`);
-          console.error(`Signature:error:message: ${ message }`);
         }
-
         throw Boom.unauthorized('Signature value does not match payload');
 
       }

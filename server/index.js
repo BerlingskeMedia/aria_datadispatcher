@@ -9,6 +9,8 @@ const Kafka = require('./kafka.js');
 const SQS = require('./aws_sqs.js');
 const NotificationsEvents = require('./notifications_events.js');
 
+// To print the event payload details to console log, the ENV var must be explicitly set to "true"
+const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true' && process.env.NODE_ENV !== 'test');
 
 process.on('unhandledRejection', (err) => {
   console.error('unhandledRejection');
@@ -117,7 +119,10 @@ async function start() {
   if (process.env.NODE_ENV === 'test') {
     // We are running tests.
   } else if (!server.info.started) {
-    await server.register({ plugin: Good, options: goodOptions });
+    // If we console.log all event data, no need to also log the HTTP-requests
+    if(!CONSOLE_LOG_EVENTS) {
+      await server.register({ plugin: Good, options: goodOptions });
+    }
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
   }
