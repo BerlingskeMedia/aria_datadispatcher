@@ -2,7 +2,7 @@
 'use strict';
 
 if (process.env.NODE_ENV === 'test') {
-  module.exports = require('../test/helpers/aws_sqs_spy.js');
+  module.exports = require('../test/helpers/sqs_spy.js');
   return;
 }
 

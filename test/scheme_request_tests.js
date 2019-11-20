@@ -9,7 +9,7 @@ const { describe, it, before, after, afterEach } = exports.lab = require('@hapi/
 
 const server = require('../server');
 const KafkaSpy = require('./helpers/kafka_spy.js');
-const SQSSpy = require('./helpers/aws_sqs_spy.js');
+const SQSSpy = require('./helpers/sqs_spy.js');
 
 
 async function request(options) {

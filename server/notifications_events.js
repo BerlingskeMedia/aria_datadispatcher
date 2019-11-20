@@ -4,7 +4,7 @@ const Boom = require('@hapi/boom');
 const Joi = require('@hapi/joi');
 const Scheme = require('./scheme.js');
 const Kafka = require('./kafka.js');
-const SQS = require('./aws_sqs.js');
+const SQS = require('./sqs.js');
 
 const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true' && process.env.NODE_ENV !== 'test');
 

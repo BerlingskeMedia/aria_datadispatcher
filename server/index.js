@@ -6,7 +6,7 @@ const Hapi = require('@hapi/hapi');
 const Inert = require('@hapi/inert');
 const Scheme = require('./scheme.js');
 const Kafka = require('./kafka.js');
-const SQS = require('./aws_sqs.js');
+const SQS = require('./sqs.js');
 const NotificationsEvents = require('./notifications_events.js');
 
 // To print the event payload details to console log, the ENV var must be explicitly set to "true"
