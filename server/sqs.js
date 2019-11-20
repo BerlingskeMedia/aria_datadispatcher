@@ -34,15 +34,12 @@ if(!SQS_QUEUE_URL) {
 
 console.log(`Connecting to SQS on ${ SQS_QUEUE_URL } on message group ${ SQS_MESSAGE_GROUP_ID } using AWS_ACCESS_KEY_ID ${ AWS_ACCESS_KEY_ID }`);
 
+// All | Policy | VisibilityTimeout | MaximumMessageSize | MessageRetentionPeriod | ApproximateNumberOfMessages | ApproximateNumberOfMessagesNotVisible | CreatedTimestamp | LastModifiedTimestamp | QueueArn | ApproximateNumberOfMessagesDelayed | DelaySeconds | ReceiveMessageWaitTimeSeconds | RedrivePolicy | FifoQueue | ContentBasedDeduplication | KmsMasterKeyId | KmsDataKeyReusePeriodSeconds,
+const AttributeNames = SQS_QUEUE_URL.endsWith('.fifo') ? [ 'FifoQueue' ] : null;
 
-// Verify we have a Fifo queue
 const params = {
   QueueUrl: SQS_QUEUE_URL,
-  AttributeNames: [
-    // All | Policy | VisibilityTimeout | MaximumMessageSize | MessageRetentionPeriod | ApproximateNumberOfMessages | ApproximateNumberOfMessagesNotVisible | CreatedTimestamp | LastModifiedTimestamp | QueueArn | ApproximateNumberOfMessagesDelayed | DelaySeconds | ReceiveMessageWaitTimeSeconds | RedrivePolicy | FifoQueue | ContentBasedDeduplication | KmsMasterKeyId | KmsDataKeyReusePeriodSeconds,
-    'FifoQueue'
-    /* more items */
-  ]
+  AttributeNames
 };
 
 sqs.getQueueAttributes(params, function(err, data) {
@@ -50,12 +47,8 @@ sqs.getQueueAttributes(params, function(err, data) {
     console.error(err, err.stack); // an error occurred
   } else {
     // console.log(data);           // successful response
-    if(data.Attributes.FifoQueue === 'true') {
-      module.exports.ready = true;
-      module.exports.events.emit('ready');
-    } else {
-      throw new Error('SQS queue is not Fifo');
-    }
+    module.exports.ready = true;
+    module.exports.events.emit('ready');
   }
 });
 
