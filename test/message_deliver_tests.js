@@ -66,14 +66,14 @@ describe('auth scheme tests', async () => {
 
     expect(KafkaSpy.deliver.calledOnce).to.equal(true);
     sinon.assert.calledWith(KafkaSpy.deliver, {
-      id: 1,
+      id: "1",
       message: '{"request":{"transaction_id":1},"subdocument":{"test":1,"anothervalue":"text"}}'
 
     });
 
     expect(SQSSpy.deliver.calledOnce).to.equal(true);
     sinon.assert.calledWith(SQSSpy.deliver, {
-      id: 1,
+      id: "1",
       message: '{"request":{"transaction_id":1},"subdocument":{"test":1,"anothervalue":"text"}}'
     });
   });
@@ -103,13 +103,13 @@ describe('auth scheme tests', async () => {
 
     expect(KafkaSpy.deliver.calledOnce).to.equal(true);
     sinon.assert.calledWith(KafkaSpy.deliver, {
-      id:2, 
+      id: "2", 
       message: '{"request":{"transaction_id":2},"subdocument":{"test":1,"anothervalue":"text"}}'
     });
     
     expect(SQSSpy.deliver.calledOnce).to.equal(true);
     sinon.assert.calledWith(SQSSpy.deliver, {
-      id: 2,
+      id: "2",
       message: '{"request":{"transaction_id":2},"subdocument":{"test":1,"anothervalue":"text"}}'
     });
   });
@@ -146,12 +146,12 @@ describe('auth scheme tests', async () => {
     expect(response.statusCode).to.equal(200);
 
     sinon.assert.calledWith(KafkaSpy.deliver, {
-      id: 4,
+      id: "4",
       message: '{"accAccessControlAIDFeatureList":[{"accessFeature":"WEB/APP","eligibleForSharing":false,"titleDomain":"www.berlingske.dk"}],"ariaAccountID":null,"ariaAccountNo":41998358,"numberOfAllotments":0}'
     });
 
     sinon.assert.calledWith(SQSSpy.deliver, {
-      id: 4,
+      id: "4",
       message: '{"accAccessControlAIDFeatureList":[{"accessFeature":"WEB/APP","eligibleForSharing":false,"titleDomain":"www.berlingske.dk"}],"ariaAccountID":null,"ariaAccountNo":41998358,"numberOfAllotments":0}'
     });
   });
@@ -182,12 +182,12 @@ describe('auth scheme tests', async () => {
     expect(response.statusCode).to.equal(200);
 
     sinon.assert.calledWith(SQSSpy.deliver, {
-      id: 4,
+      id: "4",
       message: '{"accAccessControlAIDFeatureList":[],"ariaAccountID":null,"ariaAccountNo":41998377,"numberOfAllotments":0}'
     });
 
     sinon.assert.calledWith(KafkaSpy.deliver, {
-      id: 4,
+      id: "4",
       message: '{"accAccessControlAIDFeatureList":[],"ariaAccountID":null,"ariaAccountNo":41998377,"numberOfAllotments":0}'
     });
   });
@@ -328,12 +328,12 @@ describe('auth scheme tests', async () => {
     expect(response.statusCode).to.equal(200);
 
     sinon.assert.calledWith(SQSSpy.deliver, {
-      id: 4,
+      id: "4",
       message: '{"AMPSEventIdent":{"AMPSEventID":1,"AMPSEventClass":"SUBSCRIPTION"},"AMPSEventDetail":{"AMPSEvent_SubscriptionReplaced":null,"AMPSEvent_SubscriptionModified":null,"AMPSEvent_SubscriptionDowngraded":null,"AMPSEvent_SubscriptionCancelled":null,"AMPSEvent_SubscriptionAdded":{"AMPSSubscriptionIDs":{"AriaSubscriptionNo":130338057,"AriaSubscriptionID":"BER-C-DIGITAL-PLUS-e42d6aca-ca34-419e-831d-623b822eb834"},"AMPSSubscriptionDetails":{"SubsPlanInstanceDetails":{"AMPSPlanInstanceDetails":{"PlanEffectiveDate":"","activationDate":"","PlanUsageBillInterval":3,"PlanUnits":1,"PlanReccBillInterval":3,"PlanPurchaseOrderNo":null,"PlanNextBillDate":"2019-12-05T00:00:00","PlanBillThruDate":"2019-12-04T00:00:00","PlanBillDay":5,"PlanAssignmentDate":"2019-09-05T00:00:00","AriarateScheduleName":"Berlingske Digital+ kvartal","AriaSubscriptionDesc":null,"AriaRateScheduleNo":375520,"AriaRateScheduleID":"BER-C-DIGITAL-PLUS-DKK-03","AriaDunningGroupNo":42988552,"AriaDunningGroupID":"DG-b257abdb-5947-446a-93bf-553bfd1a348b","AriaBillingGroupNo":41401104,"AriaBillingGroupID":"BG-b257abdb-5947-446a-93bf-553bfd1a348b","PlanLastBillDate":"2019-09-05T00:00:00","PlanInstanceStatusDate":"2019-09-05T00:00:00","PlanInstanceStatusCodeLabel":"Active","PlanInstanceStatusCode":1,"PlanDunningStep":0,"PlanDunningState":0,"PlanDunningDegradeDate":"","PlanDeprovisionedDate":"","PlanCreateDate":"2019-09-05T00:00:00"},"AMPSPlanDetails":{"ProductTypeVariant":"STANDARD","ProductType":"DIGITAL","AriaPlanNo":102319,"AriaPlanName":"Berlingske - Digital Plus","AriaPlanID":"BER-C-DIGITAL-PLUS","AriaPlanDesc":"Berlingske Digital+ hele ugen\\n","AMPSTitleDetails":[{"TitleName":"Berlingsk","TitleDomain":"www.berlingske.dk","TitleDesc":"Berlingsk","TitleCode":"BER"}]}},"SubsDiscountDetails":[],"SubsCampaignDetails":{"CampaignDateStart":"","CampaignDateEnd":"","CampaignBillingSKU":null,"CampaignBillingPriceVAT":null,"CampaignBillingPriceInclVAT":null,"CampaignBillingPriceExclVAT":null,"CampaignBillingCode":null,"CampaignDesc":null,"CampaignName":null,"CampaignID":null,"CampaignDurationUnit":null,"CampaignDurationLength":0,"CampaignDurationEndDate":""},"SubsBundleDetails":null},"AMPSSubscriptionAction":{"PlanInstanceStatusCodeUntilLabel":"Active","PlanInstanceStatusCodeUntil":1,"PlanChangeMethod":"IMMEDIATELY","PlanChangeDate":"2019-09-05T00:00:00"},"AMPSAccountIDs":{"AriaUserID":"34934396","AriaAccountNo":42036867,"AriaAccountID":null,"AcctMigratedCustomerID":""},"AMPSAccountDetails":{"AcctCustomerType":"C","AcctCurrencyCode":"dkk","AcctConsentCodeDate":"","AcctConsentCode":"","AcctChannelCode":"","AcctTitleCode":"BER","AcctTaxpayerID":null,"AcctSourceCode":"","AcctReservationCodeDate":"","AcctReservationCode":"","AcctPurchaseOrderNo":null,"AcctNotifyMethod":1,"AcctLocaleCode":"DK-DANSK","AcctLanguageCode":null}},"AMPSEvent_AccountModified":null,"AMPSEvent_AccountCreated":null,"AMPSEvent_AccountCreditCardUpdated":null,"AMPSEvent_SubscriptionUpgraded":null}}'
     });
 
     sinon.assert.calledWith(KafkaSpy.deliver, {
-      id: 4,
+      id: "4",
       message: '{"AMPSEventIdent":{"AMPSEventID":1,"AMPSEventClass":"SUBSCRIPTION"},"AMPSEventDetail":{"AMPSEvent_SubscriptionReplaced":null,"AMPSEvent_SubscriptionModified":null,"AMPSEvent_SubscriptionDowngraded":null,"AMPSEvent_SubscriptionCancelled":null,"AMPSEvent_SubscriptionAdded":{"AMPSSubscriptionIDs":{"AriaSubscriptionNo":130338057,"AriaSubscriptionID":"BER-C-DIGITAL-PLUS-e42d6aca-ca34-419e-831d-623b822eb834"},"AMPSSubscriptionDetails":{"SubsPlanInstanceDetails":{"AMPSPlanInstanceDetails":{"PlanEffectiveDate":"","activationDate":"","PlanUsageBillInterval":3,"PlanUnits":1,"PlanReccBillInterval":3,"PlanPurchaseOrderNo":null,"PlanNextBillDate":"2019-12-05T00:00:00","PlanBillThruDate":"2019-12-04T00:00:00","PlanBillDay":5,"PlanAssignmentDate":"2019-09-05T00:00:00","AriarateScheduleName":"Berlingske Digital+ kvartal","AriaSubscriptionDesc":null,"AriaRateScheduleNo":375520,"AriaRateScheduleID":"BER-C-DIGITAL-PLUS-DKK-03","AriaDunningGroupNo":42988552,"AriaDunningGroupID":"DG-b257abdb-5947-446a-93bf-553bfd1a348b","AriaBillingGroupNo":41401104,"AriaBillingGroupID":"BG-b257abdb-5947-446a-93bf-553bfd1a348b","PlanLastBillDate":"2019-09-05T00:00:00","PlanInstanceStatusDate":"2019-09-05T00:00:00","PlanInstanceStatusCodeLabel":"Active","PlanInstanceStatusCode":1,"PlanDunningStep":0,"PlanDunningState":0,"PlanDunningDegradeDate":"","PlanDeprovisionedDate":"","PlanCreateDate":"2019-09-05T00:00:00"},"AMPSPlanDetails":{"ProductTypeVariant":"STANDARD","ProductType":"DIGITAL","AriaPlanNo":102319,"AriaPlanName":"Berlingske - Digital Plus","AriaPlanID":"BER-C-DIGITAL-PLUS","AriaPlanDesc":"Berlingske Digital+ hele ugen\\n","AMPSTitleDetails":[{"TitleName":"Berlingsk","TitleDomain":"www.berlingske.dk","TitleDesc":"Berlingsk","TitleCode":"BER"}]}},"SubsDiscountDetails":[],"SubsCampaignDetails":{"CampaignDateStart":"","CampaignDateEnd":"","CampaignBillingSKU":null,"CampaignBillingPriceVAT":null,"CampaignBillingPriceInclVAT":null,"CampaignBillingPriceExclVAT":null,"CampaignBillingCode":null,"CampaignDesc":null,"CampaignName":null,"CampaignID":null,"CampaignDurationUnit":null,"CampaignDurationLength":0,"CampaignDurationEndDate":""},"SubsBundleDetails":null},"AMPSSubscriptionAction":{"PlanInstanceStatusCodeUntilLabel":"Active","PlanInstanceStatusCodeUntil":1,"PlanChangeMethod":"IMMEDIATELY","PlanChangeDate":"2019-09-05T00:00:00"},"AMPSAccountIDs":{"AriaUserID":"34934396","AriaAccountNo":42036867,"AriaAccountID":null,"AcctMigratedCustomerID":""},"AMPSAccountDetails":{"AcctCustomerType":"C","AcctCurrencyCode":"dkk","AcctConsentCodeDate":"","AcctConsentCode":"","AcctChannelCode":"","AcctTitleCode":"BER","AcctTaxpayerID":null,"AcctSourceCode":"","AcctReservationCodeDate":"","AcctReservationCode":"","AcctPurchaseOrderNo":null,"AcctNotifyMethod":1,"AcctLocaleCode":"DK-DANSK","AcctLanguageCode":null}},"AMPSEvent_AccountModified":null,"AMPSEvent_AccountCreated":null,"AMPSEvent_AccountCreditCardUpdated":null,"AMPSEvent_SubscriptionUpgraded":null}}'
     });
   });
@@ -397,12 +397,12 @@ describe('auth scheme tests', async () => {
     expect(response.statusCode).to.equal(200);
 
     sinon.assert.calledWith(SQSSpy.deliver, {
-      id: 9,
+      id: "9",
       message: '{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355226","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":9,"sender":"A","class":"T","auth_key":"riwyuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}}'
     });
     
     sinon.assert.calledWith(KafkaSpy.deliver, {
-      id: 9,
+      id: "9",
       message: '{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355226","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":9,"sender":"A","class":"T","auth_key":"riwyuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}}'
     });
   });
@@ -480,12 +480,12 @@ describe('auth scheme tests', async () => {
     expect(response.statusCode).to.equal(200);
 
     sinon.assert.calledWith(SQSSpy.deliver, {
-      id: 13,
+      id: "13",
       message: '{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355225","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":13,"sender":"A","class":"T","auth_key":"riweuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}}'
     });
 
     sinon.assert.calledWith(KafkaSpy.deliver, {
-      id: 13,
+      id: "13",
       message: '{"eventPayLoad":{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355225","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":13,"sender":"A","class":"T","auth_key":"riweuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}},"JSONGetAllInvoiceInfomationMReponse":{"error_code":1016,"error_msg":"An input in the provided query is missing quotation marks around a string that includes a space, less than, greater than, or equals sign. Please add quotation marks to this input to receive the response you are expecting.","starting_record":null,"total_records":null,"all_invoice_details_m":[],"SupplementalField1":null,"SupplementalField2":null,"SupplementalField3":null,"SupplementalField4":null,"SupplementalField5":null}}'
     });
   });
@@ -563,12 +563,12 @@ describe('auth scheme tests', async () => {
     expect(response.statusCode).to.equal(200);
 
     sinon.assert.calledWith(SQSSpy.deliver, {
-      id: 14,
+      id: "14",
       message: '{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355226","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":14,"sender":"A","class":"T","auth_key":"riwyuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}}'
     });
 
     sinon.assert.calledWith(KafkaSpy.deliver, {
-      id: 14,
+      id: "14",
       message: '{"eventPayload":{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355226","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":14,"sender":"A","class":"T","auth_key":"riwyuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}},"JSONGetAllInvoiceInfomationMReponse":{"error_code":1016,"error_msg":"An input in the provided query is missing quotation marks around a string that includes a space, less than, greater than, or equals sign. Please add quotation marks to this input to receive the response you are expecting.","starting_record":null,"total_records":null,"all_invoice_details_m":[],"SupplementalField1":null,"SupplementalField2":null,"SupplementalField3":null,"SupplementalField4":null,"SupplementalField5":null}}'
     });
   });
@@ -650,12 +650,12 @@ describe('auth scheme tests', async () => {
     expect(response.statusCode).to.equal(200);
 
     sinon.assert.calledWith(SQSSpy.deliver, {
-      id: 14,
+      id: "14",
       message: '{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355226","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":14,"sender":"A","class":"T","auth_key":"riwyuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}}'
     });
 
     sinon.assert.calledWith(KafkaSpy.deliver, {
-      id: 14,
+      id: "14",
       message: '{"eventPayload":{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355226","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":14,"sender":"A","class":"T","auth_key":"riwyuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}},"eventIdent":{"event_guid":"0ea71fba-7bf3-44ef-9ad2-6881b41e9092","event_timestamp":"2019-11-19T11:38:52"},"JSONGetAllInvoiceInfomationMReponse":{"error_code":1016,"error_msg":"An input in the provided query is missing quotation marks around a string that includes a space, less than, greater than, or equals sign. Please add quotation marks to this input to receive the response you are expecting.","starting_record":null,"total_records":null,"all_invoice_details_m":[],"SupplementalField1":null,"SupplementalField2":null,"SupplementalField3":null,"SupplementalField4":null,"SupplementalField5":null}}'
     });
   });

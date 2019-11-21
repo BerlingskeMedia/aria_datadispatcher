@@ -65,7 +65,7 @@ module.exports.deliver = async function({ id, message }) {
   const payloads = [
     {
       topic: KAFKA_INGRESS_TOPIC,
-      key: id ? id.toString() : null, // string or buffer, only needed when using keyed partitioner
+      key: id, // string or buffer, only needed when using keyed partitioner
       messages: message,
       attributes: 1 // Gzip better compression
       // attributes: 2 // Snappy - better CPU

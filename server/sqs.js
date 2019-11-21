@@ -60,7 +60,7 @@ module.exports.deliver = async function({ id, message }) {
   };
 
   if(AttributeNames && AttributeNames.indexOf('FifoQueue') > -1) {
-    sqsParams.MessageDeduplicationId = id.toString();
+    sqsParams.MessageDeduplicationId = id;
     sqsParams.MessageGroupId = SQS_MESSAGE_GROUP_ID;
   }
 

@@ -62,13 +62,13 @@ module.exports = {
         } else if(parsedMessage.eventPayLoad && parsedMessage.eventPayLoad.request && parsedMessage.eventPayLoad.request.transaction_id) {
           event_id = parsedMessage.eventPayLoad.request.transaction_id;
 
-          
+
         } else if(parsedMessage.eventIdent && parsedMessage.eventIdent.event_guid) {
           event_id = parsedMessage.eventIdent.event_guid;
 
         // Fall-back for those tests without IDs
         } else if(process.env.NODE_ENV === 'test') {
-          event_id = 4;
+          event_id = "4";
 
         }        
 
@@ -83,7 +83,7 @@ module.exports = {
               message;
 
             const resultSQS = await SQS.deliver({
-              id: event_id || Date.now(),
+              id: event_id ? event_id.toString() : Date.now().toString(),
               message: MessageBody
             });
 
@@ -101,7 +101,7 @@ module.exports = {
           try {
 
             const resultKafka = await Kafka.deliver({
-              id: event_id, // Kafka aka. The Data Platform prefers a "null" rather than a random ID, if no specific ID was found
+              id: event_id ? event_id.toString() : null, // Kafka aka. The Data Platform prefers a "null" rather than a random ID, if no specific ID was found
               message
             });
 
