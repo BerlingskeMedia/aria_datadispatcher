@@ -48,22 +48,23 @@ module.exports = {
 
         // Just to keep the rest to else-if's
         if(false) {
-
-        } else if(parsedMessage.eventIdent && parsedMessage.eventIdent.event_guid) {
-          event_id = parsedMessage.eventIdent.event_guid;
-
-        // Getting the event_id if it's available.
+          
+          // Getting the event_id if it's available.
         } else if(parsedMessage.request && parsedMessage.request.transaction_id) {
           event_id = parsedMessage.request.transaction_id;
-
+          
           // If the eventPayload is bundled in a enrichedPayload
           // Lowercase l
         } else if(parsedMessage.eventPayload && parsedMessage.eventPayload.request && parsedMessage.eventPayload.request.transaction_id) {
           event_id = parsedMessage.eventPayload.request.transaction_id;
-
+          
           // Uppercase L
         } else if(parsedMessage.eventPayLoad && parsedMessage.eventPayLoad.request && parsedMessage.eventPayLoad.request.transaction_id) {
           event_id = parsedMessage.eventPayLoad.request.transaction_id;
+
+          
+        } else if(parsedMessage.eventIdent && parsedMessage.eventIdent.event_guid) {
+          event_id = parsedMessage.eventIdent.event_guid;
 
         // Fall-back for those tests without IDs
         } else if(process.env.NODE_ENV === 'test') {
