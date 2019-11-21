@@ -650,12 +650,12 @@ describe('auth scheme tests', async () => {
     expect(response.statusCode).to.equal(200);
 
     sinon.assert.calledWith(SQSSpy.deliver, {
-      id: "0ea71fba-7bf3-44ef-9ad2-6881b41e9092",
+      id: 14,
       message: '{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355226","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":14,"sender":"A","class":"T","auth_key":"riwyuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}}'
     });
 
     sinon.assert.calledWith(KafkaSpy.deliver, {
-      id: "0ea71fba-7bf3-44ef-9ad2-6881b41e9092",
+      id: 14,
       message: '{"eventPayload":{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355226","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":14,"sender":"A","class":"T","auth_key":"riwyuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}},"eventIdent":{"event_guid":"0ea71fba-7bf3-44ef-9ad2-6881b41e9092","event_timestamp":"2019-11-19T11:38:52"},"JSONGetAllInvoiceInfomationMReponse":{"error_code":1016,"error_msg":"An input in the provided query is missing quotation marks around a string that includes a space, less than, greater than, or equals sign. Please add quotation marks to this input to receive the response you are expecting.","starting_record":null,"total_records":null,"all_invoice_details_m":[],"SupplementalField1":null,"SupplementalField2":null,"SupplementalField3":null,"SupplementalField4":null,"SupplementalField5":null}}'
     });
   });
