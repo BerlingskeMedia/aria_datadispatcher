@@ -91,7 +91,7 @@ module.exports = {
               console.log('SQS OK:', JSON.stringify(resultSQS));
             }
           } catch(ex) {
-            console.error(ex);
+            console.error(ex.toString());
             throw Boom.badRequest('SQS error');
           }
         }
@@ -109,7 +109,7 @@ module.exports = {
               console.log('Kafka OK:', resultKafka)
             }
           } catch(ex) {
-            console.error(ex);
+            console.error(ex.toString());
             throw Boom.badRequest('Kafka error');
           }
         }

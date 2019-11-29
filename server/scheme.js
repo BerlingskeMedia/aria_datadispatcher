@@ -192,7 +192,7 @@ const scheme = function (server, options) {
       } catch(ex) {
         if(CONSOLE_LOG_ERRORS) {
           console.error(`invalid:json:payload: ${ originalPayload }`);
-          console.error(ex);
+          console.error(ex.toString());
         }
         throw Boom.unauthorized('Invalid JSON');
       }
