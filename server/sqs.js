@@ -32,10 +32,16 @@ if(!SQS_QUEUE_URL) {
   return;
 }
 
-console.log(`Connecting to SQS on ${ SQS_QUEUE_URL } on message group ${ SQS_MESSAGE_GROUP_ID } using AWS_ACCESS_KEY_ID ${ AWS_ACCESS_KEY_ID }`);
+const isFifoQueue = SQS_QUEUE_URL.endsWith('.fifo');
+
+if(isFifoQueue) {
+  console.log(`Connecting to SQS on ${ SQS_QUEUE_URL } on message group ${ SQS_MESSAGE_GROUP_ID } using AWS_ACCESS_KEY_ID ${ AWS_ACCESS_KEY_ID }`);
+} else {
+  console.log(`Using SQS queue ${SQS_QUEUE_URL}`);
+}
 
 // All | Policy | VisibilityTimeout | MaximumMessageSize | MessageRetentionPeriod | ApproximateNumberOfMessages | ApproximateNumberOfMessagesNotVisible | CreatedTimestamp | LastModifiedTimestamp | QueueArn | ApproximateNumberOfMessagesDelayed | DelaySeconds | ReceiveMessageWaitTimeSeconds | RedrivePolicy | FifoQueue | ContentBasedDeduplication | KmsMasterKeyId | KmsDataKeyReusePeriodSeconds,
-const AttributeNames = SQS_QUEUE_URL.endsWith('.fifo') ? [ 'FifoQueue' ] : null;
+const AttributeNames = isFifoQueue ? [ 'FifoQueue' ] : null;
 
 const params = {
   QueueUrl: SQS_QUEUE_URL,
@@ -59,7 +65,7 @@ module.exports.deliver = async function({ id, message }) {
     QueueUrl: SQS_QUEUE_URL
   };
 
-  if(AttributeNames && AttributeNames.indexOf('FifoQueue') > -1) {
+  if(isFifoQueue) {
     sqsParams.MessageDeduplicationId = id;
     sqsParams.MessageGroupId = SQS_MESSAGE_GROUP_ID;
   }
