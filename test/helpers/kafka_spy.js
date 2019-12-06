@@ -9,6 +9,7 @@ console.log('Using Sinon Spy on Kafka');
 module.exports = Object.assign(new EventEmitter(), {
   deliver: spy,
   ready: true,
+  healthcheck: async () => { return true },
   reset: function () {
     spy.resetHistory();
   }

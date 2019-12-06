@@ -10,6 +10,7 @@ module.exports = {
   events: new EventEmitter(),
   deliver: spy,
   ready: true,
+  healthcheck: async () => { return true },
   reset: function () {
     spy.resetHistory();
   }
