@@ -40,23 +40,51 @@ if(isFifoQueue) {
   console.log(`Using SQS queue ${SQS_QUEUE_URL}`);
 }
 
-// All | Policy | VisibilityTimeout | MaximumMessageSize | MessageRetentionPeriod | ApproximateNumberOfMessages | ApproximateNumberOfMessagesNotVisible | CreatedTimestamp | LastModifiedTimestamp | QueueArn | ApproximateNumberOfMessagesDelayed | DelaySeconds | ReceiveMessageWaitTimeSeconds | RedrivePolicy | FifoQueue | ContentBasedDeduplication | KmsMasterKeyId | KmsDataKeyReusePeriodSeconds,
-const AttributeNames = isFifoQueue ? [ 'FifoQueue' ] : null;
+async function getQueueAttributes() {
 
-const params = {
-  QueueUrl: SQS_QUEUE_URL,
-  AttributeNames
-};
+  // All | Policy | VisibilityTimeout | MaximumMessageSize | MessageRetentionPeriod | ApproximateNumberOfMessages | ApproximateNumberOfMessagesNotVisible | CreatedTimestamp | LastModifiedTimestamp | QueueArn | ApproximateNumberOfMessagesDelayed | DelaySeconds | ReceiveMessageWaitTimeSeconds | RedrivePolicy | FifoQueue | ContentBasedDeduplication | KmsMasterKeyId | KmsDataKeyReusePeriodSeconds,
+  const AttributeNames = isFifoQueue ? [ 'FifoQueue' ] : null;
+  
+  const params = {
+    QueueUrl: SQS_QUEUE_URL,
+    AttributeNames
+  };
+  
+  return new Promise((resolve, reject) => {
+    sqs.getQueueAttributes(params, function(err, data) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(data);
+      }
+    });
+  });
+}
 
-sqs.getQueueAttributes(params, function(err, data) {
-  if (err) {
-    console.error(err, err.stack); // an error occurred
-  } else {
-    // console.log(data);           // successful response
+
+async function ready() {
+  try {
+    await getQueueAttributes();
     module.exports.ready = true;
     module.exports.events.emit('ready');
+  } catch(err) {
+    console.error(err, err.stack); // an error occurred
   }
-});
+}
+
+
+ready();
+
+
+module.exports.healthcheck = async function() {
+  try {
+    await getQueueAttributes();
+    return true;
+  } catch(err) {
+    console.error('SQS healthcheck failed');
+    return false;
+  }
+};
 
 
 module.exports.deliver = async function({ id, message }) {

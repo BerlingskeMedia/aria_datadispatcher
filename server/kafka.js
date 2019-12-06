@@ -29,6 +29,13 @@ const client = new Kafka.KafkaClient({
   kafkaHost: KAFKA_HOST,
   sslOptions: {
     rejectUnauthorized: false
+  },
+  connectRetryOptions: {
+    retries: 100,
+    factor: 2,
+    minTimeout: 1000,
+    maxTimeout: 60000,
+    randomize: true
   }
 });
 
@@ -59,6 +66,16 @@ producer.on('error', function (err) {
 producer.on('ready', async () => {
   // console.log('Producer ready');
 });
+
+
+module.exports.healthcheck = function() {
+  try {
+    return client.ready && producer.ready;
+  } catch(err) {
+    console.error('Kafka healthcheck failed');
+    return false;
+  }
+};
 
 
 module.exports.deliver = async function({ id, message }) {

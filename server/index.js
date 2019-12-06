@@ -4,6 +4,7 @@
 const Fs = require('fs');
 const Hapi = require('@hapi/hapi');
 const Inert = require('@hapi/inert');
+const Boom = require('@hapi/boom');
 const Scheme = require('./scheme.js');
 const Kafka = require('./kafka.js');
 const SQS = require('./sqs.js');
@@ -45,8 +46,12 @@ server.route({
     auth: false,
     tags: [ 'healthcheck' ]
   },
-  handler: (request, h) => {
-    return 'OK';
+  handler: async (request, h) => {
+    if(await SQS.healthcheck() && await Kafka.healthcheck()) {
+      return 'OK';
+    } else {
+      return Boom.badRequest();
+    }
   }
 });
 
