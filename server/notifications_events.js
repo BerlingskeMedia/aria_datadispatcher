@@ -6,7 +6,13 @@ const Scheme = require('./scheme.js');
 const Kafka = require('./kafka.js');
 const SQS = require('./sqs.js');
 
+
+// To print the event payload details to console log, the ENV var must be explicitly set to "true"
 const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true' && process.env.NODE_ENV !== 'test');
+if(CONSOLE_LOG_EVENTS) {
+  console.log('Console log event has been enabled.')
+}
+
 
 module.exports = {
   name: 'notifications_events',
@@ -31,6 +37,13 @@ module.exports = {
 
         // Since the payload is not parsed, it's a buffer. So we need toString()
         const payload = request.payload.toString();
+
+        
+        if(CONSOLE_LOG_EVENTS) {
+          console.log(`Event::Payload: ${ payload }`);
+        }
+
+
         const message = Scheme.isolateMessage(payload);
         let parsedMessage;
 
@@ -87,9 +100,6 @@ module.exports = {
               message: MessageBody
             });
 
-            if(CONSOLE_LOG_EVENTS) {
-              console.log('SQS OK:', JSON.stringify(resultSQS));
-            }
           } catch(ex) {
             console.error(ex.toString());
             throw Boom.badRequest('SQS error');
@@ -105,9 +115,6 @@ module.exports = {
               message
             });
 
-            if(CONSOLE_LOG_EVENTS) {
-              console.log('Kafka OK:', resultKafka)
-            }
           } catch(ex) {
             console.error(ex.toString());
             throw Boom.badRequest('Kafka error');

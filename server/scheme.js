@@ -6,12 +6,6 @@ const crypto = require('crypto');
 const Boom = require('@hapi/boom');
 const Joi = require('@hapi/joi');
 
-// To print the event payload details to console log, the ENV var must be explicitly set to "true"
-const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true' && process.env.NODE_ENV !== 'test');
-if(CONSOLE_LOG_EVENTS) {
-  console.log('Console log event has been enabled.')
-}
-
 
 const CONSOLE_LOG_ERRORS = process.env.NODE_ENV !== 'test';
 
@@ -37,13 +31,32 @@ const msgAuthDetailsValidation = Joi.object().keys({
 const validateMsgAuthDetails = function(input) {
   const validateResult = msgAuthDetailsValidation.validate(input);
   if(validateResult.error) {
-    if(CONSOLE_LOG_ERRORS) {
-      console.error(`msgAuthDetails validation error: ${ validateResult.error }`);
-    }
     throw Boom.unauthorized(validateResult.error);
   }
 
   return validateResult.value;
+};
+
+
+const isolateMsgAuthDetails = function(payload) {
+  let parsedPayload;
+
+  try {
+
+    parsedPayload = JSON.parse(payload);
+
+  } catch(err) {
+    throw Boom.unauthorized('Invalid JSON');
+  }
+
+
+  if(!parsedPayload.msgAuthDetails) {
+    throw Boom.unauthorized('Missing msgAuthDetails');
+  }
+
+  validateMsgAuthDetails(parsedPayload.msgAuthDetails);
+
+  return parsedPayload.msgAuthDetails;
 };
 
 
@@ -61,7 +74,7 @@ const isolateMessage = function(payload) {
 
   // If we have msgAuthDetails, but more than one other key, somethings wrong
   if(keys.some(n => n === 'msgAuthDetails') && keys.length !== 2) {
-    throw Boom.badRequest('Unexpected count of objects in the payload'); 
+    throw Boom.badRequest('Unexpected count of objects in the payload');
   }
 
   const messageKeyName = keys.find(n => n !== 'msgAuthDetails');
@@ -102,8 +115,7 @@ const findEndOfObject = function(input, position = 0, bracketCounter = 0) {
     return findEndOfObject(input, nextOpen + 1, bracketCounter += 1);
   }
 
-  throw new Error('Exception');
-
+  throw Boom.badRequest('Object cannot be parsed');
 };
 
 
@@ -115,7 +127,6 @@ const concatMsgAuthDetails = function(msgAuthDetails, message) {
   const ARIA_AUTH_KEY = process.env.ARIA_AUTH_KEY;
 
   if(!ARIA_AUTH_KEY) {
-    console.error('Environment variable ARIA_AUTH_KEY missing')
     throw Boom.unauthorized('Environment variable ARIA_AUTH_KEY missing');
   }
 
@@ -173,80 +184,60 @@ const scheme = function (server, options) {
     payload: async function (request, h) {
 
       if(!request.payload) {
+        if(CONSOLE_LOG_ERRORS) {
+          console.error(`Payload:error:missing`);
+        }
         throw Boom.unauthorized('Missing payload');
       }
-
+      
+      // Gettting the original, unparsed payload.
       const originalPayload = request.payload.toString();
       
       if(!originalPayload) {
+        if(CONSOLE_LOG_ERRORS) {
+          console.error(`Payload:error:missing`);
+        }
         throw Boom.unauthorized('Missing payload');
       }
 
 
-      let parsedPayload = {};
       let msgAuthDetails = {};
-      let messageKeyName = '';
+      let hash;
 
       try {
-        parsedPayload = JSON.parse(originalPayload);
-      } catch(ex) {
+
+        msgAuthDetails = isolateMsgAuthDetails(originalPayload);
+
+        // Getting the "message" from the original, unparsed request payload
+        const message = isolateMessage(originalPayload);
+        const input = concatMsgAuthDetails(msgAuthDetails, message);
+        hash = calculateSignatureValue(input);
+
+      } catch(err) {
+
         if(CONSOLE_LOG_ERRORS) {
-          console.error(`invalid:json:payload: ${ originalPayload }`);
-          console.error(ex.toString());
+          console.error(`Auth:error: ${ err.toString() } - ${ originalPayload }`);
         }
-        throw Boom.unauthorized('Invalid JSON');
+        throw err;
       }
 
-
-      if(parsedPayload.msgAuthDetails) {
-
-        msgAuthDetails = parsedPayload.msgAuthDetails;
-
-      } else if(request.headers.authorization) {
-
-      // We still prioritize the msgAuthDetails object in the payload, over the Authorization header.
-      // But in case we didn't get any msgAuthDetails in the payload, but we got a header...
-        
-        const parts = request.headers.authorization.split(',');
-        parts.forEach(c => {
-          const firstEqualIndex = c.indexOf('=');
-          const keyName = c.substring(0, firstEqualIndex).trim();
-          const value = c.substring(firstEqualIndex + 1).trim().replace(/"/g, '');
-          msgAuthDetails[keyName] = value;
-        });
-
-      } else {
-        if(CONSOLE_LOG_ERRORS) {
-          console.error(`missing:msgAuthDetails:payload: ${ originalPayload }`);
-        }
-        throw Boom.unauthorized('msgAuthDetails missing from Authtozation header or payload');
-      }
-
-      // Getting the "message" from the original, unparsed request payload
-      const message = isolateMessage(originalPayload);
-
-      const input = concatMsgAuthDetails(msgAuthDetails, message);
-      const hash = calculateSignatureValue(input);
+      
 
       // Activate to see hash results - helpful when writing tests
       // console.log(`Matches: ${ hash === msgAuthDetails.signatureValue }\nCalcutated: ${ hash }\nmsgAuthDetails: ${ msgAuthDetails.signatureValue }`);
+      
 
       if(hash === msgAuthDetails.signatureValue) {
-
-        if(CONSOLE_LOG_EVENTS) {
-          console.log(`Event::Payload: ${ originalPayload }`);
-        }
-
+        
         return h.continue;
-
+        
       } else {
-
+        
         if(CONSOLE_LOG_ERRORS) {
           console.error(`Signature:error:payload: ${ originalPayload }`);
-          console.error(`Signature:error:calculateSignatureValue: ${ hash }`);
+          console.error(`Signature:error:hash: ${ hash }`);
         }
         throw Boom.unauthorized('Signature value does not match payload');
-
       }
     }
   };

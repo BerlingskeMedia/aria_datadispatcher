@@ -10,8 +10,6 @@ const Kafka = require('./kafka.js');
 const SQS = require('./sqs.js');
 const NotificationsEvents = require('./notifications_events.js');
 
-// To print the event payload details to console log, the ENV var must be explicitly set to "true"
-const CONSOLE_LOG_EVENTS = (process.env.CONSOLE_LOG_EVENTS === 'true' && process.env.NODE_ENV !== 'test');
 
 process.on('unhandledRejection', (err) => {
   console.error('unhandledRejection');
@@ -55,6 +53,7 @@ server.route({
   }
 });
 
+
 let version = 'unknown version';
 
 try {
@@ -68,6 +67,7 @@ try {
 } catch(ex) {}
 
 console.log(`Running ${ version }`);
+
 
 server.route({
   method: 'GET',
@@ -97,37 +97,11 @@ Kafka.once('ready', async () => {
   }
 });
 
-const Good = require('@hapi/good');
-const goodOptions = {
-  reporters: {
-    myConsoleReporter: [
-      { module: '@hapi/good-squeeze',
-        name: 'Squeeze',
-        args: [
-          {
-            log: '*',
-            response: {
-              exclude: 'healthcheck',
-              include: 'notifications'
-            }
-          }
-        ]
-      },
-      { module: '@hapi/good-console' },
-      'stdout'
-    ]
-  }
-};
-
 
 async function start() {
   if (process.env.NODE_ENV === 'test') {
     // We are running tests.
   } else if (!server.info.started) {
-    // If we console.log all event data, no need to also log the HTTP-requests
-    if(!CONSOLE_LOG_EVENTS) {
-      await server.register({ plugin: Good, options: goodOptions });
-    }
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
   }
