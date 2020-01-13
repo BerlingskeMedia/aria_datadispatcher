@@ -44,6 +44,7 @@ module.exports = {
         }
 
 
+        // Removing the msgAuthDetails-object, and getting only the message part.
         const message = Scheme.isolateMessage(payload);
         let parsedMessage;
 
@@ -89,16 +90,21 @@ module.exports = {
         if(SQS.ready) {
           try {
 
-            // If the messages is of type "enrichedEventData", we only want the "eventPayload" or "eventPayLoad" on SQS.
+            
             const MessageBody = 
+              // If the messages is of type "enrichedEventData", we only want the "eventPayload" or "eventPayLoad" on SQS.
               parsedMessage.eventPayload ? JSON.stringify(parsedMessage.eventPayload) :
               parsedMessage.eventPayLoad ? JSON.stringify(parsedMessage.eventPayLoad) :
+              // If the event is an AMPSEventData, we don't need this in SQS.
+              parsedMessage.AMPSEventIdent ? null :
               message;
 
-            const resultSQS = await SQS.deliver({
-              id: event_id ? event_id.toString() : Date.now().toString(),
-              message: MessageBody
-            });
+            if(MessageBody) {
+              const resultSQS = await SQS.deliver({
+                id: event_id ? event_id.toString() : Date.now().toString(),
+                message: MessageBody
+              });
+            }
 
           } catch(ex) {
             console.error(ex.toString());
