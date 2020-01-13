@@ -32,9 +32,11 @@ if(!SQS_QUEUE_URL) {
   return;
 }
 
-const isFifoQueue = SQS_QUEUE_URL.endsWith('.fifo');
+const isFifoQueueUrl = SQS_QUEUE_URL.endsWith('.fifo');
 
-if(isFifoQueue) {
+let Attributes;
+
+if(isFifoQueueUrl) {
   console.log(`Connecting to SQS on ${ SQS_QUEUE_URL } on message group ${ SQS_MESSAGE_GROUP_ID } using AWS_ACCESS_KEY_ID ${ AWS_ACCESS_KEY_ID }`);
 } else {
   console.log(`Using SQS queue ${SQS_QUEUE_URL}`);
@@ -43,7 +45,11 @@ if(isFifoQueue) {
 async function getQueueAttributes() {
 
   // All | Policy | VisibilityTimeout | MaximumMessageSize | MessageRetentionPeriod | ApproximateNumberOfMessages | ApproximateNumberOfMessagesNotVisible | CreatedTimestamp | LastModifiedTimestamp | QueueArn | ApproximateNumberOfMessagesDelayed | DelaySeconds | ReceiveMessageWaitTimeSeconds | RedrivePolicy | FifoQueue | ContentBasedDeduplication | KmsMasterKeyId | KmsDataKeyReusePeriodSeconds,
-  const AttributeNames = isFifoQueue ? [ 'FifoQueue' ] : null;
+  let AttributeNames = [ 'MaximumMessageSize' ];
+
+  if(isFifoQueueUrl) {
+    AttributeNames.push('FifoQueue');
+  }
   
   const params = {
     QueueUrl: SQS_QUEUE_URL,
@@ -52,6 +58,9 @@ async function getQueueAttributes() {
   
   return new Promise((resolve, reject) => {
     sqs.getQueueAttributes(params, function(err, data) {
+
+      Attributes = data.Attributes;
+
       if (err) {
         reject(err);
       } else {
@@ -88,6 +97,19 @@ module.exports.healthcheck = async function() {
 
 
 module.exports.deliver = async function({ id, message }) {
+
+  if(Attributes.MaximumMessageSize) {
+    // Results in NaN if not a valid number.
+    const MaximumMessageSize = parseInt(Attributes.MaximumMessageSize);
+    const MessageSize = Buffer.byteLength(message);
+    if(MessageSize > MaximumMessageSize) {
+      // Resolve, and not Reject, because this should not trigger an Error response to Aria.
+      console.error(`SQS:message:MaximumMessageSize exceeded`);
+      return Promise.resolve('MaximumMessageSize exceeded');
+    }
+  }
+
+
   const sqsParams = {
     MessageBody: message,
     QueueUrl: SQS_QUEUE_URL
