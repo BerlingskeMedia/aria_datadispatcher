@@ -19,8 +19,8 @@ if(DISABLE_VALIDATION) {
 const msgAuthDetailsValidation = Joi.object().keys({
   clientNo: Joi.number().integer().allow([ null, "" ]).default(''),
   requestDateTime: Joi.string().allow([ null, "" ]).required(),
-  signatureVersion: Joi.number().required(),
-  signatureValue: Joi.string().allow([ 1, 2 ]).default(2).required(),
+  signatureVersion: Joi.number().allow([ 1, 2 ]).default(2).required(),
+  signatureValue: Joi.string().required(),
   ariaAccountID: Joi.string().default('').allow([ null, "" ]).required(),
   ariaAccountNo: Joi.number().integer().allow(null).required(),
   userID: Joi.string().allow([null, '']),
