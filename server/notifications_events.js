@@ -92,6 +92,9 @@ module.exports = {
         }        
 
 
+        let error = null;
+
+
         if(SQS.ready) {
           try {
 
@@ -116,7 +119,8 @@ module.exports = {
               }
           } catch(ex) {
             console.error(ex.toString());
-            throw Boom.badRequest('SQS error');
+            // Waiting to rethrow, so we can deliver to Kafka.
+            error = ex;
           }
         }
 
