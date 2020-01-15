@@ -13,6 +13,11 @@ if(CONSOLE_LOG_EVENTS) {
   console.log('Console log event has been enabled.')
 }
 
+const CONSOLE_LOG_RESULTS = (process.env.CONSOLE_LOG_RESULTS === 'true' && process.env.NODE_ENV !== 'test');
+if(CONSOLE_LOG_RESULTS) {
+  console.log('Console log of results has been enabled.')
+}
+
 
 module.exports = {
   name: 'notifications_events',
@@ -40,7 +45,7 @@ module.exports = {
 
         
         if(CONSOLE_LOG_EVENTS) {
-          console.log(`Event::Payload: ${ payload }`);
+          console.log(payload);
         }
 
 
@@ -106,6 +111,9 @@ module.exports = {
               });
             }
 
+              if(CONSOLE_LOG_RESULTS) {
+                console.log(JSON.stringify(resultSQS));
+              }
           } catch(ex) {
             console.error(ex.toString());
             throw Boom.badRequest('SQS error');
@@ -121,12 +129,19 @@ module.exports = {
               message
             });
 
+            if(CONSOLE_LOG_RESULTS) {
+              console.log(JSON.stringify(resultKafka));
+            }
+
           } catch(ex) {
             console.error(ex.toString());
-            throw Boom.badRequest('Kafka error');
+            error = ex;
           }
         }
 
+        if(error) {
+          throw error;
+        }
 
         return {
           status: `OK`

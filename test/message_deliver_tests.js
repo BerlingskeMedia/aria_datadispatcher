@@ -68,7 +68,6 @@ describe('message delivery tests', async () => {
     sinon.assert.calledWith(KafkaSpy.deliver, {
       id: "1",
       message: '{"request":{"transaction_id":1},"subdocument":{"test":1,"anothervalue":"text"}}'
-
     });
 
     expect(SQSSpy.deliver.calledOnce).to.equal(true);
