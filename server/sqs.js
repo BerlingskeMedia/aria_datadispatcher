@@ -115,7 +115,7 @@ module.exports.deliver = async function({ id, message }) {
     QueueUrl: SQS_QUEUE_URL
   };
 
-  if(isFifoQueue) {
+  if(isFifoQueueUrl) {
     sqsParams.MessageDeduplicationId = id;
     sqsParams.MessageGroupId = SQS_MESSAGE_GROUP_ID;
   }
