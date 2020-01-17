@@ -11,9 +11,86 @@
 
 TODO
 
+
+
+
+
 ## API
 
-TODO
+### [POST /notifications_events]
+
+
+The payload must be a JSON object containing two keys:
+
+* `msgAuthDetails`
+* any other key
+
+This means that if the payload has a total of three or more keys, it will be concidered invalid.
+
+The key `msgAuthDetails` is required. Signature version 2 is supported.
+
+See section **Authentication** below.
+
+If an error occurs while delivering to any of the two Kafka or SQS, the API will return an error.
+
+## Event data
+
+
+Aria Datadispatcher conciders the content of the key **other than** `msgAuthDetails` to be the message.
+
+I.e. in case:
+
+```
+{
+  "msgAuthDetails": {
+    "signatureVersion": 2,
+    "signatureValue": "CALCULATED_VALUE",
+    "ariaAccountID": "",
+    "ariaAccountNo": 12345,
+  },
+  "enrichedEventData": {
+    "eventPayload": {
+      "account": {
+        "userid": "abcd_user"
+      }
+    },
+    "eventIdent": {
+      "event_guid": "0ea71fba-7bf3-44ef-9ad2-6881b41e9092",
+      "event_timestamp": "2019-11-19T11:38:52"
+    }
+  }
+}
+```
+
+The *content* of `enrichedEventData` is concidered the message.
+
+The unique event ID is tried from the message in this order:
+
+1. `request.transaction_id` (backwards compatibility before enriched events)
+2. `eventPayload.request.transaction_id`
+3. `eventIdent.event_guid`
+
+
+
+### Kafka message delivery
+
+Kafka will get the message delivered raw - unparsed and unprocessed.
+
+Unique event ID is used for deduplication of events in Kafka.
+Otherwise _null_ will be used.
+
+
+### SQS message delivery
+
+SQS will get the message delivered raw - unparsed and unprocessed, **unless**:
+
+* If key `eventPayload` exists, that content will get delivered.
+  * If key `JSONGetAcctPlansAllMResponse` also exists, it will be added as `all_acct_plans_m` (array) to the data above, but in a slimmed down version.
+  
+
+Unique event ID is used for deduplication of events.
+Otherwise _Date.now()_ will be used.
+
 
 ## Authentication
 
@@ -107,6 +184,9 @@ https://docs.aws.amazon.com/msk/latest/developerguide/create-topic.html
 ## SQS
 
 https://sqs.eu-west-1.amazonaws.com/815296035528/aria_datadispatcher.fifo
+
+
+
 
 ## Build
 

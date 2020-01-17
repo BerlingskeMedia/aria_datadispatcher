@@ -4,7 +4,7 @@
 
 // Test shortcuts.
 const { expect } = require('@hapi/code');
-const { describe, it, before, after, afterEach } = exports.lab = require('@hapi/lab').script();
+const { describe, it, before, after, afterEach, beforeEach } = exports.lab = require('@hapi/lab').script();
 
 
 const server = require('../server');
@@ -33,15 +33,7 @@ async function request(options) {
 describe('auth scheme tests', async () => {
 
 
-  before(async () => {
-  });
-
-
-  after(async () => {
-  });
-
-
-  afterEach(async () => {
+  beforeEach(async () => {
     KafkaSpy.reset();
     SQSSpy.reset();
   });

@@ -18,11 +18,13 @@ if(CONSOLE_LOG_RESULTS) {
   console.log('Console log of results has been enabled.')
 }
 
+let log_sample_count = 0;
 
 module.exports = {
   name: 'notifications_events',
   version: '1.0.0',
   register: async (server, options) => {
+    
 
     server.route({
       method: 'POST',
@@ -43,17 +45,18 @@ module.exports = {
         // Since the payload is not parsed, it's a buffer. So we need toString()
         const payload = request.payload.toString();
 
-        let log_count = 0;
         
         if(CONSOLE_LOG_EVENTS) {
           console.log(payload);
+        } else {
+          // Console logging a sample every 1000 notification
+          if(++log_sample_count % 1000 === 0) {
+            console.log(payload);
+            log_sample_count = 0; // No need to let the number run into millions
+          }
         }
 
-        // Console logging a sample every 1000 notification
-        if(++log_count % 1000 === 0) {
-          console.log(payload);
-          log_count = 0; // No need to let the number run into millions
-        }
+
 
 
         // Removing the msgAuthDetails-object, and getting only the message part.
@@ -65,6 +68,12 @@ module.exports = {
           // We actually already parsed the payload in the auth scheme.
           // So there should in theory be no errors at this stage.
           parsedMessage = JSON.parse(message);
+
+          // Making sure the backwards compatibility
+          if(parsedMessage.eventPayLoad && !parsedMessage.eventPayload) {
+            parsedMessage.eventPayload = parsedMessage.eventPayLoad;
+          }
+
         } catch(ex) {
           throw Boom.badRequest('Invalid JSON');
         }
@@ -80,14 +89,9 @@ module.exports = {
           event_id = parsedMessage.request.transaction_id;
           
           // If the eventPayload is bundled in a enrichedPayload
-          // Lowercase l
         } else if(parsedMessage.eventPayload && parsedMessage.eventPayload.request && parsedMessage.eventPayload.request.transaction_id) {
           event_id = parsedMessage.eventPayload.request.transaction_id;
           
-          // Uppercase L
-        } else if(parsedMessage.eventPayLoad && parsedMessage.eventPayLoad.request && parsedMessage.eventPayLoad.request.transaction_id) {
-          event_id = parsedMessage.eventPayLoad.request.transaction_id;
-
 
         } else if(parsedMessage.eventIdent && parsedMessage.eventIdent.event_guid) {
           event_id = parsedMessage.eventIdent.event_guid;
@@ -105,25 +109,46 @@ module.exports = {
         if(SQS.ready) {
           try {
 
-            
-            const MessageBody = 
-              // If the messages is of type "enrichedEventData", we only want the "eventPayload" or "eventPayLoad" on SQS.
-              parsedMessage.eventPayload ? JSON.stringify(parsedMessage.eventPayload) :
-              parsedMessage.eventPayLoad ? JSON.stringify(parsedMessage.eventPayLoad) :
-              // If the event is an AMPSEventData, we don't need this in SQS.
-              parsedMessage.AMPSEventIdent ? null :
-              message;
+            let SQSMessage = message;
 
-            if(MessageBody) {
+              
+            // If the messages is of type "enrichedEventData", we only want the "eventPayload" or "eventPayLoad" on SQS.
+            if(parsedMessage.eventPayload) {
+
+              try {
+
+                // If the messages is of type "enrichedEventData", there might be the "JSONGetAcctPlansAllMResponse", that we need for B2B customers.
+                // This data object container accessFeature for a specific Master Plan. This is useful in the B2B solution.
+                if(parsedMessage.JSONGetAcctPlansAllMResponse &&
+                  parsedMessage.JSONGetAcctPlansAllMResponse.all_acct_plans_m instanceof Array
+                  && parsedMessage.JSONGetAcctPlansAllMResponse.all_acct_plans_m.length > 0) {
+                  
+                  // Since the JSONGetAcctPlansAllMResponse can get excruciatingly big, the data must be minimizes
+                  const all_acct_plans_m = slimDownAllAcctPlansM(parsedMessage.JSONGetAcctPlansAllMResponse.all_acct_plans_m);
+                  parsedMessage.eventPayload.all_acct_plans_m = all_acct_plans_m;
+  
+                }
+              } catch(err) {
+                console.error(err);
+              }
+
+
+              SQSMessage = JSON.stringify(parsedMessage.eventPayload);
+              
+            }
+
+
+            if(SQSMessage) {
               const resultSQS = await SQS.deliver({
                 id: event_id ? event_id.toString() : Date.now().toString(),
-                message: MessageBody
+                message: SQSMessage
               });
-            }
 
               if(CONSOLE_LOG_RESULTS) {
                 console.log(JSON.stringify(resultSQS));
               }
+            }
+            
           } catch(ex) {
             console.error(ex.toString());
             // Waiting to rethrow, so we can deliver to Kafka.
@@ -161,3 +186,86 @@ module.exports = {
     });
   }
 };
+
+
+function slimDownAllAcctPlansM(all_acct_plans_m) {
+
+  return all_acct_plans_m.map(acct_plan => {
+
+    // Slimming down each acct_plan to the fields we like
+    let slim_acct_plan = (({
+      plan_no,
+      plan_name,
+      plan_desc,
+      plan_date,
+      plan_units,
+      master_plan_instance_no,
+      plan_instance_no,
+      plan_instance_status_cd,
+      plan_instance_status_label,
+      plan_instance_status_date
+    }) => ({
+      plan_no,
+      plan_name,
+      plan_desc,
+      plan_date,
+      plan_units,
+      master_plan_instance_no,
+      plan_instance_no,
+      plan_instance_status_cd,
+      plan_instance_status_label,
+      plan_instance_status_date
+    }))(acct_plan);
+
+
+    if(acct_plan.product_fields instanceof Array) {
+
+      slim_acct_plan.product_fields = acct_plan.product_fields.map(product_field => {
+        // Removing the "SupplementalField1":null
+        return (({
+          field_name,
+          field_value
+        }) => ({
+          field_name,
+          field_value
+        }))(product_field);
+      });
+    }
+
+
+    if(acct_plan.plan_instance_services instanceof Array) {
+
+      slim_acct_plan.plan_instance_services = acct_plan.plan_instance_services.map(plan_instance_service => {
+
+        // Slimming down each plan_instance_service to the fields we like
+        let slim_plan_instance_service = (({
+          service_no,
+          service_desc,
+          client_service_id
+        }) => ({
+          service_no,
+          service_desc,
+          client_service_id
+        }))(plan_instance_service);
+
+        if(plan_instance_service.all_service_supp_fields instanceof Array) {
+
+          slim_plan_instance_service.all_service_supp_fields = plan_instance_service.all_service_supp_fields.map(service_supp_field => {
+            // Removing the "SupplementalField1":null
+            return (({
+              field_name,
+              field_value
+            }) => ({
+              field_name,
+              field_value
+            }))(service_supp_field);
+          });
+        }
+
+        return slim_plan_instance_service;
+      });
+    }
+
+    return slim_acct_plan;
+  });
+}
