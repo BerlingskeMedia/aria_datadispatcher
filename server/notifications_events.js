@@ -43,9 +43,16 @@ module.exports = {
         // Since the payload is not parsed, it's a buffer. So we need toString()
         const payload = request.payload.toString();
 
+        let log_count = 0;
         
         if(CONSOLE_LOG_EVENTS) {
           console.log(payload);
+        }
+
+        // Console logging a sample every 1000 notification
+        if(++log_count % 1000 === 0) {
+          console.log(payload);
+          log_count = 0; // No need to let the number run into millions
         }
 
 
