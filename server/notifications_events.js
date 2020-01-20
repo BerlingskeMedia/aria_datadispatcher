@@ -195,23 +195,29 @@ function slimDownAllAcctPlansM(all_acct_plans_m) {
     // Slimming down each acct_plan to the fields we like
     let slim_acct_plan = (({
       plan_no,
+      client_plan_id,
       plan_name,
       plan_desc,
       plan_date,
       plan_units,
-      master_plan_instance_no,
       plan_instance_no,
+      master_plan_instance_no,
+      client_plan_instance_id,
+      client_master_plan_instance_id,
       plan_instance_status_cd,
       plan_instance_status_label,
       plan_instance_status_date
     }) => ({
       plan_no,
+      client_plan_id,
       plan_name,
       plan_desc,
       plan_date,
       plan_units,
-      master_plan_instance_no,
       plan_instance_no,
+      master_plan_instance_no,
+      client_plan_instance_id,
+      client_master_plan_instance_id,
       plan_instance_status_cd,
       plan_instance_status_label,
       plan_instance_status_date
