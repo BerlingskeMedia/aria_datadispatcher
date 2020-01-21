@@ -40,7 +40,7 @@ const client = new Kafka.KafkaClient({
 });
 
 client.on("ready", function() {
-  // console.log("Producer connected");
+  console.log("Kafka client ready");
 });
 
 client.on("error", function(err) {
@@ -64,7 +64,7 @@ producer.on('error', function (err) {
 
 
 producer.on('ready', async () => {
-  // console.log('Producer ready');
+  console.log('Kafka producer ready');
 });
 
 
