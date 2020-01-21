@@ -103,7 +103,7 @@ module.exports = {
         }        
 
 
-        let error = null;
+        let error_caught = false;
 
 
         if(SQS.ready) {
@@ -125,11 +125,14 @@ module.exports = {
                   
                   // Since the JSONGetAcctPlansAllMResponse can get excruciatingly big, the data must be minimizes
                   const all_acct_plans_m = slimDownAllAcctPlansM(parsedMessage.JSONGetAcctPlansAllMResponse.all_acct_plans_m);
-                  parsedMessage.eventPayload.all_acct_plans_m = all_acct_plans_m;
+                  if(all_acct_plans_m instanceof Array && all_acct_plans_m.length > 0) {
+                    parsedMessage.eventPayload.all_acct_plans_m = all_acct_plans_m;
+                  }
   
                 }
               } catch(err) {
-                console.error(err);
+                console.warn('EventPayload Warning:')
+                console.warn(err);
               }
 
 
@@ -150,9 +153,10 @@ module.exports = {
             }
             
           } catch(ex) {
-            console.error(ex.toString());
+            console.log('SQS error:');
+            console.error(ex);
             // Waiting to rethrow, so we can deliver to Kafka.
-            error = ex;
+            error_caught = true;
           }
         }
 
@@ -170,13 +174,14 @@ module.exports = {
             }
 
           } catch(ex) {
-            console.error(ex.toString());
-            error = ex;
+            console.log('Kafka error:');
+            console.error(ex);
+            error_caught = true;
           }
         }
-
-        if(error) {
-          throw error;
+        
+        if(error_caught) {
+          throw Boom.badRequest();
         }
 
         return {
