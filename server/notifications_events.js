@@ -58,7 +58,6 @@ module.exports = {
 
 
 
-
         // Removing the msgAuthDetails-object, and getting only the message part.
         const message = Scheme.isolateMessage(payload);
         let parsedMessage;

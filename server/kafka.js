@@ -30,6 +30,7 @@ const client = new Kafka.KafkaClient({
   sslOptions: {
     rejectUnauthorized: false
   },
+  autoConnect: true,
   connectRetryOptions: {
     retries: 100,
     factor: 2,
@@ -39,13 +40,20 @@ const client = new Kafka.KafkaClient({
   }
 });
 
+
 client.on("ready", function() {
   console.log("Kafka client ready");
 });
 
 client.on("error", function(err) {
-  console.error('Producer connection error')
+  console.error('Kafka client error');
   console.error(err);
+  client.connect();
+});
+
+client.on("brokersChanged", function() {
+  console.error('Kafka event brokersChanged')
+  client.connect();
 });
 
 const producerConfig = {
@@ -57,14 +65,14 @@ const producer = new Kafka.HighLevelProducer(client, producerConfig);
 
 module.exports = producer;
 
-producer.on('error', function (err) {
-  console.error('Producer error')
-  console.error(err);
-});
-
 
 producer.on('ready', async () => {
   console.log('Kafka producer ready');
+});
+
+producer.on('error', function (err) {
+  console.error('Producer error')
+  console.error(err);
 });
 
 
