@@ -18,6 +18,8 @@ if(CONSOLE_LOG_RESULTS) {
   console.log('Console log of results has been enabled.')
 }
 
+const MAX_BYTES = process.env.MAX_BYTES || 10485760; // 10Mb
+
 let log_sample_count = 0;
 
 module.exports = {
@@ -35,7 +37,8 @@ module.exports = {
           parse: false,
           // ^-- Important not to parse the payload, as this will change the payload content from
           //   what AMPS has used to calculate the signatureValue
-          allow: ['application/json']
+          allow: ['application/json'],
+          maxBytes: MAX_BYTES // 10Mb
         },
         tags: [ 'notifications' ]
       },
