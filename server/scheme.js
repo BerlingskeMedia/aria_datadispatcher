@@ -87,35 +87,46 @@ const isolateMessage = function(payload) {
 };
 
 
-const findEndOfObject = function(input, position = 0, bracketCounter = 0) {
+const findEndOfObject = function(input) {
   if(input.length === 0) {
     return position;
   }
 
-  if(position > 0 && bracketCounter === 0) {
-    return position;
-  }
+  let position = 0;
+  let bracketCounter = 0;
+    
+  do {
 
-  const nextOpen = input.indexOf('{', position);
-  const nextClose = input.indexOf('}', position);
+    let nextOpenBracketPosition = input.indexOf('{', position);
+    let nextCloseBracketPosition = input.indexOf('}', position);
+
+    if (nextOpenBracketPosition === -1 && nextCloseBracketPosition === -1) {
+      // There is no open nor close brackets
+      // We return the last postion
+      bracketCounter = 0;
+      position = input.length - 1;
+    
+    } else if(nextOpenBracketPosition === -1 || nextOpenBracketPosition > nextCloseBracketPosition) {
+       // There is no open but close brackets, or
+       // the next bracket is a close
+       bracketCounter += -1;
+       position = nextCloseBracketPosition + 1;
+   
+    } else if(nextCloseBracketPosition === -1 || nextOpenBracketPosition < nextCloseBracketPosition) {
+       // There is an open but no close brackets, or
+       // the next bracket is an open
+       bracketCounter += 1;
+       position = nextOpenBracketPosition + 1;
+       
+    } else {
+    
+      throw Boom.badRequest('Error when finding end of message object');
+
+    }
+
+  } while (bracketCounter !== 0 );
   
-  if (nextOpen === -1 && nextClose === -1) {
-    // There is no open nor close brackets
-    // We return the last postion
-    return input.length - 1;
-
-  } else if(nextOpen === -1 || nextOpen > nextClose) {
-    // There is no open but close brackets, or
-    // the next bracket is a close
-    return findEndOfObject(input, nextClose + 1, bracketCounter += -1);
-
-  } else if(nextClose === -1 || nextOpen < nextClose) {
-    // There is an open but no close brackets, or
-    // the next bracket is an open
-    return findEndOfObject(input, nextOpen + 1, bracketCounter += 1);
-  }
-
-  throw Boom.badRequest('Object cannot be parsed');
+  return position;
 };
 
 

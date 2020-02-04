@@ -1,6 +1,7 @@
 /* jshint node: true */
 'use strict';
 
+const fs = require('fs');
 
 // Test shortcuts.
 const { expect } = require('@hapi/code');
@@ -112,6 +113,14 @@ describe('message parsing tests', async () => {
       const payload = '{"test":2,"another_test":3,"a_third_key":4}';
       const message = scheme.isolateMessage(payload);
       expect(message).to.equal(payload);
+    });
+
+    it('Prevent RangeError: Maximum call stack size exceeded', async () => {
+      
+      const payloadBuffer = fs.readFileSync('./test/files/DIMAPS.json')
+      const payload = payloadBuffer.toString();
+      const message = scheme.isolateMessage(payload);
+      expect(message.indexOf('msgAuthDetails')).to.equal(-1);
     });
   });
 });
