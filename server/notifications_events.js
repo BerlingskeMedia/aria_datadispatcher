@@ -18,7 +18,7 @@ if(CONSOLE_LOG_RESULTS) {
   console.log('Console log of results has been enabled.')
 }
 
-const MAX_BYTES = process.env.MAX_BYTES || 10485760; // 10Mb
+const MAX_BYTES = process.env.MAX_BYTES || 1048576; // 1Mb
 
 let log_sample_count = 0;
 
