@@ -105,7 +105,7 @@ module.exports = {
         }        
 
 
-        let error_caught = false;
+        let error_caught = [];
 
 
         if(SQS.ready) {
@@ -154,11 +154,9 @@ module.exports = {
               }
             }
             
-          } catch(ex) {
-            console.log('SQS error:');
-            console.error(ex);
+          } catch(err) {
+            error_caught.push(err)
             // Waiting to rethrow, so we can deliver to Kafka.
-            error_caught = true;
           }
         }
 
@@ -175,17 +173,21 @@ module.exports = {
               console.log(JSON.stringify(resultKafka));
             }
 
-          } catch(ex) {
-            console.log('Kafka error:');
-            console.error(ex);
-            error_caught = true;
+          } catch(err) {
+            error_caught.push(err)
           }
         }
-        
-        if(error_caught) {
-          throw Boom.badRequest();
+
+
+        if(error_caught.length > 0) {
+          error_caught.forEach(err => {
+            console.error(err);
+          });
+
+          throw Boom.serverUnavailable();
         }
 
+        
         return {
           status: `OK`
         };
