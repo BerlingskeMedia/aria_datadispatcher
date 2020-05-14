@@ -1,21 +1,14 @@
 # aria_datadispatcher
 
-## Terminology
+Receives events from AMPS Workflow and relay them to:
 
-* _Client application_: ARIA + AMPS
-* _Server application_: Data Dispatcher, a webservice implemented by Berlingske to recieve notifications from ARIA + AMPS.
-* _Auth server_: [BPC](https://github.com/BerlingskeMedia/bpc)
-* _Hawk_: An HTTP authentication scheme [github.com/hapijs/hawk](https://github.com/hapijs/hawk)
-
-## Architecture
-
-TODO
-
-
-
+1. Data Platform
+2. Permissions Processor (SQS queue)
 
 
 ## API
+
+This service has only one endpoint:
 
 ### [POST /notifications_events]
 
@@ -32,6 +25,7 @@ The key `msgAuthDetails` is required. Signature version 2 is supported.
 See section **Authentication** below.
 
 If an error occurs while delivering to any of the two Kafka or SQS, the API will return an error.
+
 
 ## Event data
 
@@ -155,10 +149,12 @@ Please note that there is no need to provide authKey in the JSON and all other v
 * ARIA_AUTH_KEY
 * KAFKA_HOST
 * KAFKA_INGRESS_TOPIC
-* AWS_REGION
+* AWS_REGION (Default `eu-west-1`)
 * AWS_ACCESS_KEY_ID
 * AWS_SECRET_ACCESS_KEY
 * SQS_QUEUE_URL
+* SQS_MESSAGE_GROUP_ID (Default `aria`)
+* DISABLE_VALIDATION (Only disabled when `true`. Otherwise enabled.)
 
 
 ## Development
