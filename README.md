@@ -6,6 +6,9 @@ Receives events from AMPS Workflow and relay them to:
 2. Permissions Processor (SQS queue)
 
 
+![overview](https://github.com/BerlingskeMedia/bpp_api/raw/master/docs/user_handling_overview.png)
+
+
 ## API
 
 This service has only one endpoint:
