@@ -62,3 +62,4 @@ typings/
 
 config.sh
 server/version
+.idea/
