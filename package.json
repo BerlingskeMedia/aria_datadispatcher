@@ -9,7 +9,7 @@
     "@hapi/inert": "^5.2.1",
     "@hapi/joi": "^15.1.1",
     "aws-sdk": "^2.519.0",
-    "kafka-node": "^4.1.3"
+    "kafka-node": "^5.0.0"
   },
   "devDependencies": {
     "@hapi/code": "^6.0.0",
