@@ -77,7 +77,7 @@ async function ready() {
     module.exports.ready = true;
     module.exports.events.emit('ready');
   } catch(err) {
-    console.error(err, err.stack); // an error occurred
+    console.error(JSON.stringify(err, Object.getOwnPropertyNames(err)));
   }
 }
 

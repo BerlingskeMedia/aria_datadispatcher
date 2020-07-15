@@ -181,7 +181,7 @@ module.exports = {
 
         if(error_caught.length > 0) {
           error_caught.forEach(err => {
-            console.error(err);
+            console.error(JSON.stringify(err, Object.getOwnPropertyNames(err)));
           });
 
           throw Boom.serverUnavailable();

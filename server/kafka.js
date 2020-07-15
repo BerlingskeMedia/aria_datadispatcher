@@ -47,7 +47,7 @@ client.on("ready", function() {
 
 client.on("error", function(err) {
   console.error('Kafka client error');
-  console.error(err);
+  console.error(JSON.stringify(err, Object.getOwnPropertyNames(err)));
   client.connect();
 });
 
@@ -72,7 +72,7 @@ producer.on('ready', async () => {
 
 producer.on('error', function (err) {
   console.error('Producer error')
-  console.error(err);
+  console.error(JSON.stringify(err, Object.getOwnPropertyNames(err)));
 });
 
 
