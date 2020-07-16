@@ -13,7 +13,7 @@ const NotificationsEvents = require('./notifications_events.js');
 
 process.on('unhandledRejection', (err) => {
   console.error('unhandledRejection');
-  console.error(err);
+  console.error(JSON.stringify(err, Object.getOwnPropertyNames(err)));
   process.exit(1);
 });
 
