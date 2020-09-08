@@ -13,9 +13,9 @@
   },
   "devDependencies": {
     "@hapi/code": "^6.0.0",
-    "@hapi/lab": "^20.2.1",
-    "nodemon": "^1.19.0",
-    "sinon": "^7.4.1"
+    "@hapi/lab": "^20.4.0",
+    "nodemon": "^1.19.4",
+    "sinon": "^7.5.0"
   },
   "scripts": {
     "start": "node $npm_package_main",
