@@ -1,4 +1,4 @@
-FROM node:10.17-alpine
+FROM node:14.11-alpine
 
 LABEL authors="Daniel Kokott <dako@berlingskemedia.dk>"
 
