@@ -11,10 +11,10 @@ process.env.ARIA_AUTH_KEY = 'ASas782309UK44qweaxczsg';
 
 const scheme = require('../server/scheme');
 
-describe('message parsing tests', async () => {
+describe('message parsing tests', () => {
 
-  describe('find end of object', async () => {
-    
+  describe('find end of object', () => {
+
     it('small objects 1', async () => {
       const payload = '{"clientNo":25},"eventPayload":{"test":1}}';
       const endOfObject = scheme.findEndOfObject(payload);
@@ -60,8 +60,8 @@ describe('message parsing tests', async () => {
 
 
 
-  describe('isolate message', async () => {
-    
+  describe('isolate message', () => {
+
     it('small objects 1', async () => {
       const payload = '{"msgAuthDetails":{"clientNo":25},"eventPayload":{"test":1}}';
       const message = scheme.isolateMessage(payload);
@@ -116,7 +116,7 @@ describe('message parsing tests', async () => {
     });
 
     it('Prevent RangeError: Maximum call stack size exceeded', async () => {
-      
+
       const payloadBuffer = fs.readFileSync('./test/files/DIMAPS.json')
       const payload = payloadBuffer.toString();
       const message = scheme.isolateMessage(payload);
