@@ -25,14 +25,14 @@ async function request(options) {
       }
     )
   };
-  
+
   // We don't need to reject anything. We only resolve and the tests should validate the response
   return await server.inject(req);
 };
 
 
-describe('message delivery tests', async () => {
-  
+describe('message delivery tests', () => {
+
 
   beforeEach(async () => {
     KafkaSpy.reset();
@@ -72,7 +72,7 @@ describe('message delivery tests', async () => {
 
 
   it('endpoint should return 200 when auth header is test and payload includes msgAuthDetails', async () => {
-      
+
     const headers = {
       'Authorization': 'clientNo="TEST", requestDateTime="1971-07-01T01:48:31Z", signatureValue="TEST", ariaAccountID="AccountID", ariaAccountNo="1234567", signatureVersion=2, userID="TEST"'
     };
@@ -94,10 +94,10 @@ describe('message delivery tests', async () => {
 
     expect(KafkaSpy.deliver.calledOnce).to.equal(true);
     sinon.assert.calledWith(KafkaSpy.deliver, {
-      id: "2", 
+      id: "2",
       message: '{"request":{"transaction_id":2},"subdocument":{"test":1,"anothervalue":"text"}}'
     });
-    
+
     expect(SQSSpy.deliver.calledOnce).to.equal(true);
     sinon.assert.calledWith(SQSSpy.deliver, {
       id: "2",
@@ -183,7 +183,7 @@ describe('message delivery tests', async () => {
     });
   });
 
-  
+
   it('test AMPSEventID=1 SUBSCRIPTION', async () => {
 
     const payload = {
@@ -391,7 +391,7 @@ describe('message delivery tests', async () => {
       id: "9",
       message: '{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355226","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":9,"sender":"A","class":"T","auth_key":"riwyuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}}'
     });
-    
+
     sinon.assert.calledWith(KafkaSpy.deliver, {
       id: "9",
       message: '{"account":{"userid":"abcd_user","senior_acct_no":null,"master_plan_instances":{"master_plan_instance_data":[{"resp_plan_instance_no":null,"resp_level_cd":"1","plan_instance_no":"130355226","client_plan_instance_id":"BER-C-COMBO-FULL-4dbbc68d-2694-4135-b044-ab7a0707cbea"}]},"client_no":90000327,"acct_no":42046604},"request":{"version":1,"transaction_id":9,"sender":"A","class":"T","auth_key":"riwyuyoruywe","action":"M"},"posting_info":{"posting_user":"System","posting_status_cd":1,"posting_date":"2019-11-13 01:34:52"},"event_data":{"event":[{"event_label":"Invoice Created","event_id":901}]}}'

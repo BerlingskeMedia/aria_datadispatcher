@@ -25,13 +25,13 @@ async function request(options) {
       }
     )
   };
-  
+
   // We don't need to reject anything. We only resolve and the tests should validate the response
   return await server.inject(req);
 };
 
 
-describe('message delivery tests', async () => {
+describe('message delivery tests', () => {
 
 
   beforeEach(async () => {
@@ -42,8 +42,8 @@ describe('message delivery tests', async () => {
 
   it('enrichedEventData.JSONGetAccountDetailsMResponse gets set to all_acct_plans_m', async () => {
 
-    const payload = { 
-      "msgAuthDetails":{ 
+    const payload = {
+      "msgAuthDetails":{
         "userID":"67985743",
         "ariaAccountNo":42154008,
         "ariaAccountID":"81e3d197286f4a8f9cf9852c55fc15bb",
@@ -53,21 +53,21 @@ describe('message delivery tests', async () => {
         "authKey":null,
         "clientNo":25
       },
-      "enrichedEventData":{ 
-        "eventPayload":{ 
-          "acct_supp_field_data":{ 
-            "acct_supp_field":[ 
-              { 
+      "enrichedEventData":{
+        "eventPayload":{
+          "acct_supp_field_data":{
+            "acct_supp_field":[
+              {
                 "field_name":"OwnerTitleCode",
                 "field_value":"BER"
               },
-              { 
+              {
                 "field_name":"CustomerType",
                 "field_value":"C"
               }
             ]
           },
-          "acct_data":{ 
+          "acct_data":{
             "acct_no":42154008,
             "client_acct_id":"81e3d197286f4a8f9cf9852c55fc15bb",
             "client_no":90000340,
@@ -76,7 +76,7 @@ describe('message delivery tests', async () => {
             "status_cd":1,
             "userid":"67985743"
           },
-          "acct_contact":{ 
+          "acct_contact":{
             "address1":null,
             "address2":null,
             "address3":null,
@@ -97,7 +97,7 @@ describe('message delivery tests', async () => {
             "work_phone":null,
             "work_phone_ext":null
           },
-          "request":{ 
+          "request":{
             "action":"A",
             "auth_key":"ggdfgfdgfdgfd",
             "class_name":"A",
@@ -106,9 +106,9 @@ describe('message delivery tests', async () => {
             "transaction_id":358472302,
             "version":1.0
           },
-          "master_plan_instance_data":{ 
-            "master_plan_instance":[ 
-              { 
+          "master_plan_instance_data":{
+            "master_plan_instance":[
+              {
                 "client_master_plan_instance_id":"BER-C-COMBO-WKE-1b2de06e-db39-4771-9153-784a39d78d6d",
                 "client_plan_id":"BER-C-COMBO-WKE",
                 "master_plan_instance_no":131265124,
@@ -119,9 +119,9 @@ describe('message delivery tests', async () => {
               }
             ]
           },
-          "event_data":{ 
-            "event":[ 
-              { 
+          "event_data":{
+            "event":[
+              {
                 "event_id":701,
                 "event_label":"Account Created"
               }
@@ -131,7 +131,7 @@ describe('message delivery tests', async () => {
         "JSONGetAcctPlansAllMResponse":{
           "record_count":1,
           "all_acct_plans_m":[
-            { 
+            {
               "plan_no":102220,
               "plan_name":"Berlingske - lørdag-søndag",
               "plan_desc":"Berlingske Normal lør-søn med levering og Digital+ hele ugen\n\n",
@@ -140,12 +140,12 @@ describe('message delivery tests', async () => {
               "master_plan_instance_no":131265124,
               "client_master_plan_instance_id":"BER-C-COMBO-WKE-1b2de06e-db39-4771-9153-784a39d78d6d",
               "plan_instance_services":[
-                { 
+                {
                   "service_no":10164041,
                   "service_desc":"Digital",
                   "client_service_id":"ACC-DIGITAL-ALL",
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -154,12 +154,12 @@ describe('message delivery tests', async () => {
                     }
                   ]
                 },
-                { 
+                {
                   "service_no":10165240,
                   "service_desc":"E-Paper",
                   "client_service_id":"ACC-DIGITAL-PDF",
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -172,27 +172,27 @@ describe('message delivery tests', async () => {
             }
           ]
         },
-        "eventIdent":{ 
+        "eventIdent":{
           "event_guid":"81288ba4-3273-47b9-ab35-12ed8c2060f6",
           "event_timestamp":"2019-12-17 13:12:38"
         }
       }
     };
 
-    const expected_SQS_message = { 
-      "acct_supp_field_data":{ 
-        "acct_supp_field":[ 
-          { 
+    const expected_SQS_message = {
+      "acct_supp_field_data":{
+        "acct_supp_field":[
+          {
             "field_name":"OwnerTitleCode",
             "field_value":"BER"
           },
-          { 
+          {
             "field_name":"CustomerType",
             "field_value":"C"
           }
         ]
       },
-      "acct_data":{ 
+      "acct_data":{
         "acct_no":42154008,
         "client_acct_id":"81e3d197286f4a8f9cf9852c55fc15bb",
         "client_no":90000340,
@@ -201,7 +201,7 @@ describe('message delivery tests', async () => {
         "status_cd":1,
         "userid":"67985743"
       },
-      "acct_contact":{ 
+      "acct_contact":{
         "address1":null,
         "address2":null,
         "address3":null,
@@ -222,7 +222,7 @@ describe('message delivery tests', async () => {
         "work_phone":null,
         "work_phone_ext":null
       },
-      "request":{ 
+      "request":{
         "action":"A",
         "auth_key":"ggdfgfdgfdgfd",
         "class_name":"A",
@@ -231,9 +231,9 @@ describe('message delivery tests', async () => {
         "transaction_id":358472302,
         "version":1
       },
-      "master_plan_instance_data":{ 
-        "master_plan_instance":[ 
-          { 
+      "master_plan_instance_data":{
+        "master_plan_instance":[
+          {
             "client_master_plan_instance_id":"BER-C-COMBO-WKE-1b2de06e-db39-4771-9153-784a39d78d6d",
             "client_plan_id":"BER-C-COMBO-WKE",
             "master_plan_instance_no":131265124,
@@ -244,16 +244,16 @@ describe('message delivery tests', async () => {
           }
         ]
       },
-      "event_data":{ 
-        "event":[ 
-          { 
+      "event_data":{
+        "event":[
+          {
             "event_id":701,
             "event_label":"Account Created"
           }
         ]
       },
-      "all_acct_plans_m":[ 
-        { 
+      "all_acct_plans_m":[
+        {
           "plan_no":102220,
           "plan_name":"Berlingske - lørdag-søndag",
           "plan_desc":"Berlingske Normal lør-søn med levering og Digital+ hele ugen\n\n",
@@ -261,24 +261,24 @@ describe('message delivery tests', async () => {
           "plan_instance_no":131265124,
           "master_plan_instance_no":131265124,
           "client_master_plan_instance_id":"BER-C-COMBO-WKE-1b2de06e-db39-4771-9153-784a39d78d6d",
-          "plan_instance_services":[ 
-            { 
+          "plan_instance_services":[
+            {
               "service_no":10164041,
               "service_desc":"Digital",
               "client_service_id":"ACC-DIGITAL-ALL",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"AccessFeature",
                   "field_value":"WEB/APP"
                 }
               ]
             },
-            { 
+            {
               "service_no":10165240,
               "service_desc":"E-Paper",
               "client_service_id":"ACC-DIGITAL-PDF",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"AccessFeature",
                   "field_value":"E-PAPER"
                 }
@@ -315,17 +315,17 @@ describe('message delivery tests', async () => {
       },
       "enrichedEventData":{
         "eventPayload":{
-          "billing_group_data":{ 
-            "billing_group":[ 
-              
+          "billing_group_data":{
+            "billing_group":[
+
             ]
           },
-          "acct_supp_field_data":{ 
-            "acct_supp_field":[ 
-              
+          "acct_supp_field_data":{
+            "acct_supp_field":[
+
             ]
           },
-          "acct_data":{ 
+          "acct_data":{
             "acct_no":42168839,
             "client_acct_id":"71949f1a09324be49d06b839964f55b1",
             "client_no":90000340,
@@ -341,7 +341,7 @@ describe('message delivery tests', async () => {
             "test_acct":"N",
             "userid":"64394538"
           },
-          "acct_contact":{ 
+          "acct_contact":{
             "address1":"Holmevej 5   ",
             "address2":null,
             "address3":null,
@@ -362,7 +362,7 @@ describe('message delivery tests', async () => {
             "work_phone":null,
             "work_phone_ext":null
           },
-          "request":{ 
+          "request":{
             "action":"M",
             "auth_key":"Bc5VnXc3tgkHKjdMpqjdgKM36K56dfbh",
             "class_name":"A",
@@ -371,37 +371,37 @@ describe('message delivery tests', async () => {
             "transaction_id":358689543,
             "version":1.0
           },
-          "payment_method_data":{ 
-            "payment_method":[ 
-              
+          "payment_method_data":{
+            "payment_method":[
+
             ]
           },
-          "notify_tmplt_group_data":{ 
-            "notify_tmplt_group":[ 
-              
+          "notify_tmplt_group_data":{
+            "notify_tmplt_group":[
+
             ]
           },
-          "master_plan_instance_data":{ 
-            "master_plan_instance":[ 
-              
+          "master_plan_instance_data":{
+            "master_plan_instance":[
+
             ]
           },
-          "event_data":{ 
-            "event":[ 
-              { 
+          "event_data":{
+            "event":[
+              {
                 "event_id":736,
                 "event_label":"Account Statement Contact Modified"
               }
             ]
           },
-          "dunning_group_data":{ 
-            "dunning_group":[ 
-              
+          "dunning_group_data":{
+            "dunning_group":[
+
             ]
           },
-          "contract_data":{ 
-            "contract":[ 
-              
+          "contract_data":{
+            "contract":[
+
             ]
           }
         },
@@ -409,8 +409,8 @@ describe('message delivery tests', async () => {
           "error_code":0,
           "error_msg":"OK",
           "record_count":14,
-          "all_acct_plans_m":[ 
-            { 
+          "all_acct_plans_m":[
+            {
               "plan_no":101644,
               "plan_noSpecified":true,
               "plan_name":"Special - Account Plan",
@@ -501,8 +501,8 @@ describe('message delivery tests', async () => {
               "client_plan_2_assign_on_susp":null,
               "client_rate_schedule_id":"SPC-ACCOUNT-PLAN-DKK-01",
               "proration_invoice_timing_cd":"I",
-              "product_fields":[ 
-                { 
+              "product_fields":[
+                {
                   "field_name":"ProductType",
                   "field_value":"SPECIAL",
                   "SupplementalField1":null,
@@ -511,7 +511,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"ANY",
                   "SupplementalField1":null,
@@ -520,7 +520,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"PaymentMethodReqd",
                   "field_value":"ANY",
                   "SupplementalField1":null,
@@ -529,7 +529,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductPriceModel",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -538,7 +538,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForBundles",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -547,7 +547,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForSharing",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -556,7 +556,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductTypeVariant",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -565,7 +565,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForDiscounts",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -575,8 +575,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "plan_instance_fields_detail":[ 
-                { 
+              "plan_instance_fields_detail":[
+                {
                   "field_name":null,
                   "field_value":null,
                   "SupplementalField1":null,
@@ -592,8 +592,8 @@ describe('message delivery tests', async () => {
               "parent_plan_instance_no":null,
               "parent_plan_instance_noSpecified":true,
               "client_parent_plan_instance_id":null,
-              "plan_instance_services":[ 
-                { 
+              "plan_instance_services":[
+                {
                   "service_no":10164405,
                   "service_noSpecified":true,
                   "service_desc":"Special - Service Count 1",
@@ -630,8 +630,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"SPC-SERVICE-CNT1",
                   "usage_type_cd":"SPC-SERVICE-CNT1",
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -646,8 +646,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -699,8 +699,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "surcharges_all":[ 
-                { 
+              "surcharges_all":[
+                {
                   "surcharge_noSpecified":false,
                   "surcharge_name":null,
                   "client_surcharge_id":null,
@@ -746,7 +746,7 @@ describe('message delivery tests', async () => {
               "SupplementalField4":null,
               "SupplementalField5":null
             },
-            { 
+            {
               "plan_no":102577,
               "plan_noSpecified":true,
               "plan_name":"Berlingske - fredag-lørdag",
@@ -837,8 +837,8 @@ describe('message delivery tests', async () => {
               "client_plan_2_assign_on_susp":null,
               "client_rate_schedule_id":"BER-C-COMBO-FOL-DKK-12",
               "proration_invoice_timing_cd":"I",
-              "product_fields":[ 
-                { 
+              "product_fields":[
+                {
                   "field_name":"TitleCode",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -847,7 +847,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductType",
                   "field_value":"COMBO",
                   "SupplementalField1":null,
@@ -856,7 +856,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension2",
                   "field_value":"100",
                   "SupplementalField1":null,
@@ -865,7 +865,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension3",
                   "field_value":"400",
                   "SupplementalField1":null,
@@ -874,7 +874,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension4",
                   "field_value":"150",
                   "SupplementalField1":null,
@@ -883,7 +883,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension5",
                   "field_value":"999",
                   "SupplementalField1":null,
@@ -892,7 +892,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"B",
                   "SupplementalField1":null,
@@ -901,7 +901,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"C",
                   "SupplementalField1":null,
@@ -910,7 +910,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"PaymentMethodReqd",
                   "field_value":"ANY",
                   "SupplementalField1":null,
@@ -919,7 +919,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductPriceModel",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -928,7 +928,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"TitleCodeOffering",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -937,7 +937,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForBundles",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -946,7 +946,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForSharing",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -955,7 +955,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductTypeVariant",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -964,7 +964,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForDiscounts",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -973,7 +973,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForMultiPurchase",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -983,8 +983,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "plan_instance_fields_detail":[ 
-                { 
+              "plan_instance_fields_detail":[
+                {
                   "field_name":"ChannelCode",
                   "field_value":"Contact Centre",
                   "SupplementalField1":null,
@@ -993,7 +993,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"SourceCode",
                   "field_value":"User ID",
                   "SupplementalField1":null,
@@ -1009,8 +1009,8 @@ describe('message delivery tests', async () => {
               "parent_plan_instance_no":null,
               "parent_plan_instance_noSpecified":true,
               "client_parent_plan_instance_id":null,
-              "plan_instance_services":[ 
-                { 
+              "plan_instance_services":[
+                {
                   "service_no":10164041,
                   "service_noSpecified":true,
                   "service_desc":"Digital",
@@ -1047,8 +1047,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-DIGITAL-ALL",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -1060,7 +1060,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -1072,7 +1072,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -1087,8 +1087,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -1139,7 +1139,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10164045,
                   "service_noSpecified":true,
                   "service_desc":"Subscription",
@@ -1176,8 +1176,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"SVC-SUBSCRIPTION",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -1189,7 +1189,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeGroup",
                       "field_desc":"Contains a code indicating the group the charge belongs to. Is used when allocating payments against invoices when insufficient payments are made. Is used only for \"CHARGE\", \"CHARGE-DEL-POSTAL\" or \"CHARGE-DEL-AIRMAIL\" charge types. The payments are allocated in the sequence provided with 01 being the first, 02 the next, and so on. The following codes are proposed: GROUP-01; GROUP-02; GROUP-03; GROUP-04; GROUP-05; GROUP-06; GROUP-07; GROUP-08; GROUP-09; GROUP-10",
                       "field_order_no":39,
@@ -1201,7 +1201,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION1",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 1'",
                       "field_order_no":60,
@@ -1213,7 +1213,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION2",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 2'",
                       "field_order_no":61,
@@ -1225,7 +1225,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -1240,8 +1240,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -1292,7 +1292,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10164046,
                   "service_noSpecified":true,
                   "service_desc":"Abonnement - porto udland",
@@ -1329,8 +1329,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"SVC-DELIVERY-AIRMAIL",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -1342,7 +1342,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -1354,7 +1354,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeGroup",
                       "field_desc":"Contains a code indicating the group the charge belongs to. Is used when allocating payments against invoices when insufficient payments are made. Is used only for \"CHARGE\", \"CHARGE-DEL-POSTAL\" or \"CHARGE-DEL-AIRMAIL\" charge types. The payments are allocated in the sequence provided with 01 being the first, 02 the next, and so on. The following codes are proposed: GROUP-01; GROUP-02; GROUP-03; GROUP-04; GROUP-05; GROUP-06; GROUP-07; GROUP-08; GROUP-09; GROUP-10",
                       "field_order_no":39,
@@ -1366,7 +1366,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION1",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 1'",
                       "field_order_no":60,
@@ -1378,7 +1378,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION2",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 2'",
                       "field_order_no":61,
@@ -1393,8 +1393,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -1445,7 +1445,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10165240,
                   "service_noSpecified":true,
                   "service_desc":"E-Paper",
@@ -1482,8 +1482,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-DIGITAL-PDF",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -1495,7 +1495,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -1507,7 +1507,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -1522,8 +1522,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -1574,7 +1574,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10165403,
                   "service_noSpecified":true,
                   "service_desc":"Levering fredag",
@@ -1611,8 +1611,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-PRINT-FRI",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -1624,7 +1624,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -1636,7 +1636,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -1651,8 +1651,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -1703,7 +1703,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10165404,
                   "service_noSpecified":true,
                   "service_desc":"Levering lørdag",
@@ -1740,8 +1740,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-PRINT-SAT",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -1753,7 +1753,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -1765,7 +1765,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -1780,8 +1780,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -1833,8 +1833,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "surcharges_all":[ 
-                { 
+              "surcharges_all":[
+                {
                   "surcharge_noSpecified":false,
                   "surcharge_name":null,
                   "client_surcharge_id":null,
@@ -1880,7 +1880,7 @@ describe('message delivery tests', async () => {
               "SupplementalField4":null,
               "SupplementalField5":null
             },
-            { 
+            {
               "plan_no":102577,
               "plan_noSpecified":true,
               "plan_name":"Berlingske - fredag-lørdag",
@@ -1971,8 +1971,8 @@ describe('message delivery tests', async () => {
               "client_plan_2_assign_on_susp":null,
               "client_rate_schedule_id":"BER-C-COMBO-FOL-DKK-01",
               "proration_invoice_timing_cd":"I",
-              "product_fields":[ 
-                { 
+              "product_fields":[
+                {
                   "field_name":"TitleCode",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -1981,7 +1981,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductType",
                   "field_value":"COMBO",
                   "SupplementalField1":null,
@@ -1990,7 +1990,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension2",
                   "field_value":"100",
                   "SupplementalField1":null,
@@ -1999,7 +1999,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension3",
                   "field_value":"400",
                   "SupplementalField1":null,
@@ -2008,7 +2008,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension4",
                   "field_value":"150",
                   "SupplementalField1":null,
@@ -2017,7 +2017,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension5",
                   "field_value":"999",
                   "SupplementalField1":null,
@@ -2026,7 +2026,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"B",
                   "SupplementalField1":null,
@@ -2035,7 +2035,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"C",
                   "SupplementalField1":null,
@@ -2044,7 +2044,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"PaymentMethodReqd",
                   "field_value":"ANY",
                   "SupplementalField1":null,
@@ -2053,7 +2053,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductPriceModel",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -2062,7 +2062,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"TitleCodeOffering",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -2071,7 +2071,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForBundles",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -2080,7 +2080,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForSharing",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -2089,7 +2089,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductTypeVariant",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -2098,7 +2098,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForDiscounts",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -2107,7 +2107,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForMultiPurchase",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -2117,8 +2117,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "plan_instance_fields_detail":[ 
-                { 
+              "plan_instance_fields_detail":[
+                {
                   "field_name":"ChannelCode",
                   "field_value":"Contact Centre",
                   "SupplementalField1":null,
@@ -2127,7 +2127,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"SourceCode",
                   "field_value":"User ID",
                   "SupplementalField1":null,
@@ -2143,8 +2143,8 @@ describe('message delivery tests', async () => {
               "parent_plan_instance_no":null,
               "parent_plan_instance_noSpecified":true,
               "client_parent_plan_instance_id":null,
-              "plan_instance_services":[ 
-                { 
+              "plan_instance_services":[
+                {
                   "service_no":10164041,
                   "service_noSpecified":true,
                   "service_desc":"Digital",
@@ -2181,8 +2181,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-DIGITAL-ALL",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -2194,7 +2194,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -2206,7 +2206,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -2221,8 +2221,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -2273,7 +2273,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10164045,
                   "service_noSpecified":true,
                   "service_desc":"Subscription",
@@ -2310,8 +2310,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"SVC-SUBSCRIPTION",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -2323,7 +2323,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeGroup",
                       "field_desc":"Contains a code indicating the group the charge belongs to. Is used when allocating payments against invoices when insufficient payments are made. Is used only for \"CHARGE\", \"CHARGE-DEL-POSTAL\" or \"CHARGE-DEL-AIRMAIL\" charge types. The payments are allocated in the sequence provided with 01 being the first, 02 the next, and so on. The following codes are proposed: GROUP-01; GROUP-02; GROUP-03; GROUP-04; GROUP-05; GROUP-06; GROUP-07; GROUP-08; GROUP-09; GROUP-10",
                       "field_order_no":39,
@@ -2335,7 +2335,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION1",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 1'",
                       "field_order_no":60,
@@ -2347,7 +2347,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION2",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 2'",
                       "field_order_no":61,
@@ -2359,7 +2359,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -2374,8 +2374,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -2426,7 +2426,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10164046,
                   "service_noSpecified":true,
                   "service_desc":"Abonnement - porto udland",
@@ -2463,8 +2463,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"SVC-DELIVERY-AIRMAIL",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -2476,7 +2476,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -2488,7 +2488,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeGroup",
                       "field_desc":"Contains a code indicating the group the charge belongs to. Is used when allocating payments against invoices when insufficient payments are made. Is used only for \"CHARGE\", \"CHARGE-DEL-POSTAL\" or \"CHARGE-DEL-AIRMAIL\" charge types. The payments are allocated in the sequence provided with 01 being the first, 02 the next, and so on. The following codes are proposed: GROUP-01; GROUP-02; GROUP-03; GROUP-04; GROUP-05; GROUP-06; GROUP-07; GROUP-08; GROUP-09; GROUP-10",
                       "field_order_no":39,
@@ -2500,7 +2500,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION1",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 1'",
                       "field_order_no":60,
@@ -2512,7 +2512,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION2",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 2'",
                       "field_order_no":61,
@@ -2527,8 +2527,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -2579,7 +2579,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10165240,
                   "service_noSpecified":true,
                   "service_desc":"E-Paper",
@@ -2616,8 +2616,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-DIGITAL-PDF",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -2629,7 +2629,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -2641,7 +2641,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -2656,8 +2656,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -2708,7 +2708,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10165403,
                   "service_noSpecified":true,
                   "service_desc":"Levering fredag",
@@ -2745,8 +2745,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-PRINT-FRI",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -2758,7 +2758,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -2770,7 +2770,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -2785,8 +2785,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -2837,7 +2837,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10165404,
                   "service_noSpecified":true,
                   "service_desc":"Levering lørdag",
@@ -2874,8 +2874,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-PRINT-SAT",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -2887,7 +2887,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -2899,7 +2899,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -2914,8 +2914,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -2967,8 +2967,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "surcharges_all":[ 
-                { 
+              "surcharges_all":[
+                {
                   "surcharge_noSpecified":false,
                   "surcharge_name":null,
                   "client_surcharge_id":null,
@@ -3014,7 +3014,7 @@ describe('message delivery tests', async () => {
               "SupplementalField4":null,
               "SupplementalField5":null
             },
-            { 
+            {
               "plan_no":102577,
               "plan_noSpecified":true,
               "plan_name":"Berlingske - fredag-lørdag",
@@ -3105,8 +3105,8 @@ describe('message delivery tests', async () => {
               "client_plan_2_assign_on_susp":null,
               "client_rate_schedule_id":"BER-C-COMBO-FOL-DKK-12",
               "proration_invoice_timing_cd":"I",
-              "product_fields":[ 
-                { 
+              "product_fields":[
+                {
                   "field_name":"TitleCode",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -3115,7 +3115,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductType",
                   "field_value":"COMBO",
                   "SupplementalField1":null,
@@ -3124,7 +3124,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension2",
                   "field_value":"100",
                   "SupplementalField1":null,
@@ -3133,7 +3133,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension3",
                   "field_value":"400",
                   "SupplementalField1":null,
@@ -3142,7 +3142,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension4",
                   "field_value":"150",
                   "SupplementalField1":null,
@@ -3151,7 +3151,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension5",
                   "field_value":"999",
                   "SupplementalField1":null,
@@ -3160,7 +3160,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"B",
                   "SupplementalField1":null,
@@ -3169,7 +3169,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"C",
                   "SupplementalField1":null,
@@ -3178,7 +3178,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"PaymentMethodReqd",
                   "field_value":"ANY",
                   "SupplementalField1":null,
@@ -3187,7 +3187,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductPriceModel",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -3196,7 +3196,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"TitleCodeOffering",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -3205,7 +3205,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForBundles",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -3214,7 +3214,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForSharing",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -3223,7 +3223,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductTypeVariant",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -3232,7 +3232,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForDiscounts",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -3241,7 +3241,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForMultiPurchase",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -3251,8 +3251,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "plan_instance_fields_detail":[ 
-                { 
+              "plan_instance_fields_detail":[
+                {
                   "field_name":"CancelReasonCode",
                   "field_value":"9",
                   "SupplementalField1":null,
@@ -3261,7 +3261,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ChannelCode",
                   "field_value":"Contact Centre",
                   "SupplementalField1":null,
@@ -3270,7 +3270,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"SourceCode",
                   "field_value":"User ID",
                   "SupplementalField1":null,
@@ -3286,8 +3286,8 @@ describe('message delivery tests', async () => {
               "parent_plan_instance_no":null,
               "parent_plan_instance_noSpecified":true,
               "client_parent_plan_instance_id":null,
-              "plan_instance_services":[ 
-                { 
+              "plan_instance_services":[
+                {
                   "service_noSpecified":false,
                   "service_desc":null,
                   "is_recurring_indSpecified":false,
@@ -3338,8 +3338,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "surcharges_all":[ 
-                { 
+              "surcharges_all":[
+                {
                   "surcharge_noSpecified":false,
                   "surcharge_name":null,
                   "client_surcharge_id":null,
@@ -3385,7 +3385,7 @@ describe('message delivery tests', async () => {
               "SupplementalField4":null,
               "SupplementalField5":null
             },
-            { 
+            {
               "plan_no":102219,
               "plan_noSpecified":true,
               "plan_name":"Berlingske - mandag-søndag",
@@ -3476,8 +3476,8 @@ describe('message delivery tests', async () => {
               "client_plan_2_assign_on_susp":null,
               "client_rate_schedule_id":"BER-C-COMBO-FULL-DKK-12",
               "proration_invoice_timing_cd":"I",
-              "product_fields":[ 
-                { 
+              "product_fields":[
+                {
                   "field_name":"TitleCode",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -3486,7 +3486,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductType",
                   "field_value":"COMBO",
                   "SupplementalField1":null,
@@ -3495,7 +3495,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension2",
                   "field_value":"100",
                   "SupplementalField1":null,
@@ -3504,7 +3504,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension3",
                   "field_value":"400",
                   "SupplementalField1":null,
@@ -3513,7 +3513,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension4",
                   "field_value":"620",
                   "SupplementalField1":null,
@@ -3522,7 +3522,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension5",
                   "field_value":"999",
                   "SupplementalField1":null,
@@ -3531,7 +3531,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"Erhverv (Business)",
                   "SupplementalField1":null,
@@ -3540,7 +3540,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"Privatkunde (Customer)",
                   "SupplementalField1":null,
@@ -3549,7 +3549,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"PaymentMethodReqd",
                   "field_value":"ANY",
                   "SupplementalField1":null,
@@ -3558,7 +3558,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductPriceModel",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -3567,7 +3567,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"TitleCodeOffering",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -3576,7 +3576,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"DeliveryChargeIntl",
                   "field_value":"AA/DJ/INT",
                   "SupplementalField1":null,
@@ -3585,7 +3585,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"DeliveryChargeIntl",
                   "field_value":"DL/ZZ/INT",
                   "SupplementalField1":null,
@@ -3594,7 +3594,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForBundles",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -3603,7 +3603,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForSharing",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -3612,7 +3612,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductTypeVariant",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -3621,7 +3621,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForDiscounts",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -3630,7 +3630,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForMultiPurchase",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -3640,8 +3640,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "plan_instance_fields_detail":[ 
-                { 
+              "plan_instance_fields_detail":[
+                {
                   "field_name":"CancelReasonCode",
                   "field_value":"9",
                   "SupplementalField1":null,
@@ -3650,7 +3650,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ChannelCode",
                   "field_value":"Contact Centre",
                   "SupplementalField1":null,
@@ -3659,7 +3659,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"SourceCode",
                   "field_value":"User ID",
                   "SupplementalField1":null,
@@ -3675,8 +3675,8 @@ describe('message delivery tests', async () => {
               "parent_plan_instance_no":null,
               "parent_plan_instance_noSpecified":true,
               "client_parent_plan_instance_id":null,
-              "plan_instance_services":[ 
-                { 
+              "plan_instance_services":[
+                {
                   "service_noSpecified":false,
                   "service_desc":null,
                   "is_recurring_indSpecified":false,
@@ -3727,8 +3727,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "surcharges_all":[ 
-                { 
+              "surcharges_all":[
+                {
                   "surcharge_noSpecified":false,
                   "surcharge_name":null,
                   "client_surcharge_id":null,
@@ -3774,7 +3774,7 @@ describe('message delivery tests', async () => {
               "SupplementalField4":null,
               "SupplementalField5":null
             },
-            { 
+            {
               "plan_no":102219,
               "plan_noSpecified":true,
               "plan_name":"Berlingske - mandag-søndag",
@@ -3865,8 +3865,8 @@ describe('message delivery tests', async () => {
               "client_plan_2_assign_on_susp":null,
               "client_rate_schedule_id":"BER-C-COMBO-FULL-DKK-12",
               "proration_invoice_timing_cd":"I",
-              "product_fields":[ 
-                { 
+              "product_fields":[
+                {
                   "field_name":"TitleCode",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -3875,7 +3875,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductType",
                   "field_value":"COMBO",
                   "SupplementalField1":null,
@@ -3884,7 +3884,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension2",
                   "field_value":"100",
                   "SupplementalField1":null,
@@ -3893,7 +3893,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension3",
                   "field_value":"400",
                   "SupplementalField1":null,
@@ -3902,7 +3902,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension4",
                   "field_value":"620",
                   "SupplementalField1":null,
@@ -3911,7 +3911,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension5",
                   "field_value":"999",
                   "SupplementalField1":null,
@@ -3920,7 +3920,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"Erhverv (Business)",
                   "SupplementalField1":null,
@@ -3929,7 +3929,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"Privatkunde (Customer)",
                   "SupplementalField1":null,
@@ -3938,7 +3938,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"PaymentMethodReqd",
                   "field_value":"ANY",
                   "SupplementalField1":null,
@@ -3947,7 +3947,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductPriceModel",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -3956,7 +3956,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"TitleCodeOffering",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -3965,7 +3965,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"DeliveryChargeIntl",
                   "field_value":"AA/DJ/INT",
                   "SupplementalField1":null,
@@ -3974,7 +3974,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"DeliveryChargeIntl",
                   "field_value":"DL/ZZ/INT",
                   "SupplementalField1":null,
@@ -3983,7 +3983,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForBundles",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -3992,7 +3992,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForSharing",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -4001,7 +4001,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductTypeVariant",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -4010,7 +4010,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForDiscounts",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -4019,7 +4019,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForMultiPurchase",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -4029,8 +4029,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "plan_instance_fields_detail":[ 
-                { 
+              "plan_instance_fields_detail":[
+                {
                   "field_name":"CancelReasonCode",
                   "field_value":"9",
                   "SupplementalField1":null,
@@ -4039,7 +4039,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ChannelCode",
                   "field_value":"Contact Centre",
                   "SupplementalField1":null,
@@ -4048,7 +4048,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"SourceCode",
                   "field_value":"User ID",
                   "SupplementalField1":null,
@@ -4064,8 +4064,8 @@ describe('message delivery tests', async () => {
               "parent_plan_instance_no":null,
               "parent_plan_instance_noSpecified":true,
               "client_parent_plan_instance_id":null,
-              "plan_instance_services":[ 
-                { 
+              "plan_instance_services":[
+                {
                   "service_noSpecified":false,
                   "service_desc":null,
                   "is_recurring_indSpecified":false,
@@ -4116,8 +4116,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "surcharges_all":[ 
-                { 
+              "surcharges_all":[
+                {
                   "surcharge_noSpecified":false,
                   "surcharge_name":null,
                   "client_surcharge_id":null,
@@ -4163,7 +4163,7 @@ describe('message delivery tests', async () => {
               "SupplementalField4":null,
               "SupplementalField5":null
             },
-            { 
+            {
               "plan_no":102630,
               "plan_noSpecified":true,
               "plan_name":"B.T. - søndag-mandag",
@@ -4254,8 +4254,8 @@ describe('message delivery tests', async () => {
               "client_plan_2_assign_on_susp":null,
               "client_rate_schedule_id":"BTA-C-COMBO-STM-DKK-12",
               "proration_invoice_timing_cd":"I",
-              "product_fields":[ 
-                { 
+              "product_fields":[
+                {
                   "field_name":"TitleCode",
                   "field_value":"BTA",
                   "SupplementalField1":null,
@@ -4264,7 +4264,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductType",
                   "field_value":"COMBO",
                   "SupplementalField1":null,
@@ -4273,7 +4273,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension2",
                   "field_value":"111",
                   "SupplementalField1":null,
@@ -4282,7 +4282,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension3",
                   "field_value":"408",
                   "SupplementalField1":null,
@@ -4291,7 +4291,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension4",
                   "field_value":"150",
                   "SupplementalField1":null,
@@ -4300,7 +4300,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension5",
                   "field_value":"999",
                   "SupplementalField1":null,
@@ -4309,7 +4309,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"B",
                   "SupplementalField1":null,
@@ -4318,7 +4318,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"C",
                   "SupplementalField1":null,
@@ -4327,7 +4327,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"PaymentMethodReqd",
                   "field_value":"ANY",
                   "SupplementalField1":null,
@@ -4336,7 +4336,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductPriceModel",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -4345,7 +4345,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"TitleCodeOffering",
                   "field_value":"BTA",
                   "SupplementalField1":null,
@@ -4354,7 +4354,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForBundles",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -4363,7 +4363,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForSharing",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -4372,7 +4372,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductTypeVariant",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -4381,7 +4381,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForDiscounts",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -4390,7 +4390,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForMultiPurchase",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -4400,8 +4400,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "plan_instance_fields_detail":[ 
-                { 
+              "plan_instance_fields_detail":[
+                {
                   "field_name":"CancelReasonCode",
                   "field_value":"9",
                   "SupplementalField1":null,
@@ -4410,7 +4410,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ChannelCode",
                   "field_value":"Contact Centre",
                   "SupplementalField1":null,
@@ -4419,7 +4419,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"SourceCode",
                   "field_value":"User ID",
                   "SupplementalField1":null,
@@ -4435,8 +4435,8 @@ describe('message delivery tests', async () => {
               "parent_plan_instance_no":null,
               "parent_plan_instance_noSpecified":true,
               "client_parent_plan_instance_id":null,
-              "plan_instance_services":[ 
-                { 
+              "plan_instance_services":[
+                {
                   "service_noSpecified":false,
                   "service_desc":null,
                   "is_recurring_indSpecified":false,
@@ -4487,8 +4487,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "surcharges_all":[ 
-                { 
+              "surcharges_all":[
+                {
                   "surcharge_noSpecified":false,
                   "surcharge_name":null,
                   "client_surcharge_id":null,
@@ -4534,7 +4534,7 @@ describe('message delivery tests', async () => {
               "SupplementalField4":null,
               "SupplementalField5":null
             },
-            { 
+            {
               "plan_no":102219,
               "plan_noSpecified":true,
               "plan_name":"Berlingske - mandag-søndag",
@@ -4625,8 +4625,8 @@ describe('message delivery tests', async () => {
               "client_plan_2_assign_on_susp":null,
               "client_rate_schedule_id":"BER-C-COMBO-FULL-DKK-12",
               "proration_invoice_timing_cd":"I",
-              "product_fields":[ 
-                { 
+              "product_fields":[
+                {
                   "field_name":"TitleCode",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -4635,7 +4635,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductType",
                   "field_value":"COMBO",
                   "SupplementalField1":null,
@@ -4644,7 +4644,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension2",
                   "field_value":"100",
                   "SupplementalField1":null,
@@ -4653,7 +4653,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension3",
                   "field_value":"400",
                   "SupplementalField1":null,
@@ -4662,7 +4662,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension4",
                   "field_value":"620",
                   "SupplementalField1":null,
@@ -4671,7 +4671,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension5",
                   "field_value":"999",
                   "SupplementalField1":null,
@@ -4680,7 +4680,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"Erhverv (Business)",
                   "SupplementalField1":null,
@@ -4689,7 +4689,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"Privatkunde (Customer)",
                   "SupplementalField1":null,
@@ -4698,7 +4698,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"PaymentMethodReqd",
                   "field_value":"ANY",
                   "SupplementalField1":null,
@@ -4707,7 +4707,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductPriceModel",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -4716,7 +4716,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"TitleCodeOffering",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -4725,7 +4725,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"DeliveryChargeIntl",
                   "field_value":"AA/DJ/INT",
                   "SupplementalField1":null,
@@ -4734,7 +4734,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"DeliveryChargeIntl",
                   "field_value":"DL/ZZ/INT",
                   "SupplementalField1":null,
@@ -4743,7 +4743,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForBundles",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -4752,7 +4752,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForSharing",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -4761,7 +4761,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductTypeVariant",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -4770,7 +4770,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForDiscounts",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -4779,7 +4779,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForMultiPurchase",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -4789,8 +4789,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "plan_instance_fields_detail":[ 
-                { 
+              "plan_instance_fields_detail":[
+                {
                   "field_name":"CancelReasonCode",
                   "field_value":"11",
                   "SupplementalField1":null,
@@ -4799,7 +4799,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ChannelCode",
                   "field_value":"Contact Centre",
                   "SupplementalField1":null,
@@ -4808,7 +4808,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"SourceCode",
                   "field_value":"User ID",
                   "SupplementalField1":null,
@@ -4824,8 +4824,8 @@ describe('message delivery tests', async () => {
               "parent_plan_instance_no":null,
               "parent_plan_instance_noSpecified":true,
               "client_parent_plan_instance_id":null,
-              "plan_instance_services":[ 
-                { 
+              "plan_instance_services":[
+                {
                   "service_noSpecified":false,
                   "service_desc":null,
                   "is_recurring_indSpecified":false,
@@ -4876,8 +4876,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "surcharges_all":[ 
-                { 
+              "surcharges_all":[
+                {
                   "surcharge_noSpecified":false,
                   "surcharge_name":null,
                   "client_surcharge_id":null,
@@ -4923,7 +4923,7 @@ describe('message delivery tests', async () => {
               "SupplementalField4":null,
               "SupplementalField5":null
             },
-            { 
+            {
               "plan_no":102629,
               "plan_noSpecified":true,
               "plan_name":"B.T. - lørdag-mandag",
@@ -5014,8 +5014,8 @@ describe('message delivery tests', async () => {
               "client_plan_2_assign_on_susp":null,
               "client_rate_schedule_id":"BTA-C-COMBO-LTM-DKK-03",
               "proration_invoice_timing_cd":"I",
-              "product_fields":[ 
-                { 
+              "product_fields":[
+                {
                   "field_name":"TitleCode",
                   "field_value":"BTA",
                   "SupplementalField1":null,
@@ -5024,7 +5024,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductType",
                   "field_value":"COMBO",
                   "SupplementalField1":null,
@@ -5033,7 +5033,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension2",
                   "field_value":"111",
                   "SupplementalField1":null,
@@ -5042,7 +5042,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension3",
                   "field_value":"408",
                   "SupplementalField1":null,
@@ -5051,7 +5051,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension4",
                   "field_value":"150",
                   "SupplementalField1":null,
@@ -5060,7 +5060,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension5",
                   "field_value":"999",
                   "SupplementalField1":null,
@@ -5069,7 +5069,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"B",
                   "SupplementalField1":null,
@@ -5078,7 +5078,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"C",
                   "SupplementalField1":null,
@@ -5087,7 +5087,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"PaymentMethodReqd",
                   "field_value":"ANY",
                   "SupplementalField1":null,
@@ -5096,7 +5096,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductPriceModel",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -5105,7 +5105,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"TitleCodeOffering",
                   "field_value":"BTA",
                   "SupplementalField1":null,
@@ -5114,7 +5114,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForBundles",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -5123,7 +5123,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForSharing",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -5132,7 +5132,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductTypeVariant",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -5141,7 +5141,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForDiscounts",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -5150,7 +5150,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForMultiPurchase",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -5160,8 +5160,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "plan_instance_fields_detail":[ 
-                { 
+              "plan_instance_fields_detail":[
+                {
                   "field_name":"CancelReasonCode",
                   "field_value":"9",
                   "SupplementalField1":null,
@@ -5170,7 +5170,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ChannelCode",
                   "field_value":"Contact Centre",
                   "SupplementalField1":null,
@@ -5179,7 +5179,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"SourceCode",
                   "field_value":"User ID",
                   "SupplementalField1":null,
@@ -5195,8 +5195,8 @@ describe('message delivery tests', async () => {
               "parent_plan_instance_no":null,
               "parent_plan_instance_noSpecified":true,
               "client_parent_plan_instance_id":null,
-              "plan_instance_services":[ 
-                { 
+              "plan_instance_services":[
+                {
                   "service_noSpecified":false,
                   "service_desc":null,
                   "is_recurring_indSpecified":false,
@@ -5247,8 +5247,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "surcharges_all":[ 
-                { 
+              "surcharges_all":[
+                {
                   "surcharge_noSpecified":false,
                   "surcharge_name":null,
                   "client_surcharge_id":null,
@@ -5294,7 +5294,7 @@ describe('message delivery tests', async () => {
               "SupplementalField4":null,
               "SupplementalField5":null
             },
-            { 
+            {
               "plan_no":102219,
               "plan_noSpecified":true,
               "plan_name":"Berlingske - mandag-søndag",
@@ -5385,8 +5385,8 @@ describe('message delivery tests', async () => {
               "client_plan_2_assign_on_susp":null,
               "client_rate_schedule_id":"BER-C-COMBO-FULL-DKK-12",
               "proration_invoice_timing_cd":"I",
-              "product_fields":[ 
-                { 
+              "product_fields":[
+                {
                   "field_name":"TitleCode",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -5395,7 +5395,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductType",
                   "field_value":"COMBO",
                   "SupplementalField1":null,
@@ -5404,7 +5404,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension2",
                   "field_value":"100",
                   "SupplementalField1":null,
@@ -5413,7 +5413,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension3",
                   "field_value":"400",
                   "SupplementalField1":null,
@@ -5422,7 +5422,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension4",
                   "field_value":"620",
                   "SupplementalField1":null,
@@ -5431,7 +5431,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension5",
                   "field_value":"999",
                   "SupplementalField1":null,
@@ -5440,7 +5440,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"Erhverv (Business)",
                   "SupplementalField1":null,
@@ -5449,7 +5449,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"Privatkunde (Customer)",
                   "SupplementalField1":null,
@@ -5458,7 +5458,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"PaymentMethodReqd",
                   "field_value":"ANY",
                   "SupplementalField1":null,
@@ -5467,7 +5467,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductPriceModel",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -5476,7 +5476,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"TitleCodeOffering",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -5485,7 +5485,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"DeliveryChargeIntl",
                   "field_value":"AA/DJ/INT",
                   "SupplementalField1":null,
@@ -5494,7 +5494,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"DeliveryChargeIntl",
                   "field_value":"DL/ZZ/INT",
                   "SupplementalField1":null,
@@ -5503,7 +5503,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForBundles",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -5512,7 +5512,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForSharing",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -5521,7 +5521,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductTypeVariant",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -5530,7 +5530,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForDiscounts",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -5539,7 +5539,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForMultiPurchase",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -5549,8 +5549,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "plan_instance_fields_detail":[ 
-                { 
+              "plan_instance_fields_detail":[
+                {
                   "field_name":"ChannelCode",
                   "field_value":"Contact Centre",
                   "SupplementalField1":null,
@@ -5559,7 +5559,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"SourceCode",
                   "field_value":"User ID",
                   "SupplementalField1":null,
@@ -5575,8 +5575,8 @@ describe('message delivery tests', async () => {
               "parent_plan_instance_no":null,
               "parent_plan_instance_noSpecified":true,
               "client_parent_plan_instance_id":null,
-              "plan_instance_services":[ 
-                { 
+              "plan_instance_services":[
+                {
                   "service_no":10164041,
                   "service_noSpecified":true,
                   "service_desc":"Digital",
@@ -5613,8 +5613,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-DIGITAL-ALL",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -5626,7 +5626,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -5638,7 +5638,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -5653,8 +5653,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -5705,7 +5705,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10164042,
                   "service_noSpecified":true,
                   "service_desc":"Levering hele ugen",
@@ -5742,8 +5742,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-PRINT-ALL",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -5755,7 +5755,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -5767,7 +5767,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -5782,8 +5782,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -5834,7 +5834,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10164045,
                   "service_noSpecified":true,
                   "service_desc":"Subscription",
@@ -5871,8 +5871,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"SVC-SUBSCRIPTION",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -5884,7 +5884,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeGroup",
                       "field_desc":"Contains a code indicating the group the charge belongs to. Is used when allocating payments against invoices when insufficient payments are made. Is used only for \"CHARGE\", \"CHARGE-DEL-POSTAL\" or \"CHARGE-DEL-AIRMAIL\" charge types. The payments are allocated in the sequence provided with 01 being the first, 02 the next, and so on. The following codes are proposed: GROUP-01; GROUP-02; GROUP-03; GROUP-04; GROUP-05; GROUP-06; GROUP-07; GROUP-08; GROUP-09; GROUP-10",
                       "field_order_no":39,
@@ -5896,7 +5896,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION1",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 1'",
                       "field_order_no":60,
@@ -5908,7 +5908,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION2",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 2'",
                       "field_order_no":61,
@@ -5920,7 +5920,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -5935,8 +5935,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -5987,7 +5987,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10164046,
                   "service_noSpecified":true,
                   "service_desc":"Abonnement - porto udland",
@@ -6024,8 +6024,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"SVC-DELIVERY-AIRMAIL",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -6037,7 +6037,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -6049,7 +6049,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeGroup",
                       "field_desc":"Contains a code indicating the group the charge belongs to. Is used when allocating payments against invoices when insufficient payments are made. Is used only for \"CHARGE\", \"CHARGE-DEL-POSTAL\" or \"CHARGE-DEL-AIRMAIL\" charge types. The payments are allocated in the sequence provided with 01 being the first, 02 the next, and so on. The following codes are proposed: GROUP-01; GROUP-02; GROUP-03; GROUP-04; GROUP-05; GROUP-06; GROUP-07; GROUP-08; GROUP-09; GROUP-10",
                       "field_order_no":39,
@@ -6061,7 +6061,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION1",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 1'",
                       "field_order_no":60,
@@ -6073,7 +6073,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION2",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 2'",
                       "field_order_no":61,
@@ -6088,8 +6088,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -6140,7 +6140,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10165240,
                   "service_noSpecified":true,
                   "service_desc":"E-Paper",
@@ -6177,8 +6177,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-DIGITAL-PDF",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -6190,7 +6190,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -6202,7 +6202,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -6217,8 +6217,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -6270,8 +6270,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "surcharges_all":[ 
-                { 
+              "surcharges_all":[
+                {
                   "surcharge_noSpecified":false,
                   "surcharge_name":null,
                   "client_surcharge_id":null,
@@ -6317,7 +6317,7 @@ describe('message delivery tests', async () => {
               "SupplementalField4":null,
               "SupplementalField5":null
             },
-            { 
+            {
               "plan_no":102219,
               "plan_noSpecified":true,
               "plan_name":"Berlingske - mandag-søndag",
@@ -6408,8 +6408,8 @@ describe('message delivery tests', async () => {
               "client_plan_2_assign_on_susp":null,
               "client_rate_schedule_id":"BER-C-COMBO-FULL-DKK-12",
               "proration_invoice_timing_cd":"I",
-              "product_fields":[ 
-                { 
+              "product_fields":[
+                {
                   "field_name":"TitleCode",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -6418,7 +6418,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductType",
                   "field_value":"COMBO",
                   "SupplementalField1":null,
@@ -6427,7 +6427,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension2",
                   "field_value":"100",
                   "SupplementalField1":null,
@@ -6436,7 +6436,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension3",
                   "field_value":"400",
                   "SupplementalField1":null,
@@ -6445,7 +6445,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension4",
                   "field_value":"620",
                   "SupplementalField1":null,
@@ -6454,7 +6454,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension5",
                   "field_value":"999",
                   "SupplementalField1":null,
@@ -6463,7 +6463,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"Erhverv (Business)",
                   "SupplementalField1":null,
@@ -6472,7 +6472,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"Privatkunde (Customer)",
                   "SupplementalField1":null,
@@ -6481,7 +6481,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"PaymentMethodReqd",
                   "field_value":"ANY",
                   "SupplementalField1":null,
@@ -6490,7 +6490,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductPriceModel",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -6499,7 +6499,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"TitleCodeOffering",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -6508,7 +6508,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"DeliveryChargeIntl",
                   "field_value":"AA/DJ/INT",
                   "SupplementalField1":null,
@@ -6517,7 +6517,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"DeliveryChargeIntl",
                   "field_value":"DL/ZZ/INT",
                   "SupplementalField1":null,
@@ -6526,7 +6526,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForBundles",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -6535,7 +6535,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForSharing",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -6544,7 +6544,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductTypeVariant",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -6553,7 +6553,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForDiscounts",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -6562,7 +6562,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForMultiPurchase",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -6572,8 +6572,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "plan_instance_fields_detail":[ 
-                { 
+              "plan_instance_fields_detail":[
+                {
                   "field_name":"CancelReasonCode",
                   "field_value":"9",
                   "SupplementalField1":null,
@@ -6582,7 +6582,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ChannelCode",
                   "field_value":"Contact Centre",
                   "SupplementalField1":null,
@@ -6591,7 +6591,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"SourceCode",
                   "field_value":"User ID",
                   "SupplementalField1":null,
@@ -6607,8 +6607,8 @@ describe('message delivery tests', async () => {
               "parent_plan_instance_no":null,
               "parent_plan_instance_noSpecified":true,
               "client_parent_plan_instance_id":null,
-              "plan_instance_services":[ 
-                { 
+              "plan_instance_services":[
+                {
                   "service_noSpecified":false,
                   "service_desc":null,
                   "is_recurring_indSpecified":false,
@@ -6659,8 +6659,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "surcharges_all":[ 
-                { 
+              "surcharges_all":[
+                {
                   "surcharge_noSpecified":false,
                   "surcharge_name":null,
                   "client_surcharge_id":null,
@@ -6706,7 +6706,7 @@ describe('message delivery tests', async () => {
               "SupplementalField4":null,
               "SupplementalField5":null
             },
-            { 
+            {
               "plan_no":102219,
               "plan_noSpecified":true,
               "plan_name":"Berlingske - mandag-søndag",
@@ -6797,8 +6797,8 @@ describe('message delivery tests', async () => {
               "client_plan_2_assign_on_susp":null,
               "client_rate_schedule_id":"BER-C-COMBO-FULL-DKK-12",
               "proration_invoice_timing_cd":"I",
-              "product_fields":[ 
-                { 
+              "product_fields":[
+                {
                   "field_name":"TitleCode",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -6807,7 +6807,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductType",
                   "field_value":"COMBO",
                   "SupplementalField1":null,
@@ -6816,7 +6816,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension2",
                   "field_value":"100",
                   "SupplementalField1":null,
@@ -6825,7 +6825,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension3",
                   "field_value":"400",
                   "SupplementalField1":null,
@@ -6834,7 +6834,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension4",
                   "field_value":"620",
                   "SupplementalField1":null,
@@ -6843,7 +6843,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension5",
                   "field_value":"999",
                   "SupplementalField1":null,
@@ -6852,7 +6852,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"Erhverv (Business)",
                   "SupplementalField1":null,
@@ -6861,7 +6861,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"Privatkunde (Customer)",
                   "SupplementalField1":null,
@@ -6870,7 +6870,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"PaymentMethodReqd",
                   "field_value":"ANY",
                   "SupplementalField1":null,
@@ -6879,7 +6879,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductPriceModel",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -6888,7 +6888,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"TitleCodeOffering",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -6897,7 +6897,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"DeliveryChargeIntl",
                   "field_value":"AA/DJ/INT",
                   "SupplementalField1":null,
@@ -6906,7 +6906,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"DeliveryChargeIntl",
                   "field_value":"DL/ZZ/INT",
                   "SupplementalField1":null,
@@ -6915,7 +6915,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForBundles",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -6924,7 +6924,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForSharing",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -6933,7 +6933,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductTypeVariant",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -6942,7 +6942,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForDiscounts",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -6951,7 +6951,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForMultiPurchase",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -6961,8 +6961,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "plan_instance_fields_detail":[ 
-                { 
+              "plan_instance_fields_detail":[
+                {
                   "field_name":"ChannelCode",
                   "field_value":"Contact Centre",
                   "SupplementalField1":null,
@@ -6971,7 +6971,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"SourceCode",
                   "field_value":"User ID",
                   "SupplementalField1":null,
@@ -6987,8 +6987,8 @@ describe('message delivery tests', async () => {
               "parent_plan_instance_no":null,
               "parent_plan_instance_noSpecified":true,
               "client_parent_plan_instance_id":null,
-              "plan_instance_services":[ 
-                { 
+              "plan_instance_services":[
+                {
                   "service_no":10164041,
                   "service_noSpecified":true,
                   "service_desc":"Digital",
@@ -7025,8 +7025,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-DIGITAL-ALL",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -7038,7 +7038,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -7050,7 +7050,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -7065,8 +7065,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -7117,7 +7117,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10164042,
                   "service_noSpecified":true,
                   "service_desc":"Levering hele ugen",
@@ -7154,8 +7154,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-PRINT-ALL",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -7167,7 +7167,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -7179,7 +7179,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -7194,8 +7194,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -7246,7 +7246,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10164045,
                   "service_noSpecified":true,
                   "service_desc":"Subscription",
@@ -7283,8 +7283,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"SVC-SUBSCRIPTION",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -7296,7 +7296,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeGroup",
                       "field_desc":"Contains a code indicating the group the charge belongs to. Is used when allocating payments against invoices when insufficient payments are made. Is used only for \"CHARGE\", \"CHARGE-DEL-POSTAL\" or \"CHARGE-DEL-AIRMAIL\" charge types. The payments are allocated in the sequence provided with 01 being the first, 02 the next, and so on. The following codes are proposed: GROUP-01; GROUP-02; GROUP-03; GROUP-04; GROUP-05; GROUP-06; GROUP-07; GROUP-08; GROUP-09; GROUP-10",
                       "field_order_no":39,
@@ -7308,7 +7308,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION1",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 1'",
                       "field_order_no":60,
@@ -7320,7 +7320,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION2",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 2'",
                       "field_order_no":61,
@@ -7332,7 +7332,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -7347,8 +7347,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -7399,7 +7399,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10164046,
                   "service_noSpecified":true,
                   "service_desc":"Abonnement - porto udland",
@@ -7436,8 +7436,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"SVC-DELIVERY-AIRMAIL",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -7449,7 +7449,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -7461,7 +7461,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeGroup",
                       "field_desc":"Contains a code indicating the group the charge belongs to. Is used when allocating payments against invoices when insufficient payments are made. Is used only for \"CHARGE\", \"CHARGE-DEL-POSTAL\" or \"CHARGE-DEL-AIRMAIL\" charge types. The payments are allocated in the sequence provided with 01 being the first, 02 the next, and so on. The following codes are proposed: GROUP-01; GROUP-02; GROUP-03; GROUP-04; GROUP-05; GROUP-06; GROUP-07; GROUP-08; GROUP-09; GROUP-10",
                       "field_order_no":39,
@@ -7473,7 +7473,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION1",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 1'",
                       "field_order_no":60,
@@ -7485,7 +7485,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION2",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 2'",
                       "field_order_no":61,
@@ -7500,8 +7500,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -7552,7 +7552,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10165240,
                   "service_noSpecified":true,
                   "service_desc":"E-Paper",
@@ -7589,8 +7589,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-DIGITAL-PDF",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -7602,7 +7602,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -7614,7 +7614,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -7629,8 +7629,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -7682,8 +7682,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "surcharges_all":[ 
-                { 
+              "surcharges_all":[
+                {
                   "surcharge_noSpecified":false,
                   "surcharge_name":null,
                   "client_surcharge_id":null,
@@ -7729,7 +7729,7 @@ describe('message delivery tests', async () => {
               "SupplementalField4":null,
               "SupplementalField5":null
             },
-            { 
+            {
               "plan_no":102219,
               "plan_noSpecified":true,
               "plan_name":"Berlingske - mandag-søndag",
@@ -7820,8 +7820,8 @@ describe('message delivery tests', async () => {
               "client_plan_2_assign_on_susp":null,
               "client_rate_schedule_id":"BER-C-COMBO-FULL-DKK-12",
               "proration_invoice_timing_cd":"I",
-              "product_fields":[ 
-                { 
+              "product_fields":[
+                {
                   "field_name":"TitleCode",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -7830,7 +7830,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductType",
                   "field_value":"COMBO",
                   "SupplementalField1":null,
@@ -7839,7 +7839,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension2",
                   "field_value":"100",
                   "SupplementalField1":null,
@@ -7848,7 +7848,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension3",
                   "field_value":"400",
                   "SupplementalField1":null,
@@ -7857,7 +7857,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension4",
                   "field_value":"620",
                   "SupplementalField1":null,
@@ -7866,7 +7866,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"GLDimension5",
                   "field_value":"999",
                   "SupplementalField1":null,
@@ -7875,7 +7875,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"Erhverv (Business)",
                   "SupplementalField1":null,
@@ -7884,7 +7884,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductSegment",
                   "field_value":"Privatkunde (Customer)",
                   "SupplementalField1":null,
@@ -7893,7 +7893,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"PaymentMethodReqd",
                   "field_value":"ANY",
                   "SupplementalField1":null,
@@ -7902,7 +7902,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductPriceModel",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -7911,7 +7911,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"TitleCodeOffering",
                   "field_value":"BER",
                   "SupplementalField1":null,
@@ -7920,7 +7920,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"DeliveryChargeIntl",
                   "field_value":"AA/DJ/INT",
                   "SupplementalField1":null,
@@ -7929,7 +7929,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"DeliveryChargeIntl",
                   "field_value":"DL/ZZ/INT",
                   "SupplementalField1":null,
@@ -7938,7 +7938,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForBundles",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -7947,7 +7947,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForSharing",
                   "field_value":"FALSE",
                   "SupplementalField1":null,
@@ -7956,7 +7956,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"ProductTypeVariant",
                   "field_value":"STANDARD",
                   "SupplementalField1":null,
@@ -7965,7 +7965,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForDiscounts",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -7974,7 +7974,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"EligibleForMultiPurchase",
                   "field_value":"TRUE",
                   "SupplementalField1":null,
@@ -7984,8 +7984,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "plan_instance_fields_detail":[ 
-                { 
+              "plan_instance_fields_detail":[
+                {
                   "field_name":"ChannelCode",
                   "field_value":"Contact Centre",
                   "SupplementalField1":null,
@@ -7994,7 +7994,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "field_name":"SourceCode",
                   "field_value":"User ID",
                   "SupplementalField1":null,
@@ -8010,8 +8010,8 @@ describe('message delivery tests', async () => {
               "parent_plan_instance_no":null,
               "parent_plan_instance_noSpecified":true,
               "client_parent_plan_instance_id":null,
-              "plan_instance_services":[ 
-                { 
+              "plan_instance_services":[
+                {
                   "service_no":10164041,
                   "service_noSpecified":true,
                   "service_desc":"Digital",
@@ -8048,8 +8048,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-DIGITAL-ALL",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -8061,7 +8061,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -8073,7 +8073,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -8088,8 +8088,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -8140,7 +8140,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10164042,
                   "service_noSpecified":true,
                   "service_desc":"Levering hele ugen",
@@ -8177,8 +8177,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-PRINT-ALL",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -8190,7 +8190,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -8202,7 +8202,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -8217,8 +8217,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -8269,7 +8269,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10164045,
                   "service_noSpecified":true,
                   "service_desc":"Subscription",
@@ -8306,8 +8306,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"SVC-SUBSCRIPTION",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -8319,7 +8319,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeGroup",
                       "field_desc":"Contains a code indicating the group the charge belongs to. Is used when allocating payments against invoices when insufficient payments are made. Is used only for \"CHARGE\", \"CHARGE-DEL-POSTAL\" or \"CHARGE-DEL-AIRMAIL\" charge types. The payments are allocated in the sequence provided with 01 being the first, 02 the next, and so on. The following codes are proposed: GROUP-01; GROUP-02; GROUP-03; GROUP-04; GROUP-05; GROUP-06; GROUP-07; GROUP-08; GROUP-09; GROUP-10",
                       "field_order_no":39,
@@ -8331,7 +8331,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION1",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 1'",
                       "field_order_no":60,
@@ -8343,7 +8343,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION2",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 2'",
                       "field_order_no":61,
@@ -8355,7 +8355,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -8370,8 +8370,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -8422,7 +8422,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10164046,
                   "service_noSpecified":true,
                   "service_desc":"Abonnement - porto udland",
@@ -8459,8 +8459,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"SVC-DELIVERY-AIRMAIL",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -8472,7 +8472,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -8484,7 +8484,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeGroup",
                       "field_desc":"Contains a code indicating the group the charge belongs to. Is used when allocating payments against invoices when insufficient payments are made. Is used only for \"CHARGE\", \"CHARGE-DEL-POSTAL\" or \"CHARGE-DEL-AIRMAIL\" charge types. The payments are allocated in the sequence provided with 01 being the first, 02 the next, and so on. The following codes are proposed: GROUP-01; GROUP-02; GROUP-03; GROUP-04; GROUP-05; GROUP-06; GROUP-07; GROUP-08; GROUP-09; GROUP-10",
                       "field_order_no":39,
@@ -8496,7 +8496,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION1",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 1'",
                       "field_order_no":60,
@@ -8508,7 +8508,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"DIMENSION2",
                       "field_desc":"Contains the GL dimension configured against the service in Aria to hold the values required for Berlingske GL 'DIMENSION 2'",
                       "field_order_no":61,
@@ -8523,8 +8523,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -8575,7 +8575,7 @@ describe('message delivery tests', async () => {
                   "SupplementalField4":null,
                   "SupplementalField5":null
                 },
-                { 
+                {
                   "service_no":10165240,
                   "service_noSpecified":true,
                   "service_desc":"E-Paper",
@@ -8612,8 +8612,8 @@ describe('message delivery tests', async () => {
                   "is_min_fee_indSpecified":true,
                   "client_service_id":"ACC-DIGITAL-PDF",
                   "usage_type_cd":null,
-                  "all_service_supp_fields":[ 
-                    { 
+                  "all_service_supp_fields":[
+                    {
                       "field_name":"AccessFeature",
                       "field_desc":"Contains a code indicating what information the service gives access to. Used by external access control systems to determine what the end-customer have access to. The list of values can be extended at any depending on requirements.",
                       "field_order_no":1,
@@ -8625,7 +8625,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"TaxGroupID",
                       "field_desc":"Contains a code indicating the tax group assigned to the service. This field has been added as it is not possible to quickly access the tax group ID via normal API calls. It must be set to the same tax group as the ARIA configuration item. The following codes currently apply:NONE – The service is NOT taxable; STANDARD – the service is assigned the standard VAT rate; REDUCED – the service is assigned the reduced high VAT rate; REDUCED-LOW – the service is assigned the reduced low VAT rate; ZERO – the service is assigned the zero VAT rate; EXEMPT – the service is assigned the exempt VAT rate. customer.",
                       "field_order_no":34,
@@ -8637,7 +8637,7 @@ describe('message delivery tests', async () => {
                       "SupplementalField4":null,
                       "SupplementalField5":null
                     },
-                    { 
+                    {
                       "field_name":"ChargeType",
                       "field_desc":"\nIndeholder en kode, der angiver, hvordan den aktuelle tjeneste bruges med hensyn til opladning. I øjeblikket er CHARGE, ACCESS-DIGITAL, ACCESS-PRINT og ACCESS - ENEWS og kombinationer af deres tilgængelige dage tilladt.",
                       "field_order_no":8,
@@ -8652,8 +8652,8 @@ describe('message delivery tests', async () => {
                   ],
                   "fulfillment_based_ind":0,
                   "fulfillment_based_indSpecified":true,
-                  "plan_service_rates":[ 
-                    { 
+                  "plan_service_rates":[
+                    {
                       "rate_seq_no":1,
                       "rate_seq_noSpecified":true,
                       "from_unit":1.0,
@@ -8705,8 +8705,8 @@ describe('message delivery tests', async () => {
                   "SupplementalField5":null
                 }
               ],
-              "surcharges_all":[ 
-                { 
+              "surcharges_all":[
+                {
                   "surcharge_noSpecified":false,
                   "surcharge_name":null,
                   "client_surcharge_id":null,
@@ -8757,18 +8757,18 @@ describe('message delivery tests', async () => {
       }
     };
 
-    const expected_SQS_message = { 
-      "billing_group_data":{ 
-        "billing_group":[ 
-          
+    const expected_SQS_message = {
+      "billing_group_data":{
+        "billing_group":[
+
         ]
       },
-      "acct_supp_field_data":{ 
-        "acct_supp_field":[ 
-          
+      "acct_supp_field_data":{
+        "acct_supp_field":[
+
         ]
       },
-      "acct_data":{ 
+      "acct_data":{
         "acct_no":42168839,
         "client_acct_id":"71949f1a09324be49d06b839964f55b1",
         "client_no":90000340,
@@ -8784,7 +8784,7 @@ describe('message delivery tests', async () => {
         "test_acct":"N",
         "userid":"64394538"
       },
-      "acct_contact":{ 
+      "acct_contact":{
         "address1":"Holmevej 5   ",
         "address2":null,
         "address3":null,
@@ -8805,7 +8805,7 @@ describe('message delivery tests', async () => {
         "work_phone":null,
         "work_phone_ext":null
       },
-      "request":{ 
+      "request":{
         "action":"M",
         "auth_key":"Bc5VnXc3tgkHKjdMpqjdgKM36K56dfbh",
         "class_name":"A",
@@ -8814,41 +8814,41 @@ describe('message delivery tests', async () => {
         "transaction_id":358689543,
         "version":1
       },
-      "payment_method_data":{ 
-        "payment_method":[ 
-          
+      "payment_method_data":{
+        "payment_method":[
+
         ]
       },
-      "notify_tmplt_group_data":{ 
-        "notify_tmplt_group":[ 
-          
+      "notify_tmplt_group_data":{
+        "notify_tmplt_group":[
+
         ]
       },
-      "master_plan_instance_data":{ 
-        "master_plan_instance":[ 
-          
+      "master_plan_instance_data":{
+        "master_plan_instance":[
+
         ]
       },
-      "event_data":{ 
-        "event":[ 
-          { 
+      "event_data":{
+        "event":[
+          {
             "event_id":736,
             "event_label":"Account Statement Contact Modified"
           }
         ]
       },
-      "dunning_group_data":{ 
-        "dunning_group":[ 
-          
+      "dunning_group_data":{
+        "dunning_group":[
+
         ]
       },
-      "contract_data":{ 
-        "contract":[ 
-          
+      "contract_data":{
+        "contract":[
+
         ]
       },
-      "all_acct_plans_m":[ 
-        { 
+      "all_acct_plans_m":[
+        {
           "plan_no":101644,
           "client_plan_id":"SPC-ACCOUNT-PLAN",
           "plan_name":"Special - Account Plan",
@@ -8862,47 +8862,47 @@ describe('message delivery tests', async () => {
           "plan_instance_status_cd":61,
           "plan_instance_status_label":"Active Non-Billable",
           "plan_instance_status_date":"2020-01-07",
-          "product_fields":[ 
-            { 
+          "product_fields":[
+            {
               "field_name":"ProductType",
               "field_value":"SPECIAL"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"ANY"
             },
-            { 
+            {
               "field_name":"PaymentMethodReqd",
               "field_value":"ANY"
             },
-            { 
+            {
               "field_name":"ProductPriceModel",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"EligibleForBundles",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"EligibleForSharing",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"ProductTypeVariant",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"EligibleForDiscounts",
               "field_value":"FALSE"
             }
           ],
-          "plan_instance_services":[ 
-            { 
+          "plan_instance_services":[
+            {
               "service_no":10164405,
               "service_desc":"Special - Service Count 1",
               "client_service_id":"SPC-SERVICE-CNT1",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"ZERO"
                 }
@@ -8910,7 +8910,7 @@ describe('message delivery tests', async () => {
             }
           ]
         },
-        { 
+        {
           "plan_no":102577,
           "client_plan_id":"BER-C-COMBO-FOL",
           "plan_name":"Berlingske - fredag-lørdag",
@@ -8924,198 +8924,198 @@ describe('message delivery tests', async () => {
           "plan_instance_status_cd":1,
           "plan_instance_status_label":"Active",
           "plan_instance_status_date":"2020-01-07",
-          "product_fields":[ 
-            { 
+          "product_fields":[
+            {
               "field_name":"TitleCode",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"ProductType",
               "field_value":"COMBO"
             },
-            { 
+            {
               "field_name":"GLDimension2",
               "field_value":"100"
             },
-            { 
+            {
               "field_name":"GLDimension3",
               "field_value":"400"
             },
-            { 
+            {
               "field_name":"GLDimension4",
               "field_value":"150"
             },
-            { 
+            {
               "field_name":"GLDimension5",
               "field_value":"999"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"B"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"C"
             },
-            { 
+            {
               "field_name":"PaymentMethodReqd",
               "field_value":"ANY"
             },
-            { 
+            {
               "field_name":"ProductPriceModel",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"TitleCodeOffering",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"EligibleForBundles",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"EligibleForSharing",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"ProductTypeVariant",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"EligibleForDiscounts",
               "field_value":"TRUE"
             },
-            { 
+            {
               "field_name":"EligibleForMultiPurchase",
               "field_value":"TRUE"
             }
           ],
-          "plan_instance_services":[ 
-            { 
+          "plan_instance_services":[
+            {
               "service_no":10164041,
               "service_desc":"Digital",
               "client_service_id":"ACC-DIGITAL-ALL",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"AccessFeature",
                   "field_value":"WEB/APP"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-DIGITAL"
                 }
               ]
             },
-            { 
+            {
               "service_no":10164045,
               "service_desc":"Subscription",
               "client_service_id":"SVC-SUBSCRIPTION",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"ChargeType",
                   "field_value":"CHARGE"
                 },
-                { 
+                {
                   "field_name":"ChargeGroup",
                   "field_value":"GROUP-01"
                 },
-                { 
+                {
                   "field_name":"DIMENSION1",
                   "field_value":"900001"
                 },
-                { 
+                {
                   "field_name":"DIMENSION2",
                   "field_value":"999"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"ZERO"
                 }
               ]
             },
-            { 
+            {
               "service_no":10164046,
               "service_desc":"Abonnement - porto udland",
               "client_service_id":"SVC-DELIVERY-AIRMAIL",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"ZERO"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"CHARGE-DEL-AIRMAIL"
                 },
-                { 
+                {
                   "field_name":"ChargeGroup",
                   "field_value":"GROUP-02"
                 },
-                { 
+                {
                   "field_name":"DIMENSION1",
                   "field_value":"350600"
                 },
-                { 
+                {
                   "field_name":"DIMENSION2",
                   "field_value":"952"
                 }
               ]
             },
-            { 
+            {
               "service_no":10165240,
               "service_desc":"E-Paper",
               "client_service_id":"ACC-DIGITAL-PDF",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"AccessFeature",
                   "field_value":"E-PAPER"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-DIGITAL"
                 }
               ]
             },
-            { 
+            {
               "service_no":10165403,
               "service_desc":"Levering fredag",
               "client_service_id":"ACC-PRINT-FRI",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"AccessFeature",
                   "field_value":"PRINT"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-PRINT-FRI"
                 }
               ]
             },
-            { 
+            {
               "service_no":10165404,
               "service_desc":"Levering lørdag",
               "client_service_id":"ACC-PRINT-SAT",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"AccessFeature",
                   "field_value":"PRINT"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-PRINT-SAT"
                 }
@@ -9123,7 +9123,7 @@ describe('message delivery tests', async () => {
             }
           ]
         },
-        { 
+        {
           "plan_no":102577,
           "client_plan_id":"BER-C-COMBO-FOL",
           "plan_name":"Berlingske - fredag-lørdag",
@@ -9137,198 +9137,198 @@ describe('message delivery tests', async () => {
           "plan_instance_status_cd":1,
           "plan_instance_status_label":"Active",
           "plan_instance_status_date":"2020-01-07",
-          "product_fields":[ 
-            { 
+          "product_fields":[
+            {
               "field_name":"TitleCode",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"ProductType",
               "field_value":"COMBO"
             },
-            { 
+            {
               "field_name":"GLDimension2",
               "field_value":"100"
             },
-            { 
+            {
               "field_name":"GLDimension3",
               "field_value":"400"
             },
-            { 
+            {
               "field_name":"GLDimension4",
               "field_value":"150"
             },
-            { 
+            {
               "field_name":"GLDimension5",
               "field_value":"999"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"B"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"C"
             },
-            { 
+            {
               "field_name":"PaymentMethodReqd",
               "field_value":"ANY"
             },
-            { 
+            {
               "field_name":"ProductPriceModel",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"TitleCodeOffering",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"EligibleForBundles",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"EligibleForSharing",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"ProductTypeVariant",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"EligibleForDiscounts",
               "field_value":"TRUE"
             },
-            { 
+            {
               "field_name":"EligibleForMultiPurchase",
               "field_value":"TRUE"
             }
           ],
-          "plan_instance_services":[ 
-            { 
+          "plan_instance_services":[
+            {
               "service_no":10164041,
               "service_desc":"Digital",
               "client_service_id":"ACC-DIGITAL-ALL",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"AccessFeature",
                   "field_value":"WEB/APP"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-DIGITAL"
                 }
               ]
             },
-            { 
+            {
               "service_no":10164045,
               "service_desc":"Subscription",
               "client_service_id":"SVC-SUBSCRIPTION",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"ChargeType",
                   "field_value":"CHARGE"
                 },
-                { 
+                {
                   "field_name":"ChargeGroup",
                   "field_value":"GROUP-01"
                 },
-                { 
+                {
                   "field_name":"DIMENSION1",
                   "field_value":"900001"
                 },
-                { 
+                {
                   "field_name":"DIMENSION2",
                   "field_value":"999"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"ZERO"
                 }
               ]
             },
-            { 
+            {
               "service_no":10164046,
               "service_desc":"Abonnement - porto udland",
               "client_service_id":"SVC-DELIVERY-AIRMAIL",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"ZERO"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"CHARGE-DEL-AIRMAIL"
                 },
-                { 
+                {
                   "field_name":"ChargeGroup",
                   "field_value":"GROUP-02"
                 },
-                { 
+                {
                   "field_name":"DIMENSION1",
                   "field_value":"350600"
                 },
-                { 
+                {
                   "field_name":"DIMENSION2",
                   "field_value":"952"
                 }
               ]
             },
-            { 
+            {
               "service_no":10165240,
               "service_desc":"E-Paper",
               "client_service_id":"ACC-DIGITAL-PDF",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"AccessFeature",
                   "field_value":"E-PAPER"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-DIGITAL"
                 }
               ]
             },
-            { 
+            {
               "service_no":10165403,
               "service_desc":"Levering fredag",
               "client_service_id":"ACC-PRINT-FRI",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"AccessFeature",
                   "field_value":"PRINT"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-PRINT-FRI"
                 }
               ]
             },
-            { 
+            {
               "service_no":10165404,
               "service_desc":"Levering lørdag",
               "client_service_id":"ACC-PRINT-SAT",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"AccessFeature",
                   "field_value":"PRINT"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-PRINT-SAT"
                 }
@@ -9336,7 +9336,7 @@ describe('message delivery tests', async () => {
             }
           ]
         },
-        { 
+        {
           "plan_no":102577,
           "client_plan_id":"BER-C-COMBO-FOL",
           "plan_name":"Berlingske - fredag-lørdag",
@@ -9350,80 +9350,80 @@ describe('message delivery tests', async () => {
           "plan_instance_status_cd":-2,
           "plan_instance_status_label":"Cancelled",
           "plan_instance_status_date":"2020-01-07",
-          "product_fields":[ 
-            { 
+          "product_fields":[
+            {
               "field_name":"TitleCode",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"ProductType",
               "field_value":"COMBO"
             },
-            { 
+            {
               "field_name":"GLDimension2",
               "field_value":"100"
             },
-            { 
+            {
               "field_name":"GLDimension3",
               "field_value":"400"
             },
-            { 
+            {
               "field_name":"GLDimension4",
               "field_value":"150"
             },
-            { 
+            {
               "field_name":"GLDimension5",
               "field_value":"999"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"B"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"C"
             },
-            { 
+            {
               "field_name":"PaymentMethodReqd",
               "field_value":"ANY"
             },
-            { 
+            {
               "field_name":"ProductPriceModel",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"TitleCodeOffering",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"EligibleForBundles",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"EligibleForSharing",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"ProductTypeVariant",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"EligibleForDiscounts",
               "field_value":"TRUE"
             },
-            { 
+            {
               "field_name":"EligibleForMultiPurchase",
               "field_value":"TRUE"
             }
           ],
-          "plan_instance_services":[ 
-            { 
+          "plan_instance_services":[
+            {
               "service_desc":null,
               "client_service_id":null
             }
           ]
         },
-        { 
+        {
           "plan_no":102219,
           "client_plan_id":"BER-C-COMBO-FULL",
           "plan_name":"Berlingske - mandag-søndag",
@@ -9437,88 +9437,88 @@ describe('message delivery tests', async () => {
           "plan_instance_status_cd":-2,
           "plan_instance_status_label":"Cancelled",
           "plan_instance_status_date":"2020-01-13",
-          "product_fields":[ 
-            { 
+          "product_fields":[
+            {
               "field_name":"TitleCode",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"ProductType",
               "field_value":"COMBO"
             },
-            { 
+            {
               "field_name":"GLDimension2",
               "field_value":"100"
             },
-            { 
+            {
               "field_name":"GLDimension3",
               "field_value":"400"
             },
-            { 
+            {
               "field_name":"GLDimension4",
               "field_value":"620"
             },
-            { 
+            {
               "field_name":"GLDimension5",
               "field_value":"999"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"Erhverv (Business)"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"Privatkunde (Customer)"
             },
-            { 
+            {
               "field_name":"PaymentMethodReqd",
               "field_value":"ANY"
             },
-            { 
+            {
               "field_name":"ProductPriceModel",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"TitleCodeOffering",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"DeliveryChargeIntl",
               "field_value":"AA/DJ/INT"
             },
-            { 
+            {
               "field_name":"DeliveryChargeIntl",
               "field_value":"DL/ZZ/INT"
             },
-            { 
+            {
               "field_name":"EligibleForBundles",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"EligibleForSharing",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"ProductTypeVariant",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"EligibleForDiscounts",
               "field_value":"TRUE"
             },
-            { 
+            {
               "field_name":"EligibleForMultiPurchase",
               "field_value":"TRUE"
             }
           ],
-          "plan_instance_services":[ 
-            { 
+          "plan_instance_services":[
+            {
               "service_desc":null,
               "client_service_id":null
             }
           ]
         },
-        { 
+        {
           "plan_no":102219,
           "client_plan_id":"BER-C-COMBO-FULL",
           "plan_name":"Berlingske - mandag-søndag",
@@ -9532,88 +9532,88 @@ describe('message delivery tests', async () => {
           "plan_instance_status_cd":-2,
           "plan_instance_status_label":"Cancelled",
           "plan_instance_status_date":"2020-01-13",
-          "product_fields":[ 
-            { 
+          "product_fields":[
+            {
               "field_name":"TitleCode",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"ProductType",
               "field_value":"COMBO"
             },
-            { 
+            {
               "field_name":"GLDimension2",
               "field_value":"100"
             },
-            { 
+            {
               "field_name":"GLDimension3",
               "field_value":"400"
             },
-            { 
+            {
               "field_name":"GLDimension4",
               "field_value":"620"
             },
-            { 
+            {
               "field_name":"GLDimension5",
               "field_value":"999"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"Erhverv (Business)"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"Privatkunde (Customer)"
             },
-            { 
+            {
               "field_name":"PaymentMethodReqd",
               "field_value":"ANY"
             },
-            { 
+            {
               "field_name":"ProductPriceModel",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"TitleCodeOffering",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"DeliveryChargeIntl",
               "field_value":"AA/DJ/INT"
             },
-            { 
+            {
               "field_name":"DeliveryChargeIntl",
               "field_value":"DL/ZZ/INT"
             },
-            { 
+            {
               "field_name":"EligibleForBundles",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"EligibleForSharing",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"ProductTypeVariant",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"EligibleForDiscounts",
               "field_value":"TRUE"
             },
-            { 
+            {
               "field_name":"EligibleForMultiPurchase",
               "field_value":"TRUE"
             }
           ],
-          "plan_instance_services":[ 
-            { 
+          "plan_instance_services":[
+            {
               "service_desc":null,
               "client_service_id":null
             }
           ]
         },
-        { 
+        {
           "plan_no":102630,
           "client_plan_id":"BTA-C-COMBO-STM",
           "plan_name":"B.T. - søndag-mandag",
@@ -9627,80 +9627,80 @@ describe('message delivery tests', async () => {
           "plan_instance_status_cd":-2,
           "plan_instance_status_label":"Cancelled",
           "plan_instance_status_date":"2020-01-13",
-          "product_fields":[ 
-            { 
+          "product_fields":[
+            {
               "field_name":"TitleCode",
               "field_value":"BTA"
             },
-            { 
+            {
               "field_name":"ProductType",
               "field_value":"COMBO"
             },
-            { 
+            {
               "field_name":"GLDimension2",
               "field_value":"111"
             },
-            { 
+            {
               "field_name":"GLDimension3",
               "field_value":"408"
             },
-            { 
+            {
               "field_name":"GLDimension4",
               "field_value":"150"
             },
-            { 
+            {
               "field_name":"GLDimension5",
               "field_value":"999"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"B"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"C"
             },
-            { 
+            {
               "field_name":"PaymentMethodReqd",
               "field_value":"ANY"
             },
-            { 
+            {
               "field_name":"ProductPriceModel",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"TitleCodeOffering",
               "field_value":"BTA"
             },
-            { 
+            {
               "field_name":"EligibleForBundles",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"EligibleForSharing",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"ProductTypeVariant",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"EligibleForDiscounts",
               "field_value":"TRUE"
             },
-            { 
+            {
               "field_name":"EligibleForMultiPurchase",
               "field_value":"TRUE"
             }
           ],
-          "plan_instance_services":[ 
-            { 
+          "plan_instance_services":[
+            {
               "service_desc":null,
               "client_service_id":null
             }
           ]
         },
-        { 
+        {
           "plan_no":102219,
           "client_plan_id":"BER-C-COMBO-FULL",
           "plan_name":"Berlingske - mandag-søndag",
@@ -9714,88 +9714,88 @@ describe('message delivery tests', async () => {
           "plan_instance_status_cd":-2,
           "plan_instance_status_label":"Cancelled",
           "plan_instance_status_date":"2020-01-13",
-          "product_fields":[ 
-            { 
+          "product_fields":[
+            {
               "field_name":"TitleCode",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"ProductType",
               "field_value":"COMBO"
             },
-            { 
+            {
               "field_name":"GLDimension2",
               "field_value":"100"
             },
-            { 
+            {
               "field_name":"GLDimension3",
               "field_value":"400"
             },
-            { 
+            {
               "field_name":"GLDimension4",
               "field_value":"620"
             },
-            { 
+            {
               "field_name":"GLDimension5",
               "field_value":"999"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"Erhverv (Business)"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"Privatkunde (Customer)"
             },
-            { 
+            {
               "field_name":"PaymentMethodReqd",
               "field_value":"ANY"
             },
-            { 
+            {
               "field_name":"ProductPriceModel",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"TitleCodeOffering",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"DeliveryChargeIntl",
               "field_value":"AA/DJ/INT"
             },
-            { 
+            {
               "field_name":"DeliveryChargeIntl",
               "field_value":"DL/ZZ/INT"
             },
-            { 
+            {
               "field_name":"EligibleForBundles",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"EligibleForSharing",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"ProductTypeVariant",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"EligibleForDiscounts",
               "field_value":"TRUE"
             },
-            { 
+            {
               "field_name":"EligibleForMultiPurchase",
               "field_value":"TRUE"
             }
           ],
-          "plan_instance_services":[ 
-            { 
+          "plan_instance_services":[
+            {
               "service_desc":null,
               "client_service_id":null
             }
           ]
         },
-        { 
+        {
           "plan_no":102629,
           "client_plan_id":"BTA-C-COMBO-LTM",
           "plan_name":"B.T. - lørdag-mandag",
@@ -9809,80 +9809,80 @@ describe('message delivery tests', async () => {
           "plan_instance_status_cd":-2,
           "plan_instance_status_label":"Cancelled",
           "plan_instance_status_date":"2020-01-13",
-          "product_fields":[ 
-            { 
+          "product_fields":[
+            {
               "field_name":"TitleCode",
               "field_value":"BTA"
             },
-            { 
+            {
               "field_name":"ProductType",
               "field_value":"COMBO"
             },
-            { 
+            {
               "field_name":"GLDimension2",
               "field_value":"111"
             },
-            { 
+            {
               "field_name":"GLDimension3",
               "field_value":"408"
             },
-            { 
+            {
               "field_name":"GLDimension4",
               "field_value":"150"
             },
-            { 
+            {
               "field_name":"GLDimension5",
               "field_value":"999"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"B"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"C"
             },
-            { 
+            {
               "field_name":"PaymentMethodReqd",
               "field_value":"ANY"
             },
-            { 
+            {
               "field_name":"ProductPriceModel",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"TitleCodeOffering",
               "field_value":"BTA"
             },
-            { 
+            {
               "field_name":"EligibleForBundles",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"EligibleForSharing",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"ProductTypeVariant",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"EligibleForDiscounts",
               "field_value":"TRUE"
             },
-            { 
+            {
               "field_name":"EligibleForMultiPurchase",
               "field_value":"TRUE"
             }
           ],
-          "plan_instance_services":[ 
-            { 
+          "plan_instance_services":[
+            {
               "service_desc":null,
               "client_service_id":null
             }
           ]
         },
-        { 
+        {
           "plan_no":102219,
           "client_plan_id":"BER-C-COMBO-FULL",
           "plan_name":"Berlingske - mandag-søndag",
@@ -9896,187 +9896,187 @@ describe('message delivery tests', async () => {
           "plan_instance_status_cd":1,
           "plan_instance_status_label":"Active",
           "plan_instance_status_date":"2020-01-15",
-          "product_fields":[ 
-            { 
+          "product_fields":[
+            {
               "field_name":"TitleCode",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"ProductType",
               "field_value":"COMBO"
             },
-            { 
+            {
               "field_name":"GLDimension2",
               "field_value":"100"
             },
-            { 
+            {
               "field_name":"GLDimension3",
               "field_value":"400"
             },
-            { 
+            {
               "field_name":"GLDimension4",
               "field_value":"620"
             },
-            { 
+            {
               "field_name":"GLDimension5",
               "field_value":"999"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"Erhverv (Business)"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"Privatkunde (Customer)"
             },
-            { 
+            {
               "field_name":"PaymentMethodReqd",
               "field_value":"ANY"
             },
-            { 
+            {
               "field_name":"ProductPriceModel",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"TitleCodeOffering",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"DeliveryChargeIntl",
               "field_value":"AA/DJ/INT"
             },
-            { 
+            {
               "field_name":"DeliveryChargeIntl",
               "field_value":"DL/ZZ/INT"
             },
-            { 
+            {
               "field_name":"EligibleForBundles",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"EligibleForSharing",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"ProductTypeVariant",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"EligibleForDiscounts",
               "field_value":"TRUE"
             },
-            { 
+            {
               "field_name":"EligibleForMultiPurchase",
               "field_value":"TRUE"
             }
           ],
-          "plan_instance_services":[ 
-            { 
+          "plan_instance_services":[
+            {
               "service_no":10164041,
               "service_desc":"Digital",
               "client_service_id":"ACC-DIGITAL-ALL",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"AccessFeature",
                   "field_value":"WEB/APP"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-DIGITAL"
                 }
               ]
             },
-            { 
+            {
               "service_no":10164042,
               "service_desc":"Levering hele ugen",
               "client_service_id":"ACC-PRINT-ALL",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"AccessFeature",
                   "field_value":"PRINT"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-PRINT"
                 }
               ]
             },
-            { 
+            {
               "service_no":10164045,
               "service_desc":"Subscription",
               "client_service_id":"SVC-SUBSCRIPTION",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"ChargeType",
                   "field_value":"CHARGE"
                 },
-                { 
+                {
                   "field_name":"ChargeGroup",
                   "field_value":"GROUP-01"
                 },
-                { 
+                {
                   "field_name":"DIMENSION1",
                   "field_value":"900001"
                 },
-                { 
+                {
                   "field_name":"DIMENSION2",
                   "field_value":"999"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"ZERO"
                 }
               ]
             },
-            { 
+            {
               "service_no":10164046,
               "service_desc":"Abonnement - porto udland",
               "client_service_id":"SVC-DELIVERY-AIRMAIL",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"ZERO"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"CHARGE-DEL-AIRMAIL"
                 },
-                { 
+                {
                   "field_name":"ChargeGroup",
                   "field_value":"GROUP-02"
                 },
-                { 
+                {
                   "field_name":"DIMENSION1",
                   "field_value":"350600"
                 },
-                { 
+                {
                   "field_name":"DIMENSION2",
                   "field_value":"952"
                 }
               ]
             },
-            { 
+            {
               "service_no":10165240,
               "service_desc":"E-Paper",
               "client_service_id":"ACC-DIGITAL-PDF",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"AccessFeature",
                   "field_value":"E-PAPER"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-DIGITAL"
                 }
@@ -10084,7 +10084,7 @@ describe('message delivery tests', async () => {
             }
           ]
         },
-        { 
+        {
           "plan_no":102219,
           "client_plan_id":"BER-C-COMBO-FULL",
           "plan_name":"Berlingske - mandag-søndag",
@@ -10098,88 +10098,88 @@ describe('message delivery tests', async () => {
           "plan_instance_status_cd":-2,
           "plan_instance_status_label":"Cancelled",
           "plan_instance_status_date":"2020-01-14",
-          "product_fields":[ 
-            { 
+          "product_fields":[
+            {
               "field_name":"TitleCode",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"ProductType",
               "field_value":"COMBO"
             },
-            { 
+            {
               "field_name":"GLDimension2",
               "field_value":"100"
             },
-            { 
+            {
               "field_name":"GLDimension3",
               "field_value":"400"
             },
-            { 
+            {
               "field_name":"GLDimension4",
               "field_value":"620"
             },
-            { 
+            {
               "field_name":"GLDimension5",
               "field_value":"999"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"Erhverv (Business)"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"Privatkunde (Customer)"
             },
-            { 
+            {
               "field_name":"PaymentMethodReqd",
               "field_value":"ANY"
             },
-            { 
+            {
               "field_name":"ProductPriceModel",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"TitleCodeOffering",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"DeliveryChargeIntl",
               "field_value":"AA/DJ/INT"
             },
-            { 
+            {
               "field_name":"DeliveryChargeIntl",
               "field_value":"DL/ZZ/INT"
             },
-            { 
+            {
               "field_name":"EligibleForBundles",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"EligibleForSharing",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"ProductTypeVariant",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"EligibleForDiscounts",
               "field_value":"TRUE"
             },
-            { 
+            {
               "field_name":"EligibleForMultiPurchase",
               "field_value":"TRUE"
             }
           ],
-          "plan_instance_services":[ 
-            { 
+          "plan_instance_services":[
+            {
               "service_desc":null,
               "client_service_id":null
             }
           ]
         },
-        { 
+        {
           "plan_no":102219,
           "client_plan_id":"BER-C-COMBO-FULL",
           "plan_name":"Berlingske - mandag-søndag",
@@ -10193,187 +10193,187 @@ describe('message delivery tests', async () => {
           "plan_instance_status_cd":1,
           "plan_instance_status_label":"Active",
           "plan_instance_status_date":"2020-01-15",
-          "product_fields":[ 
-            { 
+          "product_fields":[
+            {
               "field_name":"TitleCode",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"ProductType",
               "field_value":"COMBO"
             },
-            { 
+            {
               "field_name":"GLDimension2",
               "field_value":"100"
             },
-            { 
+            {
               "field_name":"GLDimension3",
               "field_value":"400"
             },
-            { 
+            {
               "field_name":"GLDimension4",
               "field_value":"620"
             },
-            { 
+            {
               "field_name":"GLDimension5",
               "field_value":"999"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"Erhverv (Business)"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"Privatkunde (Customer)"
             },
-            { 
+            {
               "field_name":"PaymentMethodReqd",
               "field_value":"ANY"
             },
-            { 
+            {
               "field_name":"ProductPriceModel",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"TitleCodeOffering",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"DeliveryChargeIntl",
               "field_value":"AA/DJ/INT"
             },
-            { 
+            {
               "field_name":"DeliveryChargeIntl",
               "field_value":"DL/ZZ/INT"
             },
-            { 
+            {
               "field_name":"EligibleForBundles",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"EligibleForSharing",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"ProductTypeVariant",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"EligibleForDiscounts",
               "field_value":"TRUE"
             },
-            { 
+            {
               "field_name":"EligibleForMultiPurchase",
               "field_value":"TRUE"
             }
           ],
-          "plan_instance_services":[ 
-            { 
+          "plan_instance_services":[
+            {
               "service_no":10164041,
               "service_desc":"Digital",
               "client_service_id":"ACC-DIGITAL-ALL",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"AccessFeature",
                   "field_value":"WEB/APP"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-DIGITAL"
                 }
               ]
             },
-            { 
+            {
               "service_no":10164042,
               "service_desc":"Levering hele ugen",
               "client_service_id":"ACC-PRINT-ALL",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"AccessFeature",
                   "field_value":"PRINT"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-PRINT"
                 }
               ]
             },
-            { 
+            {
               "service_no":10164045,
               "service_desc":"Subscription",
               "client_service_id":"SVC-SUBSCRIPTION",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"ChargeType",
                   "field_value":"CHARGE"
                 },
-                { 
+                {
                   "field_name":"ChargeGroup",
                   "field_value":"GROUP-01"
                 },
-                { 
+                {
                   "field_name":"DIMENSION1",
                   "field_value":"900001"
                 },
-                { 
+                {
                   "field_name":"DIMENSION2",
                   "field_value":"999"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"ZERO"
                 }
               ]
             },
-            { 
+            {
               "service_no":10164046,
               "service_desc":"Abonnement - porto udland",
               "client_service_id":"SVC-DELIVERY-AIRMAIL",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"ZERO"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"CHARGE-DEL-AIRMAIL"
                 },
-                { 
+                {
                   "field_name":"ChargeGroup",
                   "field_value":"GROUP-02"
                 },
-                { 
+                {
                   "field_name":"DIMENSION1",
                   "field_value":"350600"
                 },
-                { 
+                {
                   "field_name":"DIMENSION2",
                   "field_value":"952"
                 }
               ]
             },
-            { 
+            {
               "service_no":10165240,
               "service_desc":"E-Paper",
               "client_service_id":"ACC-DIGITAL-PDF",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"AccessFeature",
                   "field_value":"E-PAPER"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-DIGITAL"
                 }
@@ -10381,7 +10381,7 @@ describe('message delivery tests', async () => {
             }
           ]
         },
-        { 
+        {
           "plan_no":102219,
           "client_plan_id":"BER-C-COMBO-FULL",
           "plan_name":"Berlingske - mandag-søndag",
@@ -10395,187 +10395,187 @@ describe('message delivery tests', async () => {
           "plan_instance_status_cd":1,
           "plan_instance_status_label":"Active",
           "plan_instance_status_date":"2020-01-15",
-          "product_fields":[ 
-            { 
+          "product_fields":[
+            {
               "field_name":"TitleCode",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"ProductType",
               "field_value":"COMBO"
             },
-            { 
+            {
               "field_name":"GLDimension2",
               "field_value":"100"
             },
-            { 
+            {
               "field_name":"GLDimension3",
               "field_value":"400"
             },
-            { 
+            {
               "field_name":"GLDimension4",
               "field_value":"620"
             },
-            { 
+            {
               "field_name":"GLDimension5",
               "field_value":"999"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"Erhverv (Business)"
             },
-            { 
+            {
               "field_name":"ProductSegment",
               "field_value":"Privatkunde (Customer)"
             },
-            { 
+            {
               "field_name":"PaymentMethodReqd",
               "field_value":"ANY"
             },
-            { 
+            {
               "field_name":"ProductPriceModel",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"TitleCodeOffering",
               "field_value":"BER"
             },
-            { 
+            {
               "field_name":"DeliveryChargeIntl",
               "field_value":"AA/DJ/INT"
             },
-            { 
+            {
               "field_name":"DeliveryChargeIntl",
               "field_value":"DL/ZZ/INT"
             },
-            { 
+            {
               "field_name":"EligibleForBundles",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"EligibleForSharing",
               "field_value":"FALSE"
             },
-            { 
+            {
               "field_name":"ProductTypeVariant",
               "field_value":"STANDARD"
             },
-            { 
+            {
               "field_name":"EligibleForDiscounts",
               "field_value":"TRUE"
             },
-            { 
+            {
               "field_name":"EligibleForMultiPurchase",
               "field_value":"TRUE"
             }
           ],
-          "plan_instance_services":[ 
-            { 
+          "plan_instance_services":[
+            {
               "service_no":10164041,
               "service_desc":"Digital",
               "client_service_id":"ACC-DIGITAL-ALL",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"AccessFeature",
                   "field_value":"WEB/APP"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-DIGITAL"
                 }
               ]
             },
-            { 
+            {
               "service_no":10164042,
               "service_desc":"Levering hele ugen",
               "client_service_id":"ACC-PRINT-ALL",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"AccessFeature",
                   "field_value":"PRINT"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-PRINT"
                 }
               ]
             },
-            { 
+            {
               "service_no":10164045,
               "service_desc":"Subscription",
               "client_service_id":"SVC-SUBSCRIPTION",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"ChargeType",
                   "field_value":"CHARGE"
                 },
-                { 
+                {
                   "field_name":"ChargeGroup",
                   "field_value":"GROUP-01"
                 },
-                { 
+                {
                   "field_name":"DIMENSION1",
                   "field_value":"900001"
                 },
-                { 
+                {
                   "field_name":"DIMENSION2",
                   "field_value":"999"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"ZERO"
                 }
               ]
             },
-            { 
+            {
               "service_no":10164046,
               "service_desc":"Abonnement - porto udland",
               "client_service_id":"SVC-DELIVERY-AIRMAIL",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"ZERO"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"CHARGE-DEL-AIRMAIL"
                 },
-                { 
+                {
                   "field_name":"ChargeGroup",
                   "field_value":"GROUP-02"
                 },
-                { 
+                {
                   "field_name":"DIMENSION1",
                   "field_value":"350600"
                 },
-                { 
+                {
                   "field_name":"DIMENSION2",
                   "field_value":"952"
                 }
               ]
             },
-            { 
+            {
               "service_no":10165240,
               "service_desc":"E-Paper",
               "client_service_id":"ACC-DIGITAL-PDF",
-              "all_service_supp_fields":[ 
-                { 
+              "all_service_supp_fields":[
+                {
                   "field_name":"AccessFeature",
                   "field_value":"E-PAPER"
                 },
-                { 
+                {
                   "field_name":"TaxGroupID",
                   "field_value":"NONE"
                 },
-                { 
+                {
                   "field_name":"ChargeType",
                   "field_value":"ACCESS-DIGITAL"
                 }

@@ -17,14 +17,14 @@ if(DISABLE_VALIDATION) {
 
 
 const msgAuthDetailsValidation = Joi.object().keys({
-  clientNo: Joi.number().integer().allow([ null, "" ]).default(''),
-  requestDateTime: Joi.string().allow([ null, "" ]).required(),
-  signatureVersion: Joi.number().allow([ 1, 2 ]).default(2).required(),
+  clientNo: Joi.number().integer().allow(null, '').default(''),
+  requestDateTime: Joi.string().allow(null, '').required(),
+  signatureVersion: Joi.number().allow(1, 2).default(2).required(),
   signatureValue: Joi.string().required(),
-  ariaAccountID: Joi.string().default('').allow([ null, "" ]).required(),
+  ariaAccountID: Joi.string().default('').allow(null, '').required(),
   ariaAccountNo: Joi.number().integer().allow(null).required(),
-  userID: Joi.string().allow([null, '']),
-  authKey: Joi.string().allow([null, ''])
+  userID: Joi.string().allow(null, ''),
+  authKey: Joi.string().allow(null, '')
 });
 
 
@@ -94,7 +94,7 @@ const findEndOfObject = function(input) {
 
   let position = 0;
   let bracketCounter = 0;
-    
+
   do {
 
     let nextOpenBracketPosition = input.indexOf('{', position);
@@ -105,27 +105,27 @@ const findEndOfObject = function(input) {
       // We return the last postion
       bracketCounter = 0;
       position = input.length - 1;
-    
+
     } else if(nextOpenBracketPosition === -1 || nextOpenBracketPosition > nextCloseBracketPosition) {
        // There is no open but close brackets, or
        // the next bracket is a close
        bracketCounter += -1;
        position = nextCloseBracketPosition + 1;
-   
+
     } else if(nextCloseBracketPosition === -1 || nextOpenBracketPosition < nextCloseBracketPosition) {
        // There is an open but no close brackets, or
        // the next bracket is an open
        bracketCounter += 1;
        position = nextOpenBracketPosition + 1;
-       
+
     } else {
-    
+
       throw Boom.badRequest('Error when finding end of message object');
 
     }
 
   } while (bracketCounter !== 0 );
-  
+
   return position;
 };
 
@@ -152,7 +152,7 @@ const concatMsgAuthDetails = function(msgAuthDetails, message) {
     ARIA_AUTH_KEY
   ];
 
-  
+
   if(msgAuthDetails.signatureVersion !== 1) {
 
     // Aria workflow calculated the hash without the backslash escapes
@@ -200,10 +200,10 @@ const scheme = function (server, options) {
         }
         throw Boom.unauthorized('Missing payload');
       }
-      
+
       // Gettting the original, unparsed payload.
       const originalPayload = request.payload.toString();
-      
+
       if(!originalPayload) {
         if(CONSOLE_LOG_ERRORS) {
           console.error(`Payload:error:missing`);
@@ -232,18 +232,18 @@ const scheme = function (server, options) {
         throw err;
       }
 
-      
+
 
       // Activate to see hash results - helpful when writing tests
       // console.log(`Matches: ${ hash === msgAuthDetails.signatureValue }\nCalcutated: ${ hash }\nmsgAuthDetails: ${ msgAuthDetails.signatureValue }`);
-      
+
 
       if(hash === msgAuthDetails.signatureValue) {
-        
+
         return h.continue;
-        
+
       } else {
-        
+
         if(CONSOLE_LOG_ERRORS) {
           console.error(`Signature:error:payload: ${ originalPayload }`);
           console.error(`Signature:error:hash: ${ hash }`);

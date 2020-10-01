@@ -24,13 +24,13 @@ async function request(options) {
       }
     )
   };
-  
+
   // We don't need to reject anything. We only resolve and the tests should validate the response
   return await server.inject(req);
 };
 
 
-describe('auth scheme tests', async () => {
+describe('auth scheme tests', () => {
 
 
   beforeEach(async () => {
@@ -42,7 +42,7 @@ describe('auth scheme tests', async () => {
   it('endpoint should return 401 Unauthorized if missing payload', async () => {
     const response = await request({ method: 'POST', url: '/notifications_events' });
     expect(response.statusCode).to.equal(401);
-    
+
     expect(KafkaSpy.deliver.called).to.equal(false);
     expect(SQSSpy.deliver.called).to.equal(false);
   });
@@ -158,7 +158,7 @@ describe('auth scheme tests', async () => {
 
 
   // it('endpoint should return 200 when auth header 1', async () => {
-      
+
   //   const headers = {
   //     'Authorization': 'clientNo="25", requestDateTime="2019-07-03T07:48:31Z", signatureValue="Oy2RsOLi2uJG50NSnRYzxW2zERKJmKGre482K/q7Kl0=", ariaAccountID="AccountID", ariaAccountNo="1234567", signatureVersion=2, userID="ASaeed"'
   //   };
