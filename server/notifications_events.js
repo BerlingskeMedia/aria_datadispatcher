@@ -26,7 +26,7 @@ module.exports = {
   name: 'notifications_events',
   version: '1.0.0',
   register: async (server, options) => {
-    
+
 
     server.route({
       method: 'POST',
@@ -48,7 +48,7 @@ module.exports = {
         // Since the payload is not parsed, it's a buffer. So we need toString()
         const payload = request.payload.toString();
 
-        
+
         if(CONSOLE_LOG_EVENTS) {
           console.log(payload);
         } else {
@@ -85,15 +85,15 @@ module.exports = {
 
         // Just to keep the rest to else-if's
         if(false) {
-          
+
           // Getting the event_id if it's available.
         } else if(parsedMessage.request && parsedMessage.request.transaction_id) {
           event_id = parsedMessage.request.transaction_id;
-          
+
           // If the eventPayload is bundled in a enrichedPayload
         } else if(parsedMessage.eventPayload && parsedMessage.eventPayload.request && parsedMessage.eventPayload.request.transaction_id) {
           event_id = parsedMessage.eventPayload.request.transaction_id;
-          
+
 
         } else if(parsedMessage.eventIdent && parsedMessage.eventIdent.event_guid) {
           event_id = parsedMessage.eventIdent.event_guid;
@@ -102,8 +102,10 @@ module.exports = {
         } else if(process.env.NODE_ENV === 'test') {
           event_id = "4";
 
-        }        
-
+        }
+        if(!CONSOLE_LOG_EVENTS) {
+          console.info(JSON.stringify({event_id}));
+        }
 
         let error_caught = [];
 
@@ -113,7 +115,7 @@ module.exports = {
 
             let SQSMessage = message;
 
-              
+
             // If the messages is of type "enrichedEventData", we only want the "eventPayload" or "eventPayLoad" on SQS.
             if(parsedMessage.eventPayload) {
 
@@ -124,13 +126,13 @@ module.exports = {
                 if(parsedMessage.JSONGetAcctPlansAllMResponse &&
                   parsedMessage.JSONGetAcctPlansAllMResponse.all_acct_plans_m instanceof Array
                   && parsedMessage.JSONGetAcctPlansAllMResponse.all_acct_plans_m.length > 0) {
-                  
+
                   // Since the JSONGetAcctPlansAllMResponse can get excruciatingly big, the data must be minimizes
                   const all_acct_plans_m = slimDownAllAcctPlansM(parsedMessage.JSONGetAcctPlansAllMResponse.all_acct_plans_m);
                   if(all_acct_plans_m instanceof Array && all_acct_plans_m.length > 0) {
                     parsedMessage.eventPayload.all_acct_plans_m = all_acct_plans_m;
                   }
-  
+
                 }
               } catch(err) {
                 console.warn('EventPayload Warning:')
@@ -139,7 +141,7 @@ module.exports = {
 
 
               SQSMessage = JSON.stringify(parsedMessage.eventPayload);
-              
+
             }
 
 
@@ -153,7 +155,7 @@ module.exports = {
                 console.log(JSON.stringify(resultSQS));
               }
             }
-            
+
           } catch(err) {
             error_caught.push(err)
             // Waiting to rethrow, so we can deliver to Kafka.
@@ -180,6 +182,9 @@ module.exports = {
 
 
         if(error_caught.length > 0) {
+          if(!CONSOLE_LOG_EVENTS) {
+            console.log(payload);
+          }
           error_caught.forEach(err => {
             console.error(JSON.stringify(err, Object.getOwnPropertyNames(err)));
           });
@@ -187,7 +192,7 @@ module.exports = {
           throw Boom.serverUnavailable();
         }
 
-        
+
         return {
           status: `OK`
         };
