@@ -3,7 +3,7 @@
 const Boom = require('@hapi/boom');
 const Joi = require('@hapi/joi');
 const Scheme = require('./scheme.js');
-const Kafka = require('./kafka.js');
+const Kafka = require('./newkafka.js');
 const SQS = require('./sqs.js');
 
 

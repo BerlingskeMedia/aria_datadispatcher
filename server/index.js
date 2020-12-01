@@ -1,12 +1,13 @@
 /*jshint node: true */
 'use strict';
 
+require('dotenv').config()
 const Fs = require('fs');
 const Hapi = require('@hapi/hapi');
 const Inert = require('@hapi/inert');
 const Boom = require('@hapi/boom');
 const Scheme = require('./scheme.js');
-const Kafka = require('./kafka.js');
+const Kafka2 = require('./newkafka.js');
 const SQS = require('./sqs.js');
 const NotificationsEvents = require('./notifications_events.js');
 
@@ -45,7 +46,7 @@ server.route({
     tags: [ 'healthcheck' ]
   },
   handler: async (request, h) => {
-    if(await SQS.healthcheck() && await Kafka.healthcheck()) {
+    if(await SQS.healthcheck() && await Kafka2.healthcheck()) {
       return 'OK';
     } else {
       return Boom.badRequest();
@@ -84,13 +85,13 @@ server.route({
 
 SQS.events.once('ready', async () => {
   console.log('SQS ready');
-  if(Kafka.ready || Kafka.disabled) {
+  if(Kafka2.ready || Kafka2.disabled) {
     await start();
-  }  
+  }
 });
 
 
-Kafka.once('ready', async () => {
+Kafka2.on('producer.connect', async () => {
   console.log('Kafka ready');
   if(SQS.ready || SQS.disabled) {
     await start();
@@ -111,7 +112,7 @@ async function start() {
 module.exports = server;
 
 // I want the server to start on my local dev laptop, even though both Kafka and SQS is disabled.
-if (Kafka.disabled && SQS.disabled && ['DK0000271', 'YOU CAN ADD YOUR DEV LAPTOP HOSTNAME HERE'].indexOf(server.info.host) > -1) {
+if (Kafka2.disabled && SQS.disabled && ['DK0000271', 'YOU CAN ADD YOUR DEV LAPTOP HOSTNAME HERE'].indexOf(server.info.host) > -1) {
   console.warn('Starting the server with all queues disabled');
   // The timeout is to make sure all plugins have registered. Easier then rewriting this into an async func.
   setTimeout(start, 2000);
