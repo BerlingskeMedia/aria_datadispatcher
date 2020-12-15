@@ -72,26 +72,15 @@ module.exports.healthcheck = function() {
 };
 
 module.exports.deliver = async function({ id, message }) {
-  const payload = {
+  return await producer.send({
       topic: KAFKA_INGRESS_TOPIC,
       messages: [
         { key: id, value: message}
       ],
       compression: CompressionTypes.GZIP,
-      acks: -1,
+      acks: 0,
       timeout: 1000,
-    };
-
-  return new Promise((resolve, reject) => {
-    producer.send(payload, function (err, result) {
-      if(err) {
-        console.error(`[kafka/producer] ${err.message}`, err)
-        reject(err);
-      } else {
-        resolve(result);
-      }
     });
-  });
 };
 
 module.exports.disconnect = async function () {

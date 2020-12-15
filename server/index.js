@@ -98,7 +98,6 @@ Kafka2.on('producer.connect', async () => {
   }
 });
 
-
 async function start() {
   if (process.env.NODE_ENV === 'test') {
     // We are running tests.
