@@ -1,0 +1,20 @@
+---
+kind: pipeline
+type: docker
+name: PR checks
+
+steps:
+  - name: build
+    image: node:14.11-alpine
+    commands:
+      - npm ci
+      - npm run build
+  - name: test
+    image: node:14.11-alpine
+    commands:
+      - npm run lint
+      - npm test
+
+trigger:
+  event:
+    - pull_request
