@@ -1,4 +1,0 @@
-sut:
-  build: .
-  dockerfile: Dockerfile.testing
-  command: npm test
