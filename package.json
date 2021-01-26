@@ -5,17 +5,19 @@
   "main": "server/index.js",
   "dependencies": {
     "@hapi/boom": "^9.1.0",
-    "@hapi/hapi": "^20.0.1",
+    "@hapi/hapi": "^20.0.3",
     "@hapi/inert": "^6.0.3",
     "@hapi/joi": "^17.1.1",
-    "aws-sdk": "^2.764.0",
-    "kafka-node": "^5.0.0"
+    "aws-sdk": "^2.810.0",
+    "dotenv": "^8.2.0",
+    "kafka-node": "^5.0.0",
+    "kafkajs": "^1.15.0"
   },
   "devDependencies": {
     "@hapi/code": "^8.0.2",
-    "@hapi/lab": "^24.0.0",
-    "nodemon": "^2.0.4",
-    "sinon": "^9.1.0"
+    "@hapi/lab": "^24.1.0",
+    "nodemon": "^2.0.6",
+    "sinon": "^9.2.2"
   },
   "scripts": {
     "start": "node $npm_package_main",

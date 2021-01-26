@@ -76,6 +76,8 @@ Kafka will get the message delivered raw - unparsed and unprocessed.
 Unique event ID is used for deduplication of events in Kafka.
 Otherwise _null_ will be used.
 
+#### Kafka locally
+https://kafka.js.org/docs/running-kafka-in-development
 
 ### SQS message delivery
 

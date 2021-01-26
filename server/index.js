@@ -1,6 +1,7 @@
 /*jshint node: true */
 'use strict';
 
+require('dotenv').config()
 const Fs = require('fs');
 const Hapi = require('@hapi/hapi');
 const Inert = require('@hapi/inert');
@@ -45,10 +46,12 @@ server.route({
     tags: [ 'healthcheck' ]
   },
   handler: async (request, h) => {
-    if(await SQS.healthcheck() && await Kafka.healthcheck()) {
+    const sqsCondition = await SQS.healthcheck();
+    const kafkaCondition = await Kafka.healthcheck();
+    if(sqsCondition && kafkaCondition) {
       return 'OK';
     } else {
-      return Boom.badRequest();
+      return Boom.badRequest(`SQS health: ${sqsCondition}, Kafka health: ${kafkaCondition}`);
     }
   }
 });
@@ -86,17 +89,16 @@ SQS.events.once('ready', async () => {
   console.log('SQS ready');
   if(Kafka.ready || Kafka.disabled) {
     await start();
-  }  
+  }
 });
 
 
-Kafka.once('ready', async () => {
+Kafka.on('producer.connect', async () => {
   console.log('Kafka ready');
   if(SQS.ready || SQS.disabled) {
     await start();
   }
 });
-
 
 async function start() {
   if (process.env.NODE_ENV === 'test') {
